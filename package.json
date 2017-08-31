@@ -1,0 +1,14 @@
+{
+  "name": "yqj-lb-dispatcher-nginx",
+  "version": "1.0.0",
+  "description": "auto-deploy-then-seamless-reload-server",
+  "scripts": {
+    "deploy-dispatcher-server": "scripts/auto-deploy-then-seamless-reload-server.sh"
+  },
+  "keywords": [
+    "Deploy",
+    "Devops"
+  ],
+  "author": "jackysong <jackysonglanlan@gmail.com>",
+  "license": "MIT"
+}
