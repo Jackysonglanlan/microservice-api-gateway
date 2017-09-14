@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "auto-deploy-then-seamless-reload-server",
   "scripts": {
-    "deploy-dispatcher-server": "scripts/auto-deploy-then-seamless-reload-server.sh"
+    "deploy-to-dispatch-server": "scripts/op-dispatch-server.sh deploy",
+    "reload-dispatch-server": "scripts/op-dispatch-server.sh remote_reload"
   },
   "keywords": [
     "Deploy",

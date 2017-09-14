@@ -6,13 +6,15 @@ trap "echo 'error: Script failed: see failed command above'" ERR
 
 ### Configuration ###
 
-SERVER="myappuser@yourserver.com"
-SCP_FROM_DIR="TODO"
-SCP_TO_DIR="TODO"
+OP_DIR="/home/deploy/install/nginx/vhost"
 
-EXEC_SCRIPT_FILE="scripts/start-nginx.sh"
+SERVER="deploy@101.37.14.72"
+SCP_FROM_DIR="vhost"
+SCP_TO_DIR="$OP_DIR/releases/$(date '+%s')" # use timestamps to version control
 
-### methods ###
+REMOTE_SERVER_RELOAD_SCRIPT="sudo nginx -c /home/deploy/install/nginx/nginx-LB-Dispatch.conf"
+
+### private ###
 
 # $1: the prefix this log will use as "[prefix] xxxx"
 _use_red_green_echo() {
@@ -31,28 +33,31 @@ _use_red_green_echo() {
 }
 _use_red_green_echo AUTO-DEPLOY
 
-_run(){
-  green "[yqj-lb-dispatcher-nginx] Running: $@"
+_run_local(){
+  green "[Running] $@"
   "$@"
 }
 
+_run_remote(){
+  _run_local ssh $SERVER $1 && green "Success!!!"
+}
+
+### public ###
+
 deploy(){
   yellow "---- Deploying to remote server: $SERVER ----"
-  # TODO
-  # run scp -r $SCP_FROM_DIR $SERVER:$SCP_TO_DIR
-  green
+  # upload
+  _run_local scp -r $SCP_FROM_DIR $SERVER:$SCP_TO_DIR && green "Success!!!"
+  # cp to current
+  _run_remote "cp -f $SCP_TO_DIR/* $OP_DIR/current"
 }
 
 remote_reload(){
   yellow "---- Running deployment script on remote server: $SERVER ----"
-  # TODO
-  # run ssh $SERVER bash $EXEC_SCRIPT_FILE
-  green "Success!!!"
+  _run_remote $REMOTE_SERVER_RELOAD_SCRIPT
 }
 
 ### main ###
 
-deploy
-remote_reload
-
+"$@"
 
