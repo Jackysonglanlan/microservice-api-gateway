@@ -1,13 +1,14 @@
 {
-  "name": "yqj-lb-dispatcher-nginx",
+  "name": "nginx-remote-automator",
   "version": "1.0.0",
-  "description": "auto-deploy-then-seamless-reload-server",
+  "description": "nginx automator via npm script",
   "scripts": {
-    "deploy-to-dispatch-server": "scripts/op-dispatch-server.sh deploy",
-    "reload-dispatch-server": "scripts/op-dispatch-server.sh remote_reload"
+    "deploy-config": "scripts/op-dispatch-server.sh deploy",
+    "remote-reload": "scripts/op-dispatch-server.sh remote_reload"
   },
   "keywords": [
     "Deploy",
+    "Nginx",
     "Devops"
   ],
   "author": "jackysong <jackysonglanlan@gmail.com>",

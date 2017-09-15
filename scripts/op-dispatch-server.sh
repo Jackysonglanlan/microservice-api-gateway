@@ -6,13 +6,16 @@ trap "echo 'error: Script failed: see failed command above'" ERR
 
 ### Configuration ###
 
-OP_DIR="/home/deploy/install/nginx/vhost"
+REMOTE_OP_DIR="/home/deploy/install/nginx"
 
 SERVER="deploy@101.37.14.72"
-SCP_FROM_DIR="vhost"
-SCP_TO_DIR="$OP_DIR/releases/$(date '+%s')" # use timestamps to version control
 
-REMOTE_SERVER_RELOAD_SCRIPT="sudo nginx -c /home/deploy/install/nginx/nginx-LB-Dispatch.conf"
+MAIN_CONFIG_FILE="nginx-LB-Dispatch.conf"
+VHOST_DIR="vhost"
+
+VHOST_SCP_TO_DIR="$REMOTE_OP_DIR/$VHOST_DIR/releases/$(date '+%s')" # use timestamps to version control
+
+REMOTE_SERVER_RELOAD_SCRIPT="sudo nginx -s reload -c $REMOTE_OP_DIR/$MAIN_CONFIG_FILE"
 
 ### private ###
 
@@ -33,28 +36,32 @@ _use_red_green_echo() {
 }
 _use_red_green_echo AUTO-DEPLOY
 
+# $1: shell script
 _run_local(){
-  green "[Running] $@"
-  "$@"
+  yellow "[Running] $@"
+  "$@" && green "Success!!!"
 }
 
+# $1: shell script
 _run_remote(){
-  _run_local ssh $SERVER $1 && green "Success!!!"
+  _run_local ssh $SERVER $1
 }
 
 ### public ###
 
 deploy(){
-  yellow "---- Deploying to remote server: $SERVER ----"
-  # upload
-  _run_local scp -r $SCP_FROM_DIR $SERVER:$SCP_TO_DIR && green "Success!!!"
+  green "---- Deploying to remote server: $SERVER ----"
+  # upload main config
+  _run_local scp $MAIN_CONFIG_FILE $SERVER:$MAIN_CONFIG_FILE_SCP_TO_DIR
+  # upload vhost config
+  _run_local scp -r $VHOST_DIR $SERVER:$VHOST_SCP_TO_DIR
   # cp to current
-  _run_remote "cp -f $SCP_TO_DIR/* $OP_DIR/current"
+  _run_remote "mkdir -p $REMOTE_OP_DIR/$VHOST_DIR/current && cp -f $VHOST_SCP_TO_DIR/* $REMOTE_OP_DIR/$VHOST_DIR/current"
 }
 
 remote_reload(){
-  yellow "---- Running deployment script on remote server: $SERVER ----"
-  _run_remote $REMOTE_SERVER_RELOAD_SCRIPT
+  green "---- Running deployment script on remote server: $SERVER ----"
+  _run_remote "$REMOTE_SERVER_RELOAD_SCRIPT"
 }
 
 ### main ###
