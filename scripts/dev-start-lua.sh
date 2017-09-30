@@ -9,16 +9,14 @@ _prepare(){
 }
 
 start(){
-  
-  # start
   if [[ ! -f "openresty.pid" ]]; then
-    openresty -p `pwd` -c test-openresty.conf
+    # start
+    openresty -p `pwd`/test -c test-openresty.conf
     return
   else
     # reload
-    openresty -p `pwd` -c test-openresty.conf -s reload
+    openresty -p `pwd`/test -c test-openresty.conf -s reload
   fi
-  
 }
 
 _prepare

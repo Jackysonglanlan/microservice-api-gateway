@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "nginx automator via npm script",
   "scripts": {
+    "dev-start-lua": "scripts/dev-start-lua.sh",
     "deploy-config": "scripts/op-dispatch-server.sh deploy",
     "remote-reload": "scripts/op-dispatch-server.sh remote_reload"
   },
