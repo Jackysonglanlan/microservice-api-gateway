@@ -1,0 +1,12 @@
+{
+  "verbose": false,
+  "ext": "lua conf",
+  "watch": [
+    "test/",
+    "lua/"
+  ],
+  "events": {
+    "exit": "scripts/dev-start-lua.sh reload",
+    "restart": "scripts/dev-start-lua.sh reload"
+  }
+}

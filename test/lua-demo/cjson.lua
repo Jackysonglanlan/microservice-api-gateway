@@ -29,8 +29,20 @@ It is therefore highly recommended to always declare such within an appropriate 
 -- so below is fast-require
 
 local cjson = require("cjson")
+local resty_md5 = require "resty.md5"
+local string = require "resty.string"
 
 -- override nginx config: response json header instead
 ngx.header["Content-Type"] = "application/json"
 
-ngx.say(cjson.encode({foo=123, bar="text"}))
+local sign =ngx.escape_uri('aaa=111&bbb=222&ccc=333&Host=h1&User-Agent=h2&xxx=h3&yyy=h4')
+local md5 = resty_md5:new()
+
+local ok = md5:update(sign)
+if not ok then
+  return
+end
+
+local md5 = string.to_hex(md5:final())
+
+ngx.say(cjson.encode({foo=123, bar="text", md5=md5}))

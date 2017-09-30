@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "nginx automator via npm script",
   "scripts": {
-    "dev-start-lua": "scripts/dev-start-lua.sh",
+    "dev-start-lua": "scripts/dev-start-lua.sh start",
     "deploy-config": "scripts/op-dispatch-server.sh deploy",
     "remote-reload": "scripts/op-dispatch-server.sh remote_reload"
   },
@@ -13,5 +13,8 @@
     "Devops"
   ],
   "author": "jackysong <jackysonglanlan@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "1.12.1"
+  }
 }
