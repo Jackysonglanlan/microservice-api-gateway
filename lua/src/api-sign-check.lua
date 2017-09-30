@@ -42,7 +42,7 @@ function _escapeStr( presignStr )
 end
 
 -- sign with md5
-function _sign( presignStr )
+function _signStr( presignStr )
   local md5 = resty_md5:new()
 
   local ok = md5:update(presignStr)
@@ -73,7 +73,7 @@ function _calcSign()
   -- utils.debug('presignStr', presignStr)
 
   -- sign
-  local md5 = _sign(presignStr)
+  local md5 = _signStr(presignStr)
   return md5
 end
 
@@ -127,17 +127,17 @@ end
 function checkAPISign()
   local calculatedSign = _calcSign()
 
-  local signInHeader = ngx.req.get_headers()[SIGN_HEADER_KEY]
-  if signInHeader == calculatedSign then
-    -- sign check ok, pass to backend servers
-    return
-  end
-
-  -- [TEST ONLY] read 'sign=111' in url query param to pass the check
-  -- local signInHeader = ngx.req.get_uri_args()[SIGN_HEADER_KEY]
-  -- if signInHeader == '111' then
+  -- local signInHeader = ngx.req.get_headers()[SIGN_HEADER_KEY]
+  -- if signInHeader == calculatedSign then
+  --   -- sign check ok, pass to backend servers
   --   return
   -- end
+
+  -- [TEST ONLY] read 'sign=111' in url query param to pass the check
+  local signInHeader = ngx.req.get_uri_args()[SIGN_HEADER_KEY]
+  if signInHeader == '111' then
+    return
+  end
 
   _blockIllegalAccess()
 end
