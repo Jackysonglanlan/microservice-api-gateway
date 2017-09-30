@@ -6,18 +6,18 @@ local _M={}
 
 function _M.debug(...)
   printAllArgs = function ( args )
-    content = {}
-    count = 0
+    local content = {}
+    local count = 0
     for k,v in ipairs(args) do
-      kv = ''
+      local kv = ''
       if type(v) == 'table' then
         kv = cjson.encode(v)
       else
         kv = v
       end
-      table.insert(content, '[DEBUG] - arg[')
+      table.insert(content, '[DEBUG] - <span style="color:black">[')
       table.insert(content, k)
-      table.insert(content, ']: ')
+      table.insert(content, ']:</span> ')
       table.insert(content, kv)
       table.insert(content, '<br>')
       content[count] = '<br>'
@@ -33,6 +33,19 @@ function _M.debug(...)
   ]])
 end
 
+-- Merge many table into one.
+-- All params must be instance of table.
+function _M.tableMerge( ... )
+  local tmp = {}
+  for n,param in pairs({...}) do
+    if type(param) == 'table' then
+      for k,v in pairs(param) do
+        tmp[k] = v
+      end
+    end
+  end
+  return tmp
+end
 
 
 -- export, like node.js module.export = ...

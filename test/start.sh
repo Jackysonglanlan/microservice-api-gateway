@@ -5,7 +5,7 @@ set -euo pipefail
 trap "echo 'error: Script failed: see failed command above'" ERR
 
 _prepare(){
-  mkdir -p logs
+  rm -rf logs && mkdir -p logs
 }
 
 start(){
