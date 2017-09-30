@@ -1,0 +1,18 @@
+logs/
+*.log
+
+# tmp
+tmp/*
+*_temp
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+
+# IDE
+.idea
+.DS_Store
+.imdone
+.vscode

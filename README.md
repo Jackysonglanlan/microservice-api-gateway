@@ -1,7 +1,8 @@
 # nginx-remote-automator
 nginx automator via npm script
 
-## PERSONAL USE
+## Openresty Only
+Many business logic are implemented by lua.
 
 ## Usage
 
