@@ -1,6 +1,9 @@
 logs/
 *.log
 
+*.o
+*.so
+
 # node
 node_modules/
 
@@ -19,3 +22,15 @@ pids
 .DS_Store
 .imdone
 .vscode
+
+Entry {
+  [1] = 123,
+}
+
+Entry {
+  [1] = 123,
+}
+
+Entry {
+  [1] = 123,
+}

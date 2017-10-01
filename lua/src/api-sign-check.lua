@@ -78,7 +78,7 @@ function _calcSign()
 end
 
 function _blockIllegalAccess()
-  ngx.log(ngx.ALERT, '[Wrong Sign Reqest] headers: ' .. ngx.req.raw_header())
+  utils.alog('[Wrong Sign Reqest] headers: ' .. ngx.req.raw_header())
 
   ngx.header["Content-Type"] = "application/json"
   ngx.say(ERROR_RESPONSE)
