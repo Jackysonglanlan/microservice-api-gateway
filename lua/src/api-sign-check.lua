@@ -7,7 +7,7 @@ local cjson = require("cjson")
 
 local SIGN_HEADER_KEY = 'sign'
 -- todo: set the proper response code for ilegal sign
-local ERROR_RESPONSE_DATA = {code=620, error='wrong sign'}
+local ERROR_RESPONSE_DATA = {code = 620, error = 'wrong sign'}
 
 local ERROR_RESPONSE = cjson.encode(ERROR_RESPONSE_DATA)
 
@@ -24,71 +24,71 @@ cache the Nginx variable value to your own Lua variable, for example:
 
 function _genePresignStrFromParamsAndHeaders( presignParamTable )
   local a = {}
-  for n in pairs(presignParamTable) do table.insert(a, n) end
-  table.sort(a)
-
-  local sorted = {}
-  for k,sortedKey in pairs(a) do
-    if sortedKey ~= SIGN_HEADER_KEY then
-      table.insert(sorted, sortedKey..'='..presignParamTable[sortedKey])
+    for n in pairs(presignParamTable) do table.insert(a, n) end
+table.sort(a)
+    
+    local sorted = {}
+    for k, sortedKey in pairs(a) do
+      if sortedKey ~= SIGN_HEADER_KEY then
+        table.insert(sorted, sortedKey .. '=' .. presignParamTable[sortedKey])
+      end
     end
+    local sortedStr = table.concat(sorted, '&')
+    return sortedStr
   end
-  local sortedStr = table.concat(sorted,'&')
-  return sortedStr
-end
-
-function _escapeStr( presignStr )
-  return ngx.escape_uri(presignStr)
-end
-
--- sign with md5
-function _signStr( presignStr )
-  local md5 = resty_md5:new()
-
-  local ok = md5:update(presignStr)
-  if not ok then
-    return
+  
+  function _escapeStr( presignStr )
+    return ngx.escape_uri(presignStr)
   end
-
-  local md5 = string.to_hex(md5:final())
-  return md5
-end
-
-function _calcSign()
-  -- get args
-  local args = ngx.req.get_uri_args()
-  -- utils.debug(args)
-
-  -- get headers
-  local headers = ngx.req.get_headers()
-  -- utils.debug(headers)
-
-  -- merge
-  local allParams = utils.tableMerge(args, headers)
-  -- utils.debug(allParams)
-
-  -- gene presignStr
-  local presignStr = _genePresignStrFromParamsAndHeaders(headers)
-  presignStr = _escapeStr(presignStr)
-  -- utils.debug('presignStr', presignStr)
-
-  -- sign
-  local md5 = _signStr(presignStr)
-  return md5
-end
-
-function _blockIllegalAccess()
-  utils.alog('[Wrong Sign Reqest] headers: ' .. ngx.req.raw_header())
-
-  ngx.header["Content-Type"] = "application/json"
-  ngx.say(ERROR_RESPONSE)
-  ngx.eof()
-end
-
-
----------- main
-
---[[
+  
+  -- sign with md5
+  function _signStr( presignStr )
+    local md5 = resty_md5:new()
+    
+    local ok = md5:update(presignStr)
+    if not ok then
+      return
+    end
+    
+    local md5 = string.to_hex(md5:final())
+    return md5
+  end
+  
+  function _calcSign()
+    -- get args
+    local args = ngx.req.get_uri_args()
+    -- utils.debug(args)
+    
+    -- get headers
+    local headers = ngx.req.get_headers(50, true)
+    -- utils.log(headers)
+    
+    -- merge
+    local allParams = Table.merge(args, headers)
+    -- utils.log(allParams)
+    
+    -- gene presignStr
+    local presignStr = _genePresignStrFromParamsAndHeaders(allParams)
+    presignStr = _escapeStr(presignStr)
+    -- utils.log('presignStr', presignStr)
+    
+    -- sign
+    local md5 = _signStr(presignStr)
+    return md5
+  end
+  
+  function _blockIllegalAccess()
+    utils.alog('[Wrong Sign Reqest] headers: ' .. ngx.req.raw_header())
+    
+    ngx.header["Content-Type"] = "application/json"
+    ngx.say(ERROR_RESPONSE)
+    ngx.eof()
+  end
+  
+  
+  ---------- main
+  
+  --[[
 
 签名算法:
   1. 拿到本次请求的 query 请求参数(不要 form 形式的参数)
@@ -123,28 +123,32 @@ end
     a665715e30b65981f87a9a3213f27ef6
 
 --]]
-
-function checkAPISign()
-  local calculatedSign = _calcSign()
-
-  -- local signInHeader = ngx.req.get_headers()[SIGN_HEADER_KEY]
-  -- if signInHeader == calculatedSign then
-  --   -- sign check ok, pass to backend servers
-  --   return
-  -- end
-
-  -- [TEST ONLY] read 'sign=111' in url query param to pass the check
-  local signInHeader = ngx.req.get_uri_args()[SIGN_HEADER_KEY]
-  if signInHeader == '111' then
-    return
+  
+  function checkAPISign()
+    local calculatedSign = _calcSign()
+    
+    -- local signInHeader = ngx.req.get_headers()[SIGN_HEADER_KEY]
+    -- if signInHeader == calculatedSign then
+    --   -- sign check ok, pass to backend servers
+    --   return
+    -- end
+    
+    -- [TEST ONLY] read 'sign=111' in url query param to pass the check
+    local signInHeader = ngx.req.get_uri_args()[SIGN_HEADER_KEY]
+    if signInHeader == '111' then
+      return
+    end
+    
+    _blockIllegalAccess()
   end
-
-  _blockIllegalAccess()
-end
-
-checkAPISign()
-
-
-
-
-
+  
+  checkAPISign()
+  
+  
+  
+  
+  
+  
+  
+  
+  

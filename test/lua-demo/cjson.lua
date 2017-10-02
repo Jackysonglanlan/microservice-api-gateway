@@ -35,7 +35,7 @@ It is therefore highly recommended to always declare such within an appropriate 
 local resty_md5 = require "resty.md5"
 local string = require "resty.string"
 
-local sign =ngx.escape_uri('aaa=111&bbb=222&ccc=333&Host=h1&User-Agent=h2&xxx=h3&yyy=h4')
+local sign = ngx.escape_uri('aaa=111&bbb=222&ccc=333&Host=h1&User-Agent=h2&xxx=h3&yyy=h4')
 local md5 = resty_md5:new()
 
 local ok = md5:update(sign)
@@ -45,9 +45,37 @@ end
 
 local md5 = string.to_hex(md5:final())
 
-utils.log({foo=111, bar="text", md5=md5}, md5, 'sdfds')
+ngx.say(JSON.encode({foo = 112, bar = "text", md5 = md5}))
 
-ngx.say(JSON.encode({foo=112, bar="text", md5=md5}))
+
+utils.log('aaaaaaa', 2323, {aa = 'bbb'})
+
+
+--[[
+local tamale =  require "tamale.tamale"
+local V = tamale.var
+local M = tamale.matcher {
+  { {"foo", 1, {} },      "one" },
+  { 10,                   function() return "two" end},
+  { {"bar", 10, 100},     "three" },
+  { {"baz", V"X" },       V"X" },    -- V"X" is a variable
+  { {"add", V"X", V"Y"},  function(cs) return cs.X + cs.Y end },
+}
+
+utils.log(M({"foo", 1, {}}))   --> "one"
+utils.log(M(10))               --> "two"
+utils.log(M({"bar", 10, 100})) --> "three"
+utils.log(M({"baz", "four"}))  --> "four"
+utils.log(M({"add", 2, 3}))     --> 5
+utils.log(M({"sub", 2, 3}))    --> nil, "Match failed"
+--]]
+
+
+--[[
+local Date = require('pl.Date')
+utils.log(Date(1):__tostring())
+
+--]]
 
 --[[
 local lfs = require("lfs")
@@ -71,12 +99,26 @@ end
 attrdir ("./scripts")
 --]]
 
+--[[
+local et = require('eventable.eventable')
 
-local mutaio =  require("mutaio.mutaio")
+--Create some new evented tables
+local cook = et:new()
+local waiter = et:new()
 
-mutaio.write_entry({1,2,3}, './test/aa.txt')
+--Cook waits for order
+cook:on('order', function( evt, food )
+  utils.log('Now cooking'..food)
+  -- ...
+  cook:emit( 'order-up', food )
+end)
 
-for e in mutaio.entries('./test/aa.txt') do
-  utils.log(e)
-end
+--Waiter listens for order
+waiter:on('order-up', function( evt, food )
+  utils.log( 'Your ' .. food .. ' are served.')
+end)
+
+--Waiter places order
+waiter:emit('order', 'Pancakes')
+--]]
 

@@ -106,7 +106,6 @@ function utils.orderedPairs(t)
     return orderedNext, t, nil
 end
 
-
 --[[
   - Log to html.
   -
@@ -138,30 +137,36 @@ function utils.hlog(...)
   utils.ngx.exit(ngx.HTTP_OK)
 end
 
-function _log(level)
+local function _extract_filename_line_for_log_info(traceback)
+  local PLAIN = true
+  local tailcall = string.find(traceback, '(tail call): ?', 1, PLAIN)
+  local text = nil
+  local index = -1
+  if nil == tailcall then
+    text = traceback
+  else
+    local from = 1
+    text = String.slice(traceback, from, tailcall)
+  end
+
+  local realLoc = String.split(text,": in function ")[2]
+  realLoc = String.split(realLoc,"\n")[2]
+  realLoc = String.lstrip(realLoc)
+
+  return realLoc
+end
+
+local function _log(level)
   return function ( ... )
     local buff = {}
+    -- first line, the real log location
+    table.insert(buff, '<' .. _extract_filename_line_for_log_info(debug.traceback()) .. '>')
     for i,v in ipairs({...}) do
       table.insert(buff, inspect(v,{depth = 4}))
     end
-    utils.ngx.log(level, table.concat(buff, ",\n"))
+    utils.ngx.log(level, '\n' .. table.concat(buff, ",\n") .. '\n')
   end
 end
-
--- Merge many table into one.
--- All params must be instance of table.
-function utils.tableMerge( ... )
-  local tmp = {}
-  for n,param in pairs({...}) do
-    if type(param) == 'table' then
-      for k,v in pairs(param) do
-        tmp[k] = v
-      end
-    end
-  end
-  return tmp
-end
-
 
 -- export, like node.js module.export = ...
 return function ( ngx )
