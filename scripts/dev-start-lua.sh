@@ -4,15 +4,24 @@
 set -euo pipefail
 trap "echo 'error: Script failed: see failed command above'" ERR
 
+_mkLogDirs(){
+  mkdir -p {logs,'test/logs'}
+}
+
 _cleanLogs(){
   local logFiles=(access error alert info)
   for file in ${logFiles[@]}; do
-    echo '' > test/logs/$file.log
-    echo '' > logs/$file.log
+    if [[ -f "test/logs/$file.log" ]]; then
+      echo '' > test/logs/$file.log
+    fi
+    if [[ -f "logs/$file.log" ]]; then
+      echo '' > logs/$file.log
+    fi
   done
 }
 
 _prepare(){
+  _mkLogDirs
   _cleanLogs
 }
 

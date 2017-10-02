@@ -1,7 +1,7 @@
 {
   "name": "nginx-remote-automator",
   "version": "1.0.0",
-  "description": "nginx automator via npm script",
+  "description": "nginx(openresty) automator via npm script",
   "scripts": {
     "dev-start-lua": "scripts/dev-start-lua.sh start",
     "deploy-config": "scripts/op-dispatch-server.sh deploy",
