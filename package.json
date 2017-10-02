@@ -5,7 +5,8 @@
   "scripts": {
     "dev-start-lua": "scripts/dev-start-lua.sh start",
     "deploy-config": "scripts/op-dispatch-server.sh deploy",
-    "remote-reload": "scripts/op-dispatch-server.sh remote_reload"
+    "remote-reload": "scripts/op-dispatch-server.sh remote_reload",
+    "predev-start-lua": "scripts/build.sh"
   },
   "keywords": [
     "Deploy",
