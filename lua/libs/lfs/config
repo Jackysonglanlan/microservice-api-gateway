@@ -1,15 +1,15 @@
 # Installation directories
 
 # Default installation prefix
-PREFIX=/usr/local
+LUA_LIB=/usr/local
 
 # System's libraries directory (where binary libraries are installed)
-LUA_LIBDIR= $(PREFIX)/lib/lua/5.1
+LUA_LIBDIR= $(LUA_LIB)/lib/lua/5.1
 
 # Lua includes directory
-LUA_INC= $(PREFIX)/include
+LUA_INC= $(LUA_LIB)/include
 
-# OS dependent
+# OS dependent (passed by parameter)
 #LIB_OPTION= -shared #for Linux
 #LIB_OPTION= -bundle -undefined dynamic_lookup #for MacOS X
 

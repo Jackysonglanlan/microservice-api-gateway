@@ -25,19 +25,22 @@ ALL_LIBS_BUILT_MARK_FILE='./all-libs-built.log'
 
 _on_mac(){
   if [[ $(uname -a) == *Darwin* ]]; then
-    yellow "[ON MAC] $@"
-    "$@"
+    yellow "[ON-MAC][SUB-SHELL] $@"
+    ("$@")
   fi
 }
 
 _on_linux(){
   if [[ $(uname -a) == Linux* ]]; then
-    yellow "[ON LINUX] $@"
-    "$@"
+    yellow "[ON-LINUX][SUB-SHELL] $@"
+    ("$@")
   fi
 }
 
 _markAllLibsAreBuilt(){
+  green "All C libs are built..."
+  green "Make mark file..."
+  green "Done"
   touch $ALL_LIBS_BUILT_MARK_FILE
 }
 
@@ -46,7 +49,7 @@ _markAllLibsAreBuilt(){
 # $1: LIB_OPTION
 build_lfs(){
   cd lua/libs/lfs
-  make PREFIX=$LUA_HOME LIB_OPTION="$1" && make test && make install && make clean
+  make LUA_LIB=$LUA_HOME LIB_OPTION="$1" && make test && make install && make clean && green Done
 }
 
 # ...
@@ -57,12 +60,11 @@ main(){
     return
   fi
   
-  yellow 'Start building C libs...'
+  green 'Start building C libs...'
   
-  local current=$PWD
   _on_mac build_lfs "-bundle -undefined dynamic_lookup"
   _on_linux build_lfs "-shared"
-  cd $current
+  
   _markAllLibsAreBuilt
 }
 

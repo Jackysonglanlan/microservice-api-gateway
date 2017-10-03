@@ -43,13 +43,40 @@ if not ok then
   return
 end
 
+
+
 local md5 = string.to_hex(md5:final())
 
-ngx.say(JSON.encode({foo = 112, bar = "text", md5 = md5}))
+
+local uuid = require('yqj.uuid')
+
+ngx.say(JSON.encode({foo = 112, uuid = uuid.generate_random(), md5 = md5}))
 
 
-utils.log('aaaaaaa', 2323, {aa = 'bbb'})
 
+--[[
+local iresty_test    = require ("test.resty_test")(ngx)
+local tb = iresty_test.new({unit_name = "example"})
+
+function tb:init(  )
+  self:log("init complete")
+end
+
+function tb:test_00001(  )
+  error("invalid input")
+end
+
+function tb:atest_00002()
+  self:log("never be called")
+end
+
+function tb:test_00003(  )
+  self:log("ok")
+end
+
+-- units test
+tb:run()
+--]]
 
 --[[
 local tamale =  require "tamale.tamale"
