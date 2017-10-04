@@ -52,6 +52,13 @@ build_lfs(){
   make LUA_LIB=$LUA_HOME LIB_OPTION="$1" && make test && make install && make clean && green Done
 }
 
+# $1: gcc param
+build_cjson(){
+  cd lua/libs/libcjson/cJSON
+  gcc cJSON.c -O3 -o libcjson.so -shared ${1:-}
+  mv libcjson.so ../.. # 必须放在 lua/libs 目录下(lua 库根目录)，否则 ffi_load 找不到
+}
+
 # ...
 
 main(){
@@ -64,6 +71,9 @@ main(){
   
   _on_mac build_lfs "-bundle -undefined dynamic_lookup"
   _on_linux build_lfs "-shared"
+  
+  _on_mac build_cjson
+  _on_linux build_cjson "-fPIC"
   
   _markAllLibsAreBuilt
 }

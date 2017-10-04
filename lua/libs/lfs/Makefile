@@ -19,7 +19,7 @@ test: lib
 
 install:
 	# mkdir -p $(LUA_LIBDIR)
-	cp src/lfs.so ..
+	cp src/lfs.so .. # 必须放在 lua/libs 目录下(lua 库根目录)，否则有符合连接错误
 
 clean:
 	rm -f src/lfs.so $(OBJS)

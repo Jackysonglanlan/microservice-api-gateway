@@ -47,10 +47,10 @@ end
 
 local md5 = string.to_hex(md5:final())
 
+local uuid = require('yqj.jit-uuid')
 
-local uuid = require('yqj.uuid')
+ngx.say(JSON.encode({foo = 112, uuid = uuid.generate_v4(), md5 = md5}))
 
-ngx.say(JSON.encode({foo = 112, uuid = uuid.generate_random(), md5 = md5}))
 
 
 
