@@ -8,7 +8,7 @@ local realRouter = RealRouter:new()
 local cache = {}
 
 local function _loadRouteFile(fileRequirePath)
-  local    route = require(fileRequirePath)
+  local route = require(fileRequirePath)
   route(realRouter)
   -- utils.log(realRouter)
   return route
@@ -34,7 +34,7 @@ function Router.dispatch(apiPrefix, filePath, uri)
   
   -- pass api prefix to router
   apiPrefix = apiPrefix .. '/' .. filePath
-  realRouter:run(apiPrefix )
+  realRouter:run(apiPrefix)
 end
 
 
