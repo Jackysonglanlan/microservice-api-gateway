@@ -129,7 +129,7 @@ end
 
 function checkAPISign()
   local calculatedSign = _calcSign()
-  
+  utils.log('ilegal sign: ' .. calculatedSign)
   -- local signInHeader = ngx.req.get_headers()[SIGN_HEADER_KEY]
   -- if signInHeader == calculatedSign then
   --   -- sign check ok, pass to backend servers
