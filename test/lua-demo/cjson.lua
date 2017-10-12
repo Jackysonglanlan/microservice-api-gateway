@@ -43,6 +43,26 @@ if not ok then
   return
 end
 
+local function performHttpRequest()
+  local uv = require("lluv")
+  local curl = require "lluv.curl"
+  
+  local function writeToResp(data)
+    ngx.say(data)
+  end
+  
+  local easy = curl.easy({
+    url = "http://www.baidu.com";
+    writefunction = writeToResp
+  })
+  
+  local multi = curl.multi()
+  multi:add_handle(easy, function(easy, err)
+      ngx.say("Done:", err or easy:getinfo_response_code())
+  end)
+  uv.run()
+end
+performHttpRequest()
 
 
 local md5 = string.to_hex(md5:final())
@@ -50,7 +70,6 @@ local md5 = string.to_hex(md5:final())
 local uuid = require('yqj.jit-uuid')
 
 ngx.say(JSON.encode({foo = 112, uuid = uuid.generate_v4(), md5 = md5}))
-
 
 
 
@@ -148,4 +167,8 @@ end)
 --Waiter places order
 waiter:emit('order', 'Pancakes')
 --]]
+
+
+
+
 

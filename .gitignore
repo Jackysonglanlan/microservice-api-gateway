@@ -1,8 +1,11 @@
 logs/
 *.log
 
+# bin files
 *.o
 *.so
+# except bin files in .prebuild dir
+!lua/libs/.prebuild/**/*.so
 
 # node
 node_modules/
@@ -16,21 +19,9 @@ pids
 *.pid
 *.seed
 
-
 # IDE
 .idea
 .DS_Store
 .imdone
 .vscode
 
-Entry {
-  [1] = 123,
-}
-
-Entry {
-  [1] = 123,
-}
-
-Entry {
-  [1] = 123,
-}

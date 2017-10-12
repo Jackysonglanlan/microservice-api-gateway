@@ -21,7 +21,7 @@ use_red_green_echo() {
 use_red_green_echo 'Build'
 
 
-ALL_LIBS_BUILT_MARK_FILE='./all-libs-built.log'
+ALL_BIN_FILES_COPIED_MARK_FILE='./all-bin-files-copied.log'
 
 _on_mac(){
   if [[ $(uname -a) == *Darwin* ]]; then
@@ -41,7 +41,7 @@ _markAllLibsAreBuilt(){
   green "All C libs are built..."
   green "Make mark file..."
   green "Done"
-  touch $ALL_LIBS_BUILT_MARK_FILE
+  touch $ALL_BIN_FILES_COPIED_MARK_FILE
 }
 
 ###### build all the C libs
@@ -56,24 +56,35 @@ build_lfs(){
 build_cjson(){
   cd lua/libs/libcjson/cJSON
   gcc cJSON.c -O3 -o libcjson.so -shared ${1:-}
-  mv libcjson.so ../.. # 必须放在 lua/libs 目录下(lua 库根目录)，否则 ffi_load 找不到
+  mv libcjson.so ../..
 }
 
-# ...
+_cp_all_bin_files_to_lua_root_path(){
+  # 动态库 都必须放在 lua/libs 目录下(lua 库根目录)，否则 ffi_load 找不到
+  local luaRootPath="lua/libs"
+  _on_mac cp $luaRootPath/.prebuild/mac/*.so $luaRootPath
+  _on_linux cp $luaRootPath/.prebuild/linux/*.so $luaRootPath
+}
+
+
+
+######
 
 main(){
-  if [[ -f $ALL_LIBS_BUILT_MARK_FILE ]]; then
+  if [[ -f $ALL_BIN_FILES_COPIED_MARK_FILE ]]; then
     yellow 'All libs are built, no need to build...'
     return
   fi
   
   green 'Start building C libs...'
   
-  _on_mac build_lfs "-bundle -undefined dynamic_lookup"
-  _on_linux build_lfs "-shared"
+  # _on_mac build_lfs "-bundle -undefined dynamic_lookup"
+  # _on_linux build_lfs "-shared"
   
-  _on_mac build_cjson
-  _on_linux build_cjson "-fPIC"
+  # _on_mac build_cjson
+  # _on_linux build_cjson "-fPIC"
+  
+  _cp_all_bin_files_to_lua_root_path
   
   _markAllLibsAreBuilt
 }
