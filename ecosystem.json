@@ -28,11 +28,11 @@
     "dev": {
       "user": "maintain",
       "host": ["10.0.0.200"],
-      "ref": "origin/dev",
-      "repo": "git@git.oschina.net:yiqijiao/yqj_payment.git",
-      "path": "/var/www/yqj-payment",
+      "ref": "origin/master",
+      "repo": "http://jacky:abcd123@internal.yiqijiao.cn:8412/gitblit/r/jacky/openresty-dispatcher.git",
+      "path": "/var/www/openresty-dispatcher",
       "ssh_options": "StrictHostKeyChecking=no",
-      "post-deploy": "scripts/pm2-hooks/post-deploy.sh dev /var/www/yqj-payment payment",
+      "post-deploy": "",
       "env": {
         "NODE_ENV": "dev"
       }
