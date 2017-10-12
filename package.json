@@ -4,15 +4,15 @@
   "description": "nginx(openresty) automator via npm script",
   "scripts": {
     "//--------------------------------------- DEV --------------------------------------------": "",
-    "dev-start-lua": "scripts/dev-start-lua.sh start",
+    "dev-start": "scripts/dev-start.sh start",
     "//-------------------------------------- DEPLOY --------------------------------------------": "",
     "deploy-config": "scripts/op-dispatch-server.sh deploy",
     "remote-reload": "scripts/op-dispatch-server.sh remote_reload",
     "//--------------------------------------- PRODCTION --------------------------------------------": "",
-    "start": "openresty -p \"$PWD/test\" -c test-openresty.conf",
+    "start": "pm2 start ecosystem.json --env production",
     "//--------------------------------------- HOOKS --------------------------------------------": "",
     "prestart": "scripts/build.sh",
-    "predev-start-lua": "scripts/build.sh"
+    "predev-start": "scripts/build.sh"
   },
   "keywords": [
     "Deploy",

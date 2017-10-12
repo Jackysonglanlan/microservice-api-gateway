@@ -1,0 +1,67 @@
+{
+  "apps": [{
+    "name": "openresty-dispatcher",
+    "watch": false,
+    "merge_logs": true,
+    "script": "scripts/prod-start.sh",
+    "exec_interpreter": "bash",
+    "exec_mode": "fork",
+    "autorestart": true,
+    "max_memory_restart": "500M",
+    "error_file": "logs/pm2/pm2.error.log",
+    "out_file": "logs/pm2/pm2.stdout.log",
+    "pid_file": "logs/pm2/pm2.pid",
+    "env": {
+      //
+    },
+    "env_dev": {
+      //
+    },
+    "env_test": {
+      //
+    },
+    "env_production": {
+      //
+    }
+  }],
+  "deploy": {
+    "dev": {
+      "user": "maintain",
+      "host": ["10.0.0.200"],
+      "ref": "origin/dev",
+      "repo": "git@git.oschina.net:yiqijiao/yqj_payment.git",
+      "path": "/var/www/yqj-payment",
+      "ssh_options": "StrictHostKeyChecking=no",
+      "post-deploy": "scripts/pm2-hooks/post-deploy.sh dev /var/www/yqj-payment payment",
+      "env": {
+        "NODE_ENV": "dev"
+      }
+    },
+
+    "test": {
+      "user": "deploy",
+      "host": ["112.124.116.174"],
+      "ref": "origin/dev",
+      "repo": "git@git.oschina.net:yiqijiao/yqj_payment.git",
+      "path": "/var/www/yqj-payment",
+      "ssh_options": "StrictHostKeyChecking=no",
+      "post-deploy": "scripts/pm2-hooks/post-deploy.sh test /var/www/yqj-payment payment",
+      "env": {
+        "NODE_ENV": "test"
+      }
+    },
+
+    "production": {
+      "user": "deploy",
+      "host": ["127.0.0.1"],
+      "ref": "origin/master",
+      "repo": "git@git.oschina.net:yiqijiao/yqj_payment.git",
+      "path": "/var/www/yqj-payment",
+      "ssh_options": "StrictHostKeyChecking=no",
+      "post-deploy": "scripts/pm2-hooks/post-deploy.sh production /var/www/yqj-payment payment",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  }
+}
