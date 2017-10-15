@@ -6,7 +6,7 @@
     "lua/"
   ],
   "events": {
-    "exit": "scripts/dev-start.sh reload",
-    "restart": "scripts/dev-start.sh reload"
+    "exit": "scripts/dev-start.sh nodemon_restart",
+    "restart": "scripts/dev-start.sh nodemon_restart"
   }
 }

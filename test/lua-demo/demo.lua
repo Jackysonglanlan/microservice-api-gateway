@@ -32,12 +32,46 @@ It is therefore highly recommended to always declare such within an appropriate 
 
 -- ///////////////
 
+local function testLuahs()
+  local hs = require('luahs')
+  db = hs.compile {
+    expression = 'aaa', 
+    mode = hs.compile_mode.HS_MODE_BLOCK, 
+  }
+  scratch = db:makeScratch()
+  
+  hits = db:scan('aaa', scratch)
+  
+  utils.log(hits)
+end
+testLuahs()
+
+local function testHttpipe(url)
+  local httpipe = require('http.httpipe')
+  local hp, err = httpipe:new(100)
+  
+  local ok, err = hp:connect(url, 80)
+  if not ok then
+    utils.log("failed to request: ", err)
+    return
+  end
+  local ok, err = hp:send_request({method = "GET" })
+  
+  local res = {}
+  hp:read_response({body_filter = function(data)
+      table.insert(res, data)
+  end})
+  
+  utils.log(table.concat(res, ''))
+end
+-- testHttpipe('www.baidu.com')
+
 local function performHttpRequest()
   local uv = require("lluv")
   local curl = require "lluv.curl"
   
   local function writeToResp(data)
-    ngx.say(data)
+    utils.log(data)
   end
   
   local easy = curl.easy({
@@ -47,11 +81,11 @@ local function performHttpRequest()
   
   local multi = curl.multi()
   multi:add_handle(easy, function(easy, err)
-      ngx.say("Done:", err or easy:getinfo_response_code())
+      utils.log("Done:", err or easy:getinfo_response_code())
   end)
   uv.run()
 end
--- performHttpRequest()
+performHttpRequest()
 
 local function md5AndCJSON()
   local resty_md5 = require "resty.md5"
@@ -125,7 +159,7 @@ local function testTamale()
     { {"foo", 1, {} },      "one" }, 
     { 10,                   function() return "two" end}, 
     { {"bar", 10, 100},     "three" }, 
-    { {"baz", V"X" },       V"X" },             -- V"X" is a variable
+    { {"baz", V"X" },       V"X" },                                -- V"X" is a variable
     { {"add", V"X", V"Y"},  function(cs) return cs.X + cs.Y end }, 
   }
   
@@ -167,6 +201,7 @@ local function testEventable()
   waiter:emit('order', 'Pancakes')
 end
 -- testEventable()
+
 
 
 

@@ -6,17 +6,19 @@ trap "echo 'error: Script failed: see failed command above'" ERR
 
 _mkLogDirs(){
   mkdir -p {logs,'test/logs'}
+  
+  # those utils.log() log files can't be auto-created on mac (no idea why)
+  touch logs/yqj.{alert,debug,error,info}.log
 }
 
 _cleanLogs(){
-  local logFiles=(access error alert info)
-  for file in ${logFiles[@]}; do
-    if [[ -f "test/logs/$file.log" ]]; then
-      echo '' > test/logs/$file.log
-    fi
-    if [[ -f "logs/$file.log" ]]; then
-      echo '' > logs/$file.log
-    fi
+  local logDirs=(logs 'test/logs')
+  for logDir in ${logDirs[@]}; do
+    for logFile in $logDir/*.log; do
+      if [[ -f $logFile ]]; then
+        echo '' > $logFile
+      fi
+    done
   done
 }
 
@@ -27,14 +29,15 @@ _prepare(){
 
 start(){
   if [[ -f "test/openresty.pid" ]]; then
+    echo "[WARN] Openresty is started, pid: `cat test/openresty.pid`"
     return
   fi
   node ./node_modules/.bin/nodemon --exec "openresty -p `pwd`/test -c test-openresty.conf"
 }
 
-reload(){
+nodemon_restart(){
   if [[ -f "test/openresty.pid" ]]; then
-    kill $(cat test/openresty.pid)
+    kill `cat test/openresty.pid`
   fi
   
   sleep 1 # wait to finish killing
