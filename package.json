@@ -5,6 +5,7 @@
   "scripts": {
     "//--------------------------------------- DEV --------------------------------------------": "",
     "dev-start": "scripts/dev-start.sh start",
+    "deploy-to-200": "pm2 deploy dev",
     "//-------------------------------------- DEPLOY --------------------------------------------": "",
     "deploy-config": "scripts/op-dispatch-server.sh deploy",
     "remote-reload": "scripts/op-dispatch-server.sh remote_reload",

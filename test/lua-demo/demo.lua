@@ -44,7 +44,7 @@ local function testLuahs()
   
   utils.log(hits)
 end
-testLuahs()
+-- testLuahs()
 
 local function testHttpipe(url)
   local httpipe = require('http.httpipe')
@@ -69,6 +69,7 @@ end
 local function performHttpRequest()
   local uv = require("lluv")
   local curl = require "lluv.curl"
+  local loop = uv.default_loop()
   
   local function writeToResp(data)
     utils.log(data)
@@ -82,10 +83,11 @@ local function performHttpRequest()
   local multi = curl.multi()
   multi:add_handle(easy, function(easy, err)
       utils.log("Done:", err or easy:getinfo_response_code())
+      uv.stop(loop) -- stop the loop, or it will block the nginx thread
   end)
-  uv.run()
+  uv.run(loop)
 end
-performHttpRequest()
+-- performHttpRequest()
 
 local function md5AndCJSON()
   local resty_md5 = require "resty.md5"
@@ -159,7 +161,7 @@ local function testTamale()
     { {"foo", 1, {} },      "one" }, 
     { 10,                   function() return "two" end}, 
     { {"bar", 10, 100},     "three" }, 
-    { {"baz", V"X" },       V"X" },                                -- V"X" is a variable
+    { {"baz", V"X" },       V"X" },                                     -- V"X" is a variable
     { {"add", V"X", V"Y"},  function(cs) return cs.X + cs.Y end }, 
   }
   
