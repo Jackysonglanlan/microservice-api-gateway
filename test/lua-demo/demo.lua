@@ -33,7 +33,7 @@ It is therefore highly recommended to always declare such within an appropriate 
 -- ///////////////
 
 local function testLuahs()
-  local hs = require('luahs')
+  local hs = require('luahs') -- need gcc to have "GLIBCXX_3.4.20", or it will fail
   db = hs.compile {
     expression = 'aaa', 
     mode = hs.compile_mode.HS_MODE_BLOCK, 
@@ -161,7 +161,7 @@ local function testTamale()
     { {"foo", 1, {} },      "one" }, 
     { 10,                   function() return "two" end}, 
     { {"bar", 10, 100},     "three" }, 
-    { {"baz", V"X" },       V"X" },                                     -- V"X" is a variable
+    { {"baz", V"X" },       V"X" },                                      -- V"X" is a variable
     { {"add", V"X", V"Y"},  function(cs) return cs.X + cs.Y end }, 
   }
   

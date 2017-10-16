@@ -72,7 +72,27 @@ _markAllLibsAreBuilt(){
 
 # $1: mac or linux
 _cp_all_bin_files_to_lua_root_path(){
-  # 动态库 都必须放在 lua 库根目录，否则 ffi_load 找不到, 见 nginx 配置文件
+  # 动态库 都必须放在 lua 库根目录，否则 ffi_load 找不到, 见 nginx.conf 的 lua_package_cpath
+  
+  ##### WARN
+  # 如果执行 require('luahs') 报错:
+  #
+  # 1. libstdc++.so.6 "GLIBCXX_3.4.20"
+  # 请升级 gcc 到 5.5, 见 http://blog.csdn.net/gw85047034/article/details/52957516
+  #
+  # 注意事项:
+  # make install 后可能需要:
+  #   cd /usr/lib &&
+  #   ln -sf /usr/local/lib64/libstdc++.so.6.0.21 /usr/local/lib64/libstdc++.{so,so.6}
+  #
+  # 升级后，执行 strings /path/to/libstdc++.so.6 | grep GLIBCXX
+  # 看到 "GLIBCXX_3.4.20" 则 ok
+  #
+  # 2. libc.so.6 "GLIBC_2.14"
+  # 请升级 glibc 到 2.14,  见 http://www.cnblogs.com/gw811/p/3676856.html
+  # 注意事项同上
+  #
+  #####
   for soFile in $LUA_LIB_PATH/.prebuild/$1/*.so; do
     cp $soFile $LUA_LIB_PATH
   done
