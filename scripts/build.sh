@@ -103,6 +103,10 @@ _cp_all_bin_files_to_lua_root_path(){
   done
 }
 
+_makeDirs(){
+  mkdir -p {tmp,logs}
+}
+
 ######
 
 main(){
@@ -117,6 +121,8 @@ main(){
   _on_linux _cp_all_bin_files_to_lua_root_path linux
   
   _markAllLibsAreBuilt
+  
+  _makeDirs
 }
 
 main
