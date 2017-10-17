@@ -1,11 +1,21 @@
+#!/usr/bin/env resty
 
-if ngx ~= nil then
-  ngx.exit = function() end
+--
+-- Based on https://github.com/thibaultcha/lua-resty-busted
+--
+
+if ngx == nil then
+  os.execute('echo "[YQJ] FATAL: Not running in Openresty environment, Quit!!"')
+  os.exit(1);
+else
+  ngx.exit = function() end -- 防止退出???
 end
 
 function trim(s)
   return (s:gsub('^%s*(.-)%s*$', '%1'))
 end
+
+-- 加载 openresty 的 package.path, 这样整个测试环境就和 openresty 的运行环境一致了
 
 local tmpFilePath = 'tmp/lua-home'
 local tmp = io.open(tmpFilePath)
@@ -18,26 +28,15 @@ end
 local LUA_HOME = trim(tmp:read('*all')) .. '/../' -- execute() 会自动加上换行符，所以要 trim
 tmp:close()
 
+
 local ROOT = os.getenv('PWD') .. '/'
 
-package.path = LUA_HOME .. 'share/lua/5.1/?.lua;' .. LUA_HOME .. 'share/lua/5.1/?/init.lua;' .. 
+package.path = LUA_HOME .. 'share/lua/5.1/?.lua;' .. LUA_HOME .. 'share/lua/5.1/?/init.lua;' ..
 ROOT .. 'lua/src/?.lua;' .. ROOT .. 'lua/libs/?.lua;' .. ';;'
 
 package.cpath = LUA_HOME .. 'lib/lua/5.1/?.so;' .. ROOT .. 'lua/libs/?.so;' .. ';;'
 
--- core class extension
-require('luacat.luacat.luacat') -- 注意: luacat 库自带的 moacat 是一个做游戏的 sdk, 没有使用，但是也没有删除
-
--- mount everyday use modules to global
-_G.JSON = require('libcjson.libcjson')
-_G.utils = require('yqj.utils')(ngx)
-_G.utils.regex = require('regex.regex')
-
--- lua lodash
-_G._ = require('moses.moses_min')
-
--- just to collect any garbage
-collectgarbage("collect")
+require('init')
 
 -- Busted command-line runner
 require 'busted.runner'({ standalone = false })

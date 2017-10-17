@@ -25,9 +25,8 @@ describe("Openresty C libs", function()
         printAllFilesRecursive('lua/libs/.prebuild')
       end)
     
-    it("should load jit-uuid and JSON", function()
-        local uuid = require('yqj.jit-uuid')
-        utils.log( JSON.encode({foo = 112, uuid = uuid.generate_v4(), md5 = md5}))
+    it("should load JSON", function()
+        utils.log( JSON.encode({foo = 112,  bar = 'bbb'}))
       end)
     
     pending("should load libuv to make http request", function()
