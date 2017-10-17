@@ -6,14 +6,14 @@ describe("Openresty test context", function()
         assert.equal(200, ngx.HTTP_OK)
       end)
     
-    -- it("should wait", function()
-    --     ngx.sleep(1)
-    --     assert.is_true(1 == 1)
-    --   end)
+    it("should wait", function()
+        ngx.sleep(0.1)
+        assert.is_true(1 == 1)
+      end)
 end)
 
 
-describe("Openresty test context", function()
+describe("Openresty C libs", function()
     
     local function printAllFilesRecursive(path)
       local lfs = require("lfs")
@@ -43,13 +43,13 @@ describe("Openresty test context", function()
         utils.log( JSON.encode({foo = 112, uuid = uuid.generate_v4(), md5 = md5}))
       end)
     
-    it("should load libuv to make http request", function()
+    pending("should load libuv to make http request", function()
         local uv = require("lluv")
         local curl = require "lluv.curl"
         local loop = uv.default_loop()
         
         local function writeToResp(data)
-          utils.log(data)
+          -- utils.log(data)
         end
         
         local easy = curl.easy({
@@ -65,6 +65,30 @@ describe("Openresty test context", function()
         uv.run(loop)
       end)
     
+    it("should load luahs", function()
+        local hs = require('luahs') -- need gcc to have "GLIBCXX_3.4.20", or it will fail
+        db = hs.compile {
+          expression = '\\w\\b', 
+          mode = hs.compile_mode.HS_MODE_BLOCK, 
+          flags = {
+            hs.pattern_flags.HS_FLAG_CASELESS, 
+            hs.pattern_flags.HS_FLAG_MULTILINE, 
+            -- hs.pattern_flags.HS_FLAG_UTF8,
+            -- hs.pattern_flags.HS_FLAG_UCP,
+                }
+            }
+        scratch = db:makeScratch()
+        
+        local text = 'or it will fail'
+        hits = db:scan(text, scratch)
+        
+        local start = 0
+        for _, match in pairs(hits) do
+          utils.log( string.sub(text, start, match.to))
+          start = match.to + 1
+        end
+        
+      end)
     
 end)
 

@@ -15,11 +15,13 @@
     "start": "pm2 start ecosystem.json --env production",
     "//--------------------------------------- HOOKS --------------------------------------------": "",
     "prestart": "scripts/build.sh",
+    "pretest-only": "scripts/build.sh",
     "predev-start": "scripts/build.sh"
   },
   "keywords": [
     "Deploy",
     "Nginx",
+    "Openresty",
     "Devops"
   ],
   "author": "jackysong <jackysonglanlan@gmail.com>",

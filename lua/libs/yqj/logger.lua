@@ -19,7 +19,7 @@ ffi.cdef[[
   int close(int fd);
 ]]
 
-local O_RDWR   = 0X0002
+local O_RDWR   = 0x0002
 local O_CREAT  = 0x0040
 local O_APPEND = 0x0400
 local S_IRWXU  = 0x01C0
@@ -70,6 +70,9 @@ local function _loggerFactory(level)
   end
 end
 
+--
+-- method defs
+--
 debug = _loggerFactory(LVL_DEBUG)
 info = _loggerFactory(LVL_INFO)
 error = _loggerFactory(LVL_ERROR)
