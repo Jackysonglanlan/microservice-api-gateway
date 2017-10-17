@@ -127,17 +127,23 @@ function json.encval(value)
     return cjson.cJSON_CreateNull()
   end
 end
+
 function json.encode(value, formatted)
   local j = ffi_gc(json.encval(value), cjson.cJSON_Delete)
   if j == nil then return nil end
-  return formatted ~= false and ffi_str(ffi_gc(cjson.cJSON_Print(j), C.free)) or ffi_str(ffi_gc(cjson.cJSON_PrintUnformatted(j), C.free))
+  if formatted then
+    return ffi_str(ffi_gc(cjson.cJSON_Print(j), C.free))
+  end
+  return ffi_str(ffi_gc(cjson.cJSON_PrintUnformatted(j), C.free))
 end
+
 function json.minify(value)
   local t = type(value) ~= "string" and json.encode(value) or value
   local m = ffi_new(char_t, #t, t)
   cjson.cJSON_Minify(m)
   return ffi_str(m)
 end
+
 return {
   decode = json.decode, 
   encode = json.encode, 
