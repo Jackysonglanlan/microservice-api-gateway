@@ -7,7 +7,7 @@
     "dev-start": "LUA_ENV=dev scripts/dev-start.sh start",
     "deploy-to-200": "pm2 deploy dev",
     "//--------------------------------------- TEST --------------------------------------------": "",
-    "test": "npm run test-only -- --pattern=tests\\-.+ -- lua/tests",
+    "test": "npm run test-only -- --pattern=tests-.+ -- lua/tests",
     "test-only": "LUA_ENV=test lua/bin/busted ",
     "//-------------------------------------- DEPLOY --------------------------------------------": "",
     "deploy-config": "scripts/op-dispatch-server.sh deploy",

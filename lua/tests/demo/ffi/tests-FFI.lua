@@ -22,7 +22,7 @@ describe("FFI", function()
       end)
     
     it("should load C lib", function()
-        local c = ffi.load("lua/tests/demo/libhelloworld.so")
+        local c = ffi.load("lua/tests/demo/ffi/libhelloworld.so")
         
         -- userdata 代表数据是 C 的结构
         assert.equal('userdata', type(c))
