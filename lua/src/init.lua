@@ -1,6 +1,6 @@
 
 local ENV = {'dev', 'prod', 'test'}
-local runningEnv = os.getenv("LUA_ENV")
+local runningEnv = os.getenv("LUA_ENV") or ''
 
 local function _mustHaveLUA_ENV()
   local found = false
