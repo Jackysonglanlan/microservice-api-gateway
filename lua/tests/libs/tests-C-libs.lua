@@ -29,26 +29,6 @@ describe("Openresty C libs", function()
         print( JSON.encode({foo = 112,  bar = 'bbb'}))
       end)
     
-    it("should load libuv to make http request", function()
-        local curl = require "lluv.curl"
-        
-        local function writeToResp(data)
-          print(data)
-        end
-        
-        local easy = curl.easy({
-          url = "http://www.baidu.com";
-          writefunction = writeToResp
-            })
-        
-        local multi = curl.multi()
-        multi:add_handle(easy, function(easy, err)
-            print("Done:", err or easy:getinfo_response_code())
-            loop.stop() -- stop the loop, or it will block the nginx thread
-            end)
-        loop.run()
-      end)
-    
     it("should load luahs", function()
         local hs = require('luahs') -- need gcc to have "GLIBCXX_3.4.20", or it will fail
         db = hs.compile {

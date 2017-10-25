@@ -62,19 +62,6 @@ _G.notInProd = _envFunctionFactory('prod', true)
 _G.inTest = _envFunctionFactory('test')
 _G.notInTest = _envFunctionFactory('test', true)
 
-_G.uv = require "lluv"
-
-local loop = uv.default_loop()
--- local counter = 0
--- uv.idle(loop):start(function(idle)
---     counter = counter + 1
---     if counter > 10e4 then
---       print('stop')
---       uv.stop()
---     end
--- end)
--- loop.run()
-_G.loop = loop
 
 
 
