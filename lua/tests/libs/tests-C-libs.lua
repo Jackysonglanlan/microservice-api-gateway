@@ -12,7 +12,7 @@ describe("Openresty C libs", function()
           if attr.mode == "directory" then
             printAllFilesRecursive (f)
           else
-            utils.log(f)
+            print(f)
             --   for name, value in pairs(attr) do
             --     utils.log(name, value)
             -- end
@@ -26,16 +26,14 @@ describe("Openresty C libs", function()
       end)
     
     it("should load JSON", function()
-        utils.log( JSON.encode({foo = 112,  bar = 'bbb'}))
+        print( JSON.encode({foo = 112,  bar = 'bbb'}))
       end)
     
-    pending("should load libuv to make http request", function()
-        local uv = require("lluv")
+    it("should load libuv to make http request", function()
         local curl = require "lluv.curl"
-        local loop = uv.default_loop()
         
         local function writeToResp(data)
-          -- utils.log(data)
+          print(data)
         end
         
         local easy = curl.easy({
@@ -45,10 +43,10 @@ describe("Openresty C libs", function()
         
         local multi = curl.multi()
         multi:add_handle(easy, function(easy, err)
-            utils.log("Done:", err or easy:getinfo_response_code())
-            uv.stop(loop) -- stop the loop, or it will block the nginx thread
+            print("Done:", err or easy:getinfo_response_code())
+            loop.stop() -- stop the loop, or it will block the nginx thread
             end)
-        uv.run(loop)
+        loop.run()
       end)
     
     it("should load luahs", function()
@@ -70,7 +68,7 @@ describe("Openresty C libs", function()
         
         local start = 0
         for _, match in pairs(hits) do
-          utils.log( string.sub(text, start, match.to))
+          print( string.sub(text, start, match.to))
           start = match.to + 1
         end
         

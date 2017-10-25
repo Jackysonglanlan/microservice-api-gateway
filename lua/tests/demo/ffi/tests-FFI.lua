@@ -18,7 +18,7 @@ describe("FFI", function()
     
     setup(function()
         -- 编译动态库
-        os.execute('cd lua/tests/demo && make')
+        os.execute('cd lua/tests/demo/ffi && make')
       end)
     
     it("should load C lib", function()

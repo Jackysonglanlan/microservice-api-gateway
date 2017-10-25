@@ -31,13 +31,13 @@ describe("Openresty test context", function()
         it("should load _", function()
             local arr = {'aa', 'bb', 'cc'}
             _.each(arr, function(k, v)
-                utils.log(v)
+                print(v)
                   end)
             end)
         
         it("should load JSON", function()
             --
-            utils.log(JSON.encode({a = 1, b = 2, c = 3}))
+            print(JSON.encode({a = 1, b = 2, c = 3}))
             end)
       end)
     

@@ -51,7 +51,6 @@ local function md5AndCJSON()
 end
 md5AndCJSON()
 
-
 local function testTamale()
   local tamale =  require "tamale.tamale"
   local V = tamale.var
@@ -59,7 +58,7 @@ local function testTamale()
     { {"foo", 1, {} },      "one" }, 
     { 10,                   function() return "two" end}, 
     { {"bar", 10, 100},     "three" }, 
-    { {"baz", V"X" },       V"X" },                                            -- V"X" is a variable
+    { {"baz", V"X" },       V"X" },                                                 -- V"X" is a variable
     { {"add", V"X", V"Y"},  function(cs) return cs.X + cs.Y end }, 
   }
   
