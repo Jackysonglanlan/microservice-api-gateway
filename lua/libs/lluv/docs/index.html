@@ -1,0 +1,4373 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#Class_uv_error">Class uv_error </a></li>
+<li><a href="#Class_uv_fbuffer">Class uv_fbuffer </a></li>
+<li><a href="#Class_uv_file">Class uv_file </a></li>
+<li><a href="#Class_uv_handle">Class uv_handle </a></li>
+<li><a href="#Class_uv_stream">Class uv_stream </a></li>
+<li><a href="#Class_uv_idle">Class uv_idle </a></li>
+<li><a href="#Class_uv_timer">Class uv_timer </a></li>
+<li><a href="#Class_uv_fs_event">Class uv_fs_event </a></li>
+<li><a href="#Class_uv_fs_poll">Class uv_fs_poll </a></li>
+<li><a href="#Class_uv_pipe">Class uv_pipe </a></li>
+<li><a href="#Class_uv_prepare">Class uv_prepare </a></li>
+<li><a href="#Class_uv_check">Class uv_check </a></li>
+<li><a href="#Class_uv_process">Class uv_process </a></li>
+<li><a href="#Class_uv_signal">Class uv_signal </a></li>
+<li><a href="#Class_uv_tcp">Class uv_tcp </a></li>
+<li><a href="#Class_uv_tty">Class uv_tty </a></li>
+<li><a href="#Class_uv_udp">Class uv_udp </a></li>
+<li><a href="#Class_uv_poll">Class uv_poll </a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><strong>lluv</strong></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>lluv</code></h1>
+<p>Main architecture.</p>
+<p> <br/>* All function with callback - callback is last argument.
+ <br/>* In callback first argument is object. It could be loop or specific object(e.g. file).
+ <br/>* Second argument is error object or nil.
+ <br/>* loop parameter could be omit in constructors.
+ <br/>   uv.XXX(loop, ...) - correct
+ <br/>   uv.XXX(...) - correct loop is uv.default_loop()
+ <br/>   uv.XXX(nil, ...) - loop is uv.default_loop(), but first parameter in ctor is nil</p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#walk_cb">walk_cb (handle)</a></td>
+	<td class="summary">Definition for callback passed to uv.handles.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#run">run ([msgh[, run=uv.RUN_DEFAULT]])</a></td>
+	<td class="summary">Run event loop.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#stop">stop ()</a></td>
+	<td class="summary">Stop event loop.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#handles">handles ([callback])</a></td>
+	<td class="summary">Iterate over handles.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#now">now ()</a></td>
+	<td class="summary">Return the current timestamp in milliseconds.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#default_loop">default_loop ()</a></td>
+	<td class="summary">Return default loop object.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#update_time">update_time ()</a></td>
+	<td class="summary">Update the event loop’s concept of “now”.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#loop">loop ()</a></td>
+	<td class="summary">Create new event loop object</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#tty">tty ()</a></td>
+	<td class="summary">Create new TTY handle</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#tcp">tcp ()</a></td>
+	<td class="summary">Create new TCP handle</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#udp">udp ()</a></td>
+	<td class="summary">Create new UDP handle</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#timer">timer ()</a></td>
+	<td class="summary">Create new Timer handle</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#idle">idle ()</a></td>
+	<td class="summary">Create new Idle handle</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#fs_event">fs_event ()</a></td>
+	<td class="summary">Create new FS event handle</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#fs_poll">fs_poll ()</a></td>
+	<td class="summary">Create new FS poll handle</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#pipe">pipe ([ipc=false])</a></td>
+	<td class="summary">Create new Pipe handle</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#poll">poll (file)</a></td>
+	<td class="summary">Create new Poll handle</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#poll_socket">poll_socket (socket)</a></td>
+	<td class="summary">Create new Poll handle</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#prepare">prepare ()</a></td>
+	<td class="summary">Create new Prepare handle</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#check">check ()</a></td>
+	<td class="summary">Create new Check handle</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#spawn">spawn (options[, callback])</a></td>
+	<td class="summary">spawn new process and return new Process handle</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#signal">signal ()</a></td>
+	<td class="summary">Create new Signal handle</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#version">version ([if])</a></td>
+	<td class="summary">Return libuv version.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get_process_title">get_process_title ()</a></td>
+	<td class="summary">Get the title of the current process.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#set_process_title">set_process_title (title.)</a></td>
+	<td class="summary">Set the title of the current process.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#resident_set_memory">resident_set_memory ()</a></td>
+	<td class="summary">Get the resident set size for the current process.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uptime">uptime ()</a></td>
+	<td class="summary">Get the current system uptime.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getrusage">getrusage ()</a></td>
+	<td class="summary">Gets the resource usage for the current process.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#cpu_info">cpu_info ()</a></td>
+	<td class="summary">Get information about the CPUs on the system.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#interface_addresses">interface_addresses ()</a></td>
+	<td class="summary">Get address information about the network interfaces on the system.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#exepath">exepath ()</a></td>
+	<td class="summary">Get the executable path.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#cwd">cwd ()</a></td>
+	<td class="summary">Get the current working directory.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#chdir">chdir (path)</a></td>
+	<td class="summary">Change the current working directory.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get_total_memory">get_total_memory ()</a></td>
+	<td class="summary">Get memory information (in bytes).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#get_free_memory">get_free_memory ()</a></td>
+	<td class="summary">Get memory information (in bytes).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#hrtime">hrtime ()</a></td>
+	<td class="summary">Returns the current high-resolution real time.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#fs_unlink">fs_unlink ([loop], path[, callback])</a></td>
+	<td class="summary">Remove the specified file.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#fs_mkdtemp">fs_mkdtemp ([loop], path[, callback])</a></td>
+	<td class="summary">Create the temporary directory.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#fs_mkdir">fs_mkdir ([loop], path[, callback])</a></td>
+	<td class="summary">Create the specified directory.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#fs_rmdir">fs_rmdir ([loop], path[, callback])</a></td>
+	<td class="summary">Remove the specified directory.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#fs_scandir">fs_scandir ([loop], path[, callback])</a></td>
+	<td class="summary">List files from a directory.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#fs_stat">fs_stat ([loop], path[, callback])</a></td>
+	<td class="summary">Crossplatform file stat.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#fs_lstat">fs_lstat ([loop], path[, callback])</a></td>
+	<td class="summary">Crossplatform link stat.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#fs_rename">fs_rename ([loop], path, new_path[, callback])</a></td>
+	<td class="summary">Rename file.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#fs_chmod">fs_chmod ([loop], path, mode[, callback])</a></td>
+	<td class="summary">Change file permissions.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#fs_utime">fs_utime ([loop], path, atime, mtime[, callback])</a></td>
+	<td class="summary">Update file timestamps.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#fs_symlink">fs_symlink ([loop], path, new_path[, flags[, callback]])</a></td>
+	<td class="summary">Create a symlink.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#fs_readlink">fs_readlink ([loop], path[, callback])</a></td>
+	<td class="summary">Read link file and return the original file path.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#fs_chown">fs_chown ([loop], path, uid, gid)</a></td>
+	<td class="summary">Changes ownership of a file.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#fs_access">fs_access ([loop], path[, checked[, callback]])</a></td>
+	<td class="summary">Check real user's permissions for a file.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#fs_open">fs_open ([loop], path, mode[, flags[, callback]])</a></td>
+	<td class="summary">Open file.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#disable_stdio_inheritance">disable_stdio_inheritance ()</a></td>
+	<td class="summary">Disables inheritance for file descriptors / handles that this process inherited from its parent.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#kill">kill (pid[, signal=uv.SIGTERM])</a></td>
+	<td class="summary">Sends the specified signal to the given PID.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#signal_ignore">signal_ignore (signal)</a></td>
+	<td class="summary">Ignore specific signal.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#signal_default">signal_default (signal)</a></td>
+	<td class="summary">Set default handler to signal</td>
+	</tr>
+</table>
+<h2><a href="#Class_uv_error">Class uv_error </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#uv_error:category">uv_error:category ()</a></td>
+	<td class="summary">Get the error category.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_error:cat">uv_error:cat ()</a></td>
+	<td class="summary">Get the error category.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_error:no">uv_error:no ()</a></td>
+	<td class="summary">Get the number value of error.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_error:name">uv_error:name ()</a></td>
+	<td class="summary">Get the error name.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_error:msg">uv_error:msg ()</a></td>
+	<td class="summary">Get the error description.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_error:ext">uv_error:ext ()</a></td>
+	<td class="summary">Get the extinsion information about error.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_error:__tostring">uv_error:__tostring ()</a></td>
+	<td class="summary">Get the full error description.</td>
+	</tr>
+</table>
+<h2><a href="#Class_uv_fbuffer">Class uv_fbuffer </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#uv_fbuffer:free">uv_fbuffer:free ()</a></td>
+	<td class="summary">Free buffer.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_fbuffer:to_s">uv_fbuffer:to_s ([offset=0[, size=self:size()]])</a></td>
+	<td class="summary">Return buffer data as string.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_fbuffer:to_p">uv_fbuffer:to_p ([offset=0])</a></td>
+	<td class="summary">Return buffer data as lightuserdata.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_fbuffer:size">uv_fbuffer:size ()</a></td>
+	<td class="summary">Return number of bytes in buffer.</td>
+	</tr>
+</table>
+<h2><a href="#Class_uv_file">Class uv_file </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#uv_file:loop">uv_file:loop ()</a></td>
+	<td class="summary">Return loop object where this handle runs.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_file:stat">uv_file:stat ([loop], path[, callback])</a></td>
+	<td class="summary">Crossplatform file stat.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_file:sync">uv_file:sync ([callback])</a></td>
+	<td class="summary">Sync all changes made to file.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_file:datasync">uv_file:datasync ([callback])</a></td>
+	<td class="summary">Sync data changes made to file.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_file:truncate">uv_file:truncate (offset[, callback])</a></td>
+	<td class="summary">Truncate the contents of a file to the specified offset.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_file:close">uv_file:close ([callback])</a></td>
+	<td class="summary">Close file handle.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_file:read">uv_file:read (buffer[, position=0][, offset=0][, length=buffer:size()-offset], callback)</a></td>
+	<td class="summary">Read data from file.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_file:read">uv_file:read (buffer_length[, position=0][, offset=0][, length=buffer:size()-offset], callback)</a></td>
+	<td class="summary">Read data from file.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_file:read">uv_file:read (buffer, buffer_length[, position=0][, offset=0][, length=buffer:size()-offset], callback)</a></td>
+	<td class="summary">Read data from file.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_file:write">uv_file:write (data[, position=0][, offset=0][, length=buffer:size()-offset], callback)</a></td>
+	<td class="summary">Write data to file.</td>
+	</tr>
+</table>
+<h2><a href="#Class_uv_handle">Class uv_handle </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#uv_handle:loop">uv_handle:loop ()</a></td>
+	<td class="summary">Returns loop object.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_handle:close">uv_handle:close ([callback])</a></td>
+	<td class="summary">Close handle.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_handle:ref">uv_handle:ref ()</a></td>
+	<td class="summary">Reference handle.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_handle:unref">uv_handle:unref ()</a></td>
+	<td class="summary">Unreference handle.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_handle:has_ref">uv_handle:has_ref ()</a></td>
+	<td class="summary">Indicates if handle is referenced.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_handle:lock">uv_handle:lock ()</a></td>
+	<td class="summary">Protect handle from Lua gc.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_handle:unlock">uv_handle:unlock ()</a></td>
+	<td class="summary">Apply to handle regular rules of Lua gc.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_handle:locked">uv_handle:locked ()</a></td>
+	<td class="summary">Indicates if handle is locked.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_handle:is_active">uv_handle:is_active ()</a></td>
+	<td class="summary">Indicates if handle is active.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_handle:is_closing">uv_handle:is_closing ()</a></td>
+	<td class="summary">Indicates if handle is closing or already closed.</td>
+	</tr>
+</table>
+<h2><a href="#Class_uv_stream">Class uv_stream </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#uv_stream:shutdown">uv_stream:shutdown (callback)</a></td>
+	<td class="summary">Shutdown the outgoing (write) side of a duplex stream.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_stream:listen">uv_stream:listen ([backlog], callback)</a></td>
+	<td class="summary">Start listening for incoming connections.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_stream:accept">uv_stream:accept ([client])</a></td>
+	<td class="summary">Accept incoming connections.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_stream:start_read">uv_stream:start_read (callback)</a></td>
+	<td class="summary">Read data from an incoming stream.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_stream:stop_read">uv_stream:stop_read ()</a></td>
+	<td class="summary">Stop reading data from the stream.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_stream:write">uv_stream:write (data[, callback])</a></td>
+	<td class="summary">Write data to stream.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_stream:try_write">uv_stream:try_write ()</a></td>
+	<td class="summary">Write data to stream.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_stream:readable">uv_stream:readable ()</a></td>
+	<td class="summary">Check if stream is readable.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_stream:writable">uv_stream:writable ()</a></td>
+	<td class="summary">Check if stream is writable.</td>
+	</tr>
+</table>
+<h2><a href="#Class_uv_idle">Class uv_idle </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#uv_idle:start">uv_idle:start (callback)</a></td>
+	<td class="summary">Start idle handle.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_idle:stop">uv_idle:stop ()</a></td>
+	<td class="summary">Stop idle handle.</td>
+	</tr>
+</table>
+<h2><a href="#Class_uv_timer">Class uv_timer </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#uv_timer:start">uv_timer:start ([timeout][, repeat], callback)</a></td>
+	<td class="summary">Start timer handle.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_timer:stop">uv_timer:stop ()</a></td>
+	<td class="summary">Stop timer handle.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_timer:again">uv_timer:again ([repeat])</a></td>
+	<td class="summary">Stop the Timer, and if it is repeating restart it using the repeat value as the timeout.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_timer:set_repeat">uv_timer:set_repeat (repeat)</a></td>
+	<td class="summary">Set the repeat value.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_timer:get_repeat">uv_timer:get_repeat ()</a></td>
+	<td class="summary">Get repeat value.</td>
+	</tr>
+</table>
+<h2><a href="#Class_uv_fs_event">Class uv_fs_event </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#uv_fs_event:start">uv_fs_event:start (path[, flags], callback)</a></td>
+	<td class="summary">Start FS Event handle.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_fs_event:stop">uv_fs_event:stop ()</a></td>
+	<td class="summary">Stop FS Event handle.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_fs_event:path">uv_fs_event:path ()</a></td>
+	<td class="summary">Get the path being monitored by the handle.</td>
+	</tr>
+</table>
+<h2><a href="#Class_uv_fs_poll">Class uv_fs_poll </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#uv_fs_poll:start">uv_fs_poll:start (callback)</a></td>
+	<td class="summary">Check the file at path for changes every interval milliseconds.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_fs_poll:stop">uv_fs_poll:stop ()</a></td>
+	<td class="summary">Stop the handle</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_fs_poll:getpath">uv_fs_poll:getpath ()</a></td>
+	<td class="summary">Get the path being monitored by the handle.</td>
+	</tr>
+</table>
+<h2><a href="#Class_uv_pipe">Class uv_pipe </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#uv_pipe:open">uv_pipe:open (fileno)</a></td>
+	<td class="summary">Open an existing file descriptor.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_pipe:bind">uv_pipe:bind (name[, callback])</a></td>
+	<td class="summary">Bind the pipe to a file path (Unix) or a name (Windows).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_pipe:connect">uv_pipe:connect (name, callback)</a></td>
+	<td class="summary">Connect to the Unix domain socket or the named pipe.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_pipe:getsockname">uv_pipe:getsockname ()</a></td>
+	<td class="summary">Get the name of the Unix domain socket or the named pipe.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_pipe:pending_instances">uv_pipe:pending_instances (count)</a></td>
+	<td class="summary">Set the number of pending pipe instance handles when the pipe server is waiting for connections.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_pipe:pending_count">uv_pipe:pending_count ()</a></td>
+	<td class="summary">Get the number of pending pipe instance.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_pipe:pending_type">uv_pipe:pending_type ()</a></td>
+	<td class="summary">Get the type of first pending handle.</td>
+	</tr>
+</table>
+<h2><a href="#Class_uv_prepare">Class uv_prepare </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#uv_prepare:start">uv_prepare:start (callback, self)</a></td>
+	<td class="summary">Start the handle.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_prepare:stop">uv_prepare:stop (self)</a></td>
+	<td class="summary">Stop the handle.</td>
+	</tr>
+</table>
+<h2><a href="#Class_uv_check">Class uv_check </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#uv_check:start">uv_check:start (callback, self)</a></td>
+	<td class="summary">Start the handle.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_check:stop">uv_check:stop (self)</a></td>
+	<td class="summary">Stop the handle.</td>
+	</tr>
+</table>
+<h2><a href="#Class_uv_process">Class uv_process </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#uv_process:pid">uv_process:pid ()</a></td>
+	<td class="summary">Get process ID.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_process:kill">uv_process:kill ([signal=uv.SIGTERM])</a></td>
+	<td class="summary">Sends the specified signal to the given process handle.</td>
+	</tr>
+</table>
+<h2><a href="#Class_uv_signal">Class uv_signal </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#uv_signal:start">uv_signal:start (signum, callback, self)</a></td>
+	<td class="summary">Start the handle watching for the given signal.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_signal:stop">uv_signal:stop (self)</a></td>
+	<td class="summary">Stop the handle.</td>
+	</tr>
+</table>
+<h2><a href="#Class_uv_tcp">Class uv_tcp </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#uv_tcp:open">uv_tcp:open (fileno)</a></td>
+	<td class="summary">Open an existing file descriptor.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_tcp:bind">uv_tcp:bind (host, port[, flags[, callback]])</a></td>
+	<td class="summary">Bind the handle to an address and port.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_tcp:connect">uv_tcp:connect (host, port, callback)</a></td>
+	<td class="summary">Connect the handle to remote endpoint.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_tcp:nodelay">uv_tcp:nodelay ()</a></td>
+	<td class="summary">Enable / disable Nagle’s algorithm.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_tcp:keepalive">uv_tcp:keepalive ()</a></td>
+	<td class="summary">Enable / disable TCP keep-alive.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_tcp:simultaneous_accepts">uv_tcp:simultaneous_accepts ()</a></td>
+	<td class="summary">Enable / disable simultaneous asynchronous accept requests.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_tcp:getsockname">uv_tcp:getsockname ()</a></td>
+	<td class="summary">Get the current address to which the handle is bound.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_tcp:getpeername">uv_tcp:getpeername ()</a></td>
+	<td class="summary">Get the address of the peer connected to the handle.</td>
+	</tr>
+</table>
+<h2><a href="#Class_uv_tty">Class uv_tty </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#uv_tty:set_mode">uv_tty:set_mode (mode)</a></td>
+	<td class="summary">Set the TTY mode.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_tty:get_winsize">uv_tty:get_winsize ()</a></td>
+	<td class="summary">Gets the current Window size.</td>
+	</tr>
+</table>
+<h2><a href="#Class_uv_udp">Class uv_udp </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#uv_udp:open">uv_udp:open (fileno)</a></td>
+	<td class="summary">Open an existing file descriptor.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_udp:bind">uv_udp:bind (host, port[, flags[, callback]])</a></td>
+	<td class="summary">Bind the handle to an address and port.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_udp:getsockname">uv_udp:getsockname ()</a></td>
+	<td class="summary">Get the current address to which the handle is bound.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_udp:start_recv">uv_udp:start_recv (callback)</a></td>
+	<td class="summary">Read datagrams from UDP socket.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_udp:stop_recv">uv_udp:stop_recv ()</a></td>
+	<td class="summary">Stop listening for incoming datagrams.</td>
+	</tr>
+</table>
+<h2><a href="#Class_uv_poll">Class uv_poll </a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#uv_poll:start">uv_poll:start (events, callback)</a></td>
+	<td class="summary">Start polling the file descriptor.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#uv_poll:stop">uv_poll:stop ()</a></td>
+	<td class="summary">Stop polling the file descriptor.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "walk_cb"></a>
+    <strong>walk_cb (handle)</strong>
+    </dt>
+    <dd>
+    Definition for callback passed to uv.handles.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">handle</span>
+            <span class="types"><span class="type">uv_handle</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "run"></a>
+    <strong>run ([msgh[, run=uv.RUN_DEFAULT]])</strong>
+    </dt>
+    <dd>
+    Run event loop.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">msgh</span>
+            <span class="types"><span class="type">function</span></span>
+         error message handler
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">run</span>
+            <span class="types"><span class="type">number</span></span>
+         mode
+         (<em>default</em> uv.RUN_DEFAULT)
+        </li>
+    </ul>
+
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">uv.run(<span class="global">debug</span>.traceback)
+uv.run(uv.RUN_ONCE)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "stop"></a>
+    <strong>stop ()</strong>
+    </dt>
+    <dd>
+    Stop event loop.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "handles"></a>
+    <strong>handles ([callback])</strong>
+    </dt>
+    <dd>
+    Iterate over handles.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">walk_cb</span></span>
+
+
+
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "now"></a>
+    <strong>now ()</strong>
+    </dt>
+    <dd>
+    Return the current timestamp in milliseconds.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">number</span></span>
+        milliseconds
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "default_loop"></a>
+    <strong>default_loop ()</strong>
+    </dt>
+    <dd>
+    Return default loop object.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_loop</span></span>
+        loop
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "update_time"></a>
+    <strong>update_time ()</strong>
+    </dt>
+    <dd>
+    Update the event loop’s concept of “now”.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "loop"></a>
+    <strong>loop ()</strong>
+    </dt>
+    <dd>
+    Create new event loop object
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "tty"></a>
+    <strong>tty ()</strong>
+    </dt>
+    <dd>
+    Create new TTY handle
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_tty</span></span>
+        handle
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "tcp"></a>
+    <strong>tcp ()</strong>
+    </dt>
+    <dd>
+    Create new TCP handle
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_tcp</span></span>
+        handle
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "udp"></a>
+    <strong>udp ()</strong>
+    </dt>
+    <dd>
+    Create new UDP handle
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_udp</span></span>
+        handle
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "timer"></a>
+    <strong>timer ()</strong>
+    </dt>
+    <dd>
+    Create new Timer handle
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_timer</span></span>
+        handle
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "idle"></a>
+    <strong>idle ()</strong>
+    </dt>
+    <dd>
+    Create new Idle handle
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_idle</span></span>
+        handle
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "fs_event"></a>
+    <strong>fs_event ()</strong>
+    </dt>
+    <dd>
+    Create new FS event handle
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_fs_event</span></span>
+        handle
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "fs_poll"></a>
+    <strong>fs_poll ()</strong>
+    </dt>
+    <dd>
+    Create new FS poll handle
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_fs_poll</span></span>
+        handle
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "pipe"></a>
+    <strong>pipe ([ipc=false])</strong>
+    </dt>
+    <dd>
+    Create new Pipe handle
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">ipc</span>
+            <span class="types"><span class="type">boolean</span></span>
+         indicate if this pipe will be used for handle passing between processes
+         (<em>default</em> false)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_pipe</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "poll"></a>
+    <strong>poll (file)</strong>
+    </dt>
+    <dd>
+    Create new Poll handle
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">file</span>
+            <span class="types"><span class="type">number</span></span>
+         handle
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_poll</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "poll_socket"></a>
+    <strong>poll_socket (socket)</strong>
+    </dt>
+    <dd>
+    Create new Poll handle
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">socket</span>
+            <span class="types"><span class="type">number</span></span>
+         handle
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_poll</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "prepare"></a>
+    <strong>prepare ()</strong>
+    </dt>
+    <dd>
+    Create new Prepare handle
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_prepare</span></span>
+        handle
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "check"></a>
+    <strong>check ()</strong>
+    </dt>
+    <dd>
+    Create new Check handle
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_check</span></span>
+        handle
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "spawn"></a>
+    <strong>spawn (options[, callback])</strong>
+    </dt>
+    <dd>
+    spawn new process and return new Process handle
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">options</span>
+            <span class="types"><span class="type">process_options</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (process, error, exit_status, signal)
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_process</span></span>
+        handle
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "signal"></a>
+    <strong>signal ()</strong>
+    </dt>
+    <dd>
+    Create new Signal handle
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_signal</span></span>
+        handle
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "version"></a>
+    <strong>version ([if])</strong>
+    </dt>
+    <dd>
+    Return libuv version.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">if</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#pdf-unpack">unpack</a></span>
+         true then version return as three number
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+        version
+    </ol>
+     <h3>Or</h3>
+    <ol>
+        <li>
+           <span class="types"><span class="type">number</span></span>
+        minor</li>
+        <li>
+           <span class="types"><span class="type">number</span></span>
+        major</li>
+        <li>
+           <span class="types"><span class="type">number</span></span>
+        patch</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "get_process_title"></a>
+    <strong>get_process_title ()</strong>
+    </dt>
+    <dd>
+    Get the title of the current process.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+        title.
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "set_process_title"></a>
+    <strong>set_process_title (title.)</strong>
+    </dt>
+    <dd>
+    Set the title of the current process.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">title.</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "resident_set_memory"></a>
+    <strong>resident_set_memory ()</strong>
+    </dt>
+    <dd>
+    Get the resident set size for the current process.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">number</span></span>
+        rss
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uptime"></a>
+    <strong>uptime ()</strong>
+    </dt>
+    <dd>
+    Get the current system uptime.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">number</span></span>
+        uptime
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getrusage"></a>
+    <strong>getrusage ()</strong>
+    </dt>
+    <dd>
+    Gets the resource usage for the current process.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "cpu_info"></a>
+    <strong>cpu_info ()</strong>
+    </dt>
+    <dd>
+    Get information about the CPUs on the system.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">cpu_infos</span></span>
+        infos
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "interface_addresses"></a>
+    <strong>interface_addresses ()</strong>
+    </dt>
+    <dd>
+    Get address information about the network interfaces on the system.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">interface_address</span></span>
+        addresses
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "exepath"></a>
+    <strong>exepath ()</strong>
+    </dt>
+    <dd>
+    Get the executable path.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+        path
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "cwd"></a>
+    <strong>cwd ()</strong>
+    </dt>
+    <dd>
+    Get the current working directory.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+        path
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "chdir"></a>
+    <strong>chdir (path)</strong>
+    </dt>
+    <dd>
+    Change the current working directory.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">path</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "get_total_memory"></a>
+    <strong>get_total_memory ()</strong>
+    </dt>
+    <dd>
+    Get memory information (in bytes).
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">number</span></span>
+        count
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "get_free_memory"></a>
+    <strong>get_free_memory ()</strong>
+    </dt>
+    <dd>
+    Get memory information (in bytes).
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">number</span></span>
+        count
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "hrtime"></a>
+    <strong>hrtime ()</strong>
+    </dt>
+    <dd>
+    Returns the current high-resolution real time.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">number</span></span>
+        time
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "fs_unlink"></a>
+    <strong>fs_unlink ([loop], path[, callback])</strong>
+    </dt>
+    <dd>
+    Remove the specified file.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">loop</span>
+            <span class="types"><span class="type">uv_loop</span></span>
+
+
+
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">path</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         file to unlink
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (loop, err, path)
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "fs_mkdtemp"></a>
+    <strong>fs_mkdtemp ([loop], path[, callback])</strong>
+    </dt>
+    <dd>
+    Create the temporary directory.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">loop</span>
+            <span class="types"><span class="type">uv_loop</span></span>
+
+
+
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">path</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         directory template name to create
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (loop, err, path)
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "fs_mkdir"></a>
+    <strong>fs_mkdir ([loop], path[, callback])</strong>
+    </dt>
+    <dd>
+    Create the specified directory.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">loop</span>
+            <span class="types"><span class="type">uv_loop</span></span>
+
+
+
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">path</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         directory to create
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (loop, err, path)
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "fs_rmdir"></a>
+    <strong>fs_rmdir ([loop], path[, callback])</strong>
+    </dt>
+    <dd>
+    Remove the specified directory.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">loop</span>
+            <span class="types"><span class="type">uv_loop</span></span>
+
+
+
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">path</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         directory to remove
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (loop, err, path)
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "fs_scandir"></a>
+    <strong>fs_scandir ([loop], path[, callback])</strong>
+    </dt>
+    <dd>
+    List files from a directory.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">loop</span>
+            <span class="types"><span class="type">uv_loop</span></span>
+
+
+
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">path</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         directory to list
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (loop, err, path, files)
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "fs_stat"></a>
+    <strong>fs_stat ([loop], path[, callback])</strong>
+    </dt>
+    <dd>
+    Crossplatform file stat.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">loop</span>
+            <span class="types"><span class="type">uv_loop</span></span>
+
+
+
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">path</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         file to stat
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (loop, err, stat, path)
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "fs_lstat"></a>
+    <strong>fs_lstat ([loop], path[, callback])</strong>
+    </dt>
+    <dd>
+    Crossplatform link stat.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">loop</span>
+            <span class="types"><span class="type">uv_loop</span></span>
+
+
+
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">path</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         link to stat
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (loop, err, stat, path)
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "fs_rename"></a>
+    <strong>fs_rename ([loop], path, new_path[, callback])</strong>
+    </dt>
+    <dd>
+    Rename file.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">loop</span>
+            <span class="types"><span class="type">uv_loop</span></span>
+
+
+
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">path</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         original file
+        </li>
+        <li><span class="parameter">new_path</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         new name for the file
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (loop, err, path)
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "fs_chmod"></a>
+    <strong>fs_chmod ([loop], path, mode[, callback])</strong>
+    </dt>
+    <dd>
+    Change file permissions.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">loop</span>
+            <span class="types"><span class="type">uv_loop</span></span>
+
+
+
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">path</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         file which permissions will be changed
+        </li>
+        <li><span class="parameter">mode</span>
+            <span class="types"><span class="type">number</span></span>
+         file permissions (e.g. 0755)
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (loop, err, path)
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "fs_utime"></a>
+    <strong>fs_utime ([loop], path, atime, mtime[, callback])</strong>
+    </dt>
+    <dd>
+    Update file timestamps.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">loop</span>
+            <span class="types"><span class="type">uv_loop</span></span>
+
+
+
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">path</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         file which times will be changed
+        </li>
+        <li><span class="parameter">atime</span>
+            <span class="types"><span class="type">number</span></span>
+         new accessed time
+        </li>
+        <li><span class="parameter">mtime</span>
+            <span class="types"><span class="type">number</span></span>
+         new modified time
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (loop, err, path)
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "fs_symlink"></a>
+    <strong>fs_symlink ([loop], path, new_path[, flags[, callback]])</strong>
+    </dt>
+    <dd>
+    Create a symlink.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">loop</span>
+            <span class="types"><span class="type">uv_loop</span></span>
+
+
+
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">path</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         original file
+        </li>
+        <li><span class="parameter">new_path</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         name for the symlink
+        </li>
+        <li><span class="parameter">flags</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (loop, err, path)
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "fs_readlink"></a>
+    <strong>fs_readlink ([loop], path[, callback])</strong>
+    </dt>
+    <dd>
+    Read link file and return the original file path.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">loop</span>
+            <span class="types"><span class="type">uv_loop</span></span>
+
+
+
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">path</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         link name
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (loop, err, path)
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "fs_chown"></a>
+    <strong>fs_chown ([loop], path, uid, gid)</strong>
+    </dt>
+    <dd>
+    Changes ownership of a file.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">loop</span>
+            <span class="types"><span class="type">uv_loop</span></span>
+
+
+
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">path</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         original file
+        </li>
+        <li><span class="parameter">uid</span>
+            <span class="types"><span class="type">number</span></span>
+         User ID
+        </li>
+        <li><span class="parameter">gid</span>
+            <span class="types"><span class="type">number</span></span>
+         GroupID
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "fs_access"></a>
+    <strong>fs_access ([loop], path[, checked[, callback]])</strong>
+    </dt>
+    <dd>
+    Check real user's permissions for a file.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">loop</span>
+            <span class="types"><span class="type">uv_loop</span></span>
+
+
+
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">path</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         original file
+        </li>
+        <li><span class="parameter">checked</span>
+            <span class="types"><span class="type">number</span> or <a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         access permissions
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (loop, err, ok, path)
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "fs_open"></a>
+    <strong>fs_open ([loop], path, mode[, flags[, callback]])</strong>
+    </dt>
+    <dd>
+    Open file.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">loop</span>
+            <span class="types"><span class="type">uv_loop</span></span>
+
+
+
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">path</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         original file
+        </li>
+        <li><span class="parameter">mode</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         for opening the file (e.g. "w+b")
+        </li>
+        <li><span class="parameter">flags</span>
+            <span class="types"><span class="type">number</span></span>
+         flags for opening the file
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (file, err, path)
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "disable_stdio_inheritance"></a>
+    <strong>disable_stdio_inheritance ()</strong>
+    </dt>
+    <dd>
+    Disables inheritance for file descriptors / handles that this process inherited from its parent.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "kill"></a>
+    <strong>kill (pid[, signal=uv.SIGTERM])</strong>
+    </dt>
+    <dd>
+    Sends the specified signal to the given PID.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">pid</span>
+            <span class="types"><span class="type">number</span></span>
+         process id
+        </li>
+        <li><span class="parameter">signal</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+         (<em>default</em> uv.SIGTERM)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+        true
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "signal_ignore"></a>
+    <strong>signal_ignore (signal)</strong>
+    </dt>
+    <dd>
+    Ignore specific signal.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">signal</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "signal_default"></a>
+    <strong>signal_default (signal)</strong>
+    </dt>
+    <dd>
+    Set default handler to signal
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">signal</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header has-description"><a name="Class_uv_error"></a>Class uv_error </h2>
+
+          <div class="section-description">
+          lluv error object
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "uv_error:category"></a>
+    <strong>uv_error:category ()</strong>
+    </dt>
+    <dd>
+    Get the error category.
+
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a> or <span class="type">number</span></span>
+        error category <code>LIBUV</code>/<code>LLUV</code> or number for other categories
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_error:cat"></a>
+    <strong>uv_error:cat ()</strong>
+    </dt>
+    <dd>
+    Get the error category.
+
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a> or <span class="type">number</span></span>
+        error category <code>LIBUV</code>/<code>LLUV</code> or number for other categories
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_error:no"></a>
+    <strong>uv_error:no ()</strong>
+    </dt>
+    <dd>
+    Get the number value of error.
+
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">number</span></span>
+        number of error (uv.EXXX constants e.g. uv.EOF)
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_error:name"></a>
+    <strong>uv_error:name ()</strong>
+    </dt>
+    <dd>
+    Get the error name.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+        error name (e.g. "EOF")
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_error:msg"></a>
+    <strong>uv_error:msg ()</strong>
+    </dt>
+    <dd>
+    Get the error description.
+
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+        error description (e.g. "Login denied")
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_error:ext"></a>
+    <strong>uv_error:ext ()</strong>
+    </dt>
+    <dd>
+    Get the extinsion information about error.
+ This field e.g. contains file path for fs_xxx function.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+        error information
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_error:__tostring"></a>
+    <strong>uv_error:__tostring ()</strong>
+    </dt>
+    <dd>
+    Get the full error description.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+        string that contain name, message and number of error
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header has-description"><a name="Class_uv_fbuffer"></a>Class uv_fbuffer </h2>
+
+          <div class="section-description">
+          lluv fixed buffer
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "uv_fbuffer:free"></a>
+    <strong>uv_fbuffer:free ()</strong>
+    </dt>
+    <dd>
+    Free buffer.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_fbuffer:to_s"></a>
+    <strong>uv_fbuffer:to_s ([offset=0[, size=self:size()]])</strong>
+    </dt>
+    <dd>
+    Return buffer data as string.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">offset</span>
+            <span class="types"><span class="type">number</span></span>
+         starting from 0
+         (<em>default</em> 0)
+        </li>
+        <li><span class="parameter">size</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+         (<em>default</em> self:size())
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+        data
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">str = buf:to_s(<span class="number">10</span>) <span class="comment">-- return first 10 bytes
+</span>str = buf:to_s(<span class="number">5</span>, <span class="number">10</span>) <span class="comment">-- return 10 bytes starting from 5th</span></pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "uv_fbuffer:to_p"></a>
+    <strong>uv_fbuffer:to_p ([offset=0])</strong>
+    </dt>
+    <dd>
+    Return buffer data as lightuserdata.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">offset</span>
+            <span class="types"><span class="type">number</span></span>
+         starting from 0
+         (<em>default</em> 0)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">lightuserdata</span></span>
+        pointer
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example">ptr = buf:to_p(<span class="number">4</span>)</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "uv_fbuffer:size"></a>
+    <strong>uv_fbuffer:size ()</strong>
+    </dt>
+    <dd>
+    Return number of bytes in buffer.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">number</span></span>
+        size
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header has-description"><a name="Class_uv_file"></a>Class uv_file </h2>
+
+          <div class="section-description">
+          lluv file object
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "uv_file:loop"></a>
+    <strong>uv_file:loop ()</strong>
+    </dt>
+    <dd>
+    Return loop object where this handle runs.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_loop</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_file:stat"></a>
+    <strong>uv_file:stat ([loop], path[, callback])</strong>
+    </dt>
+    <dd>
+    Crossplatform file stat.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">loop</span>
+            <span class="types"><span class="type">uv_loop</span></span>
+
+
+
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">path</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         file to stat
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (self, err, stat)
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_file:sync"></a>
+    <strong>uv_file:sync ([callback])</strong>
+    </dt>
+    <dd>
+    Sync all changes made to file.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (self, err)
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_file:datasync"></a>
+    <strong>uv_file:datasync ([callback])</strong>
+    </dt>
+    <dd>
+    Sync data changes made to file.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (self, err)
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_file:truncate"></a>
+    <strong>uv_file:truncate (offset[, callback])</strong>
+    </dt>
+    <dd>
+    Truncate the contents of a file to the specified offset.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">offset</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (self, err)
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_file:close"></a>
+    <strong>uv_file:close ([callback])</strong>
+    </dt>
+    <dd>
+    Close file handle.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (self, err)
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_file:read"></a>
+    <strong>uv_file:read (buffer[, position=0][, offset=0][, length=buffer:size()-offset], callback)</strong>
+    </dt>
+    <dd>
+    Read data from file.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">buffer</span>
+            <span class="types"><span class="type">uv_fbuffer</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">position</span>
+            <span class="types"><span class="type">number</span></span>
+         specifying where to begin reading from in the file.
+         (<em>default</em> 0)
+        </li>
+        <li><span class="parameter">offset</span>
+            <span class="types"><span class="type">number</span></span>
+         offset in the buffer to start writing at.
+         (<em>default</em> 0)
+        </li>
+        <li><span class="parameter">length</span>
+            <span class="types"><span class="type">number</span></span>
+         number of bytes to reading.
+         (<em>default</em> buffer:size()-offset)
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (file, err, buffer, size)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_file:read"></a>
+    <strong>uv_file:read (buffer_length[, position=0][, offset=0][, length=buffer:size()-offset], callback)</strong>
+    </dt>
+    <dd>
+    Read data from file.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">buffer_length</span>
+            <span class="types"><span class="type">number</span></span>
+         allocate buffer that size.
+        </li>
+        <li><span class="parameter">position</span>
+            <span class="types"><span class="type">number</span></span>
+         specifying where to begin reading from in the file.
+         (<em>default</em> 0)
+        </li>
+        <li><span class="parameter">offset</span>
+            <span class="types"><span class="type">number</span></span>
+         offset in the buffer to start writing at.
+         (<em>default</em> 0)
+        </li>
+        <li><span class="parameter">length</span>
+            <span class="types"><span class="type">number</span></span>
+         number of bytes to reading.
+         (<em>default</em> buffer:size()-offset)
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (file, err, buffer, size)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_file:read"></a>
+    <strong>uv_file:read (buffer, buffer_length[, position=0][, offset=0][, length=buffer:size()-offset], callback)</strong>
+    </dt>
+    <dd>
+    Read data from file.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">buffer</span>
+            <span class="types"><span class="type">lightuserdata</span></span>
+         pointer to buffer
+        </li>
+        <li><span class="parameter">buffer_length</span>
+            <span class="types"><span class="type">number</span></span>
+         buffer size.
+        </li>
+        <li><span class="parameter">position</span>
+            <span class="types"><span class="type">number</span></span>
+         specifying where to begin reading from in the file.
+         (<em>default</em> 0)
+        </li>
+        <li><span class="parameter">offset</span>
+            <span class="types"><span class="type">number</span></span>
+         offset in the buffer to start writing at.
+         (<em>default</em> 0)
+        </li>
+        <li><span class="parameter">length</span>
+            <span class="types"><span class="type">number</span></span>
+         number of bytes to reading.
+         (<em>default</em> buffer:size()-offset)
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (file, err, buffer, size)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_file:write"></a>
+    <strong>uv_file:write (data[, position=0][, offset=0][, length=buffer:size()-offset], callback)</strong>
+    </dt>
+    <dd>
+    Write data to file.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">data</span>
+            <span class="types"><span class="type">buffer</span> or <a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">position</span>
+            <span class="types"><span class="type">number</span></span>
+         specifying where to begin writing to in the file.
+         (<em>default</em> 0)
+        </li>
+        <li><span class="parameter">offset</span>
+            <span class="types"><span class="type">number</span></span>
+         offset in the buffer to start reading at.
+         (<em>default</em> 0)
+        </li>
+        <li><span class="parameter">length</span>
+            <span class="types"><span class="type">number</span></span>
+         number of bytes to writing.
+         (<em>default</em> buffer:size()-offset)
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (file, err, data, size)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header has-description"><a name="Class_uv_handle"></a>Class uv_handle </h2>
+
+          <div class="section-description">
+          lluv handle base class
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "uv_handle:loop"></a>
+    <strong>uv_handle:loop ()</strong>
+    </dt>
+    <dd>
+    Returns loop object.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_handle:close"></a>
+    <strong>uv_handle:close ([callback])</strong>
+    </dt>
+    <dd>
+    Close handle. </p>
+
+<p> Callback gets already closed handle.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (handle)
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_handle:ref"></a>
+    <strong>uv_handle:ref ()</strong>
+    </dt>
+    <dd>
+    Reference handle.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_handle:unref"></a>
+    <strong>uv_handle:unref ()</strong>
+    </dt>
+    <dd>
+    Unreference handle.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_handle:has_ref"></a>
+    <strong>uv_handle:has_ref ()</strong>
+    </dt>
+    <dd>
+    Indicates if handle is referenced.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_handle:lock"></a>
+    <strong>uv_handle:lock ()</strong>
+    </dt>
+    <dd>
+    Protect handle from Lua gc.
+ lluv temporary lock handle if it has planned callback
+ so threre usially no reason to manually lock handle.
+ You need this function only if you plan find inactive
+ handle using <code>loop:handles()</code> method.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_handle</span></span>
+        self
+    </ol>
+
+
+
+    <h3>Usage:</h3>
+    <ul>
+        <pre class="example"><span class="comment">-- here we create timer but it is inactive and has no
+</span><span class="comment">-- Lua reference so without <code>lock()</code> it will be GC'ed.
+</span>uv.timer():lock()
+
+<span class="comment">-- Assume we have only one handle. We can find handle.
+</span><span class="keyword">local</span> timer = uv.handles()[<span class="number">1</span>]</pre>
+    </ul>
+
+</dd>
+    <dt>
+    <a name = "uv_handle:unlock"></a>
+    <strong>uv_handle:unlock ()</strong>
+    </dt>
+    <dd>
+    Apply to handle regular rules of Lua gc.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_handle</span></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_handle:locked"></a>
+    <strong>uv_handle:locked ()</strong>
+    </dt>
+    <dd>
+    Indicates if handle is locked.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+        status
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_handle:is_active"></a>
+    <strong>uv_handle:is_active ()</strong>
+    </dt>
+    <dd>
+    Indicates if handle is active.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_handle:is_closing"></a>
+    <strong>uv_handle:is_closing ()</strong>
+    </dt>
+    <dd>
+    Indicates if handle is closing or already closed.
+
+
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Class_uv_stream"></a>Class uv_stream </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "uv_stream:shutdown"></a>
+    <strong>uv_stream:shutdown (callback)</strong>
+    </dt>
+    <dd>
+    Shutdown the outgoing (write) side of a duplex stream.
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (self, error)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_stream</span></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_stream:listen"></a>
+    <strong>uv_stream:listen ([backlog], callback)</strong>
+    </dt>
+    <dd>
+    Start listening for incoming connections.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">backlog</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (self, error)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_stream</span></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_stream:accept"></a>
+    <strong>uv_stream:accept ([client])</strong>
+    </dt>
+    <dd>
+    Accept incoming connections.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">client</span>
+            <span class="types"><span class="type">uv_stream</span></span>
+         handle
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_stream</span></span>
+        client
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_stream:start_read"></a>
+    <strong>uv_stream:start_read (callback)</strong>
+    </dt>
+    <dd>
+    Read data from an incoming stream.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (self, error, data)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_stream</span></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_stream:stop_read"></a>
+    <strong>uv_stream:stop_read ()</strong>
+    </dt>
+    <dd>
+    Stop reading data from the stream.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_stream</span></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_stream:write"></a>
+    <strong>uv_stream:write (data[, callback])</strong>
+    </dt>
+    <dd>
+    Write data to stream.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">data</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a> or <a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (self, error)
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_stream</span></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_stream:try_write"></a>
+    <strong>uv_stream:try_write ()</strong>
+    </dt>
+    <dd>
+    Write data to stream.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_stream</span></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_stream:readable"></a>
+    <strong>uv_stream:readable ()</strong>
+    </dt>
+    <dd>
+    Check if stream is readable.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        flag
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_stream:writable"></a>
+    <strong>uv_stream:writable ()</strong>
+    </dt>
+    <dd>
+    Check if stream is writable.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">boolean</span></span>
+        flag
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header has-description"><a name="Class_uv_idle"></a>Class uv_idle </h2>
+
+          <div class="section-description">
+          lluv idle handle
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "uv_idle:start"></a>
+    <strong>uv_idle:start (callback)</strong>
+    </dt>
+    <dd>
+    Start idle handle.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (handle)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_idle:stop"></a>
+    <strong>uv_idle:stop ()</strong>
+    </dt>
+    <dd>
+    Stop idle handle.
+
+
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header has-description"><a name="Class_uv_timer"></a>Class uv_timer </h2>
+
+          <div class="section-description">
+          lluv timer handle
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "uv_timer:start"></a>
+    <strong>uv_timer:start ([timeout][, repeat], callback)</strong>
+    </dt>
+    <dd>
+    Start timer handle.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">timeout</span>
+            <span class="types"><span class="type">number</span></span>
+         timer will start after the specified amount of time.
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">repeat</span>
+            <span class="types"><span class="type">number</span></span>
+          timer will run again after the specified amount of time.
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (handle)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_timer</span></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_timer:stop"></a>
+    <strong>uv_timer:stop ()</strong>
+    </dt>
+    <dd>
+    Stop timer handle.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_timer</span></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_timer:again"></a>
+    <strong>uv_timer:again ([repeat])</strong>
+    </dt>
+    <dd>
+    Stop the Timer, and if it is repeating restart it using the repeat value as the timeout.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">repeat</span>
+            <span class="types"><span class="type">number</span></span>
+         new repeat value
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_timer</span></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_timer:set_repeat"></a>
+    <strong>uv_timer:set_repeat (repeat)</strong>
+    </dt>
+    <dd>
+    Set the repeat value.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">repeat</span>
+            <span class="types"><span class="type">number</span></span>
+         new value
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_timer</span></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_timer:get_repeat"></a>
+    <strong>uv_timer:get_repeat ()</strong>
+    </dt>
+    <dd>
+    Get repeat value.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">number</span></span>
+        repeat value
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header has-description"><a name="Class_uv_fs_event"></a>Class uv_fs_event </h2>
+
+          <div class="section-description">
+          lluv fs_event handle
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "uv_fs_event:start"></a>
+    <strong>uv_fs_event:start (path[, flags], callback)</strong>
+    </dt>
+    <dd>
+    Start FS Event handle.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">path</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         path to monitoring
+        </li>
+        <li><span class="parameter">flags</span>
+            <span class="types"><span class="type">number</span> or <a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+
+
+
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (self, err, path|nil, events)</p>
+
+<p> Usage
+ fs_event():start("./config", function(self, err) ... end)
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_fs_event:stop"></a>
+    <strong>uv_fs_event:stop ()</strong>
+    </dt>
+    <dd>
+    Stop FS Event handle.
+
+
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_fs_event:path"></a>
+    <strong>uv_fs_event:path ()</strong>
+    </dt>
+    <dd>
+    Get the path being monitored by the handle.
+
+
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header has-description"><a name="Class_uv_fs_poll"></a>Class uv_fs_poll </h2>
+
+          <div class="section-description">
+          lluv FS poll handle
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "uv_fs_poll:start"></a>
+    <strong>uv_fs_poll:start (callback)</strong>
+    </dt>
+    <dd>
+    Check the file at path for changes every interval milliseconds.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (handle, prev<em>stat, curr</em>stat)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_fs_poll</span></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_fs_poll:stop"></a>
+    <strong>uv_fs_poll:stop ()</strong>
+    </dt>
+    <dd>
+    Stop the handle
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_fs_poll</span></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_fs_poll:getpath"></a>
+    <strong>uv_fs_poll:getpath ()</strong>
+    </dt>
+    <dd>
+    Get the path being monitored by the handle.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+        path
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header has-description"><a name="Class_uv_pipe"></a>Class uv_pipe </h2>
+
+          <div class="section-description">
+          lluv Pipe handle
+          </div>
+    <dl class="function">
+    <dt>
+    <a name = "uv_pipe:open"></a>
+    <strong>uv_pipe:open (fileno)</strong>
+    </dt>
+    <dd>
+    Open an existing file descriptor.
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">fileno</span>
+            <span class="types"><span class="type">number</span></span>
+         file descriptor
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_pipe</span></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_pipe:bind"></a>
+    <strong>uv_pipe:bind (name[, callback])</strong>
+    </dt>
+    <dd>
+    Bind the pipe to a file path (Unix) or a name (Windows).
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (self, error, name)
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_pipe</span></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_pipe:connect"></a>
+    <strong>uv_pipe:connect (name, callback)</strong>
+    </dt>
+    <dd>
+    Connect to the Unix domain socket or the named pipe.
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (self, error)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_pipe</span></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_pipe:getsockname"></a>
+    <strong>uv_pipe:getsockname ()</strong>
+    </dt>
+    <dd>
+    Get the name of the Unix domain socket or the named pipe.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+        name
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_pipe:pending_instances"></a>
+    <strong>uv_pipe:pending_instances (count)</strong>
+    </dt>
+    <dd>
+    Set the number of pending pipe instance handles when the pipe server is waiting for connections.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">count</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_pipe</span></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_pipe:pending_count"></a>
+    <strong>uv_pipe:pending_count ()</strong>
+    </dt>
+    <dd>
+    Get the number of pending pipe instance.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">number</span></span>
+        count
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_pipe:pending_type"></a>
+    <strong>uv_pipe:pending_type ()</strong>
+    </dt>
+    <dd>
+    Get the type of first pending handle.
+ <a href="index.html#uv_stream:accept">accept</a> function can check and create handle of needed type.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+        type
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Class_uv_prepare"></a>Class uv_prepare </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "uv_prepare:start"></a>
+    <strong>uv_prepare:start (callback, self)</strong>
+    </dt>
+    <dd>
+    Start the handle.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (self)
+        </li>
+        <li><span class="parameter">self</span>
+            <span class="types"><span class="type">uv_prepare</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_prepare:stop"></a>
+    <strong>uv_prepare:stop (self)</strong>
+    </dt>
+    <dd>
+    Stop the handle.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+            <span class="types"><span class="type">uv_prepare</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Class_uv_check"></a>Class uv_check </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "uv_check:start"></a>
+    <strong>uv_check:start (callback, self)</strong>
+    </dt>
+    <dd>
+    Start the handle.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (self)
+        </li>
+        <li><span class="parameter">self</span>
+            <span class="types"><span class="type">uv_check</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_check:stop"></a>
+    <strong>uv_check:stop (self)</strong>
+    </dt>
+    <dd>
+    Stop the handle.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+            <span class="types"><span class="type">uv_check</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Class_uv_process"></a>Class uv_process </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "uv_process:pid"></a>
+    <strong>uv_process:pid ()</strong>
+    </dt>
+    <dd>
+    Get process ID.
+
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">number</span></span>
+        process id
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_process:kill"></a>
+    <strong>uv_process:kill ([signal=uv.SIGTERM])</strong>
+    </dt>
+    <dd>
+    Sends the specified signal to the given process handle.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">signal</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+         (<em>default</em> uv.SIGTERM)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_process</span></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Class_uv_signal"></a>Class uv_signal </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "uv_signal:start"></a>
+    <strong>uv_signal:start (signum, callback, self)</strong>
+    </dt>
+    <dd>
+    Start the handle watching for the given signal.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">signum</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (self, signum)
+        </li>
+        <li><span class="parameter">self</span>
+            <span class="types"><span class="type">uv_signal</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_signal:stop"></a>
+    <strong>uv_signal:stop (self)</strong>
+    </dt>
+    <dd>
+    Stop the handle.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">self</span>
+            <span class="types"><span class="type">uv_signal</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Class_uv_tcp"></a>Class uv_tcp </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "uv_tcp:open"></a>
+    <strong>uv_tcp:open (fileno)</strong>
+    </dt>
+    <dd>
+    Open an existing file descriptor.
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">fileno</span>
+            <span class="types"><span class="type">number</span></span>
+         descriptor
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_tcp</span></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_tcp:bind"></a>
+    <strong>uv_tcp:bind (host, port[, flags[, callback]])</strong>
+    </dt>
+    <dd>
+    Bind the handle to an address and port.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">host</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">port</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">flags</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (self, error, host, port)
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_tcp</span></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_tcp:connect"></a>
+    <strong>uv_tcp:connect (host, port, callback)</strong>
+    </dt>
+    <dd>
+    Connect the handle to remote endpoint.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">host</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">port</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (self, error)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_tcp</span></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_tcp:nodelay"></a>
+    <strong>uv_tcp:nodelay ()</strong>
+    </dt>
+    <dd>
+    Enable / disable Nagle’s algorithm.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_tcp</span></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_tcp:keepalive"></a>
+    <strong>uv_tcp:keepalive ()</strong>
+    </dt>
+    <dd>
+    Enable / disable TCP keep-alive.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_tcp</span></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_tcp:simultaneous_accepts"></a>
+    <strong>uv_tcp:simultaneous_accepts ()</strong>
+    </dt>
+    <dd>
+    Enable / disable simultaneous asynchronous accept requests.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_tcp</span></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_tcp:getsockname"></a>
+    <strong>uv_tcp:getsockname ()</strong>
+    </dt>
+    <dd>
+    Get the current address to which the handle is bound.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+        host</li>
+        <li>
+           <span class="types"><span class="type">number</span></span>
+        port</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_tcp:getpeername"></a>
+    <strong>uv_tcp:getpeername ()</strong>
+    </dt>
+    <dd>
+    Get the address of the peer connected to the handle.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+        host</li>
+        <li>
+           <span class="types"><span class="type">number</span></span>
+        port</li>
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Class_uv_tty"></a>Class uv_tty </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "uv_tty:set_mode"></a>
+    <strong>uv_tty:set_mode (mode)</strong>
+    </dt>
+    <dd>
+    Set the TTY mode.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">mode</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_tty</span></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_tty:get_winsize"></a>
+    <strong>uv_tty:get_winsize ()</strong>
+    </dt>
+    <dd>
+    Gets the current Window size.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><span class="type">number</span></span>
+        width</li>
+        <li>
+           <span class="types"><span class="type">number</span></span>
+        height</li>
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Class_uv_udp"></a>Class uv_udp </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "uv_udp:open"></a>
+    <strong>uv_udp:open (fileno)</strong>
+    </dt>
+    <dd>
+    Open an existing file descriptor.
+
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">fileno</span>
+            <span class="types"><span class="type">number</span></span>
+         descriptor
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_udp</span></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_udp:bind"></a>
+    <strong>uv_udp:bind (host, port[, flags[, callback]])</strong>
+    </dt>
+    <dd>
+    Bind the handle to an address and port.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">host</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">port</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">flags</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+         (<em>optional</em>)
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (self, error, host, port)
+         (<em>optional</em>)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_udp</span></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_udp:getsockname"></a>
+    <strong>uv_udp:getsockname ()</strong>
+    </dt>
+    <dd>
+    Get the current address to which the handle is bound.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+        <li>
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+        host</li>
+        <li>
+           <span class="types"><span class="type">number</span></span>
+        port</li>
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_udp:start_recv"></a>
+    <strong>uv_udp:start_recv (callback)</strong>
+    </dt>
+    <dd>
+    Read datagrams from UDP socket.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (self, error, data, flags, host, port)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_udp</span></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_udp:stop_recv"></a>
+    <strong>uv_udp:stop_recv ()</strong>
+    </dt>
+    <dd>
+    Stop listening for incoming datagrams.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_udp</span></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Class_uv_poll"></a>Class uv_poll </h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "uv_poll:start"></a>
+    <strong>uv_poll:start (events, callback)</strong>
+    </dt>
+    <dd>
+    Start polling the file descriptor.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">events</span>
+            <span class="types"><span class="type">number</span>, <a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a> or <a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">callback</span>
+            <span class="types"><span class="type">function</span></span>
+        (self, error, event)
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_poll</span></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "uv_poll:stop"></a>
+    <strong>uv_poll:stop ()</strong>
+    </dt>
+    <dd>
+    Stop polling the file descriptor.
+
+
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">uv_poll</span></span>
+        self
+    </ol>
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2017-10-25 10:44:17 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
