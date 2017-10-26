@@ -1,4 +1,4 @@
-local unit = {}
+local gene = {}
 
 --- Generate randomized table based on provided template.
 -- @t A template in table format. Keys are constant and should have string
@@ -7,9 +7,9 @@ local unit = {}
 -- function can be given. It should return a (supposedly random) value or list
 -- of possible values to chosen randomly.
 -- @return randomized table
-function rand_table(t)
+function gene.rand_table(t)
   assert(type(t) == "table", "t must be a table!")
-
+  
   local randtab = {}
   for k, v in pairs(t) do
     -- check keys, values (or generate them)
@@ -25,7 +25,9 @@ function rand_table(t)
       -- enclose returned value in a table for code below to work correctly
       if type(v) ~= "table" then v = {v} end
     end
-    assert(type(v) == "table", "couldn't find or generate value table within t!")
+    
+    assert(type(v) == "table", "could not find or generate value table within t!")
+    
     -- put randomly chosen value into table
     randtab[k] = v[math.random(#v)]
   end
@@ -33,4 +35,4 @@ function rand_table(t)
 end
 
 
-return unit
+return gene

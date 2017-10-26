@@ -1,18 +1,17 @@
 
-
 describe("Openresty C libs", function()
     
-    local function printAllFilesRecursive(path)
+    local function walkAllFilesRecursive(path, cb)
       local lfs = require("lfs")
       for file in lfs.dir(path) do
         if file ~= "." and file ~= ".." then
           local f = path .. '/' .. file
           local attr = lfs.attributes (f)
-          assert (type(attr) == "table")
+          assert.equal('table', type(attr))
           if attr.mode == "directory" then
-            printAllFilesRecursive (f)
+            walkAllFilesRecursive(f, cb)
           else
-            print(f)
+            cb(f)
             --   for name, value in pairs(attr) do
             --     utils.log(name, value)
             -- end
@@ -22,11 +21,13 @@ describe("Openresty C libs", function()
     end
     
     it("should load lfs", function()
-        printAllFilesRecursive('lua/libs/.prebuild')
+        walkAllFilesRecursive('lua/libs/.prebuild', function(f)
+            assert.is_true(String.start_with(f, 'lua/libs/.prebuild'))
+            end)
       end)
     
     it("should load JSON", function()
-        print( JSON.encode({foo = 112,  bar = 'bbb'}))
+        assert.equal('{"foo":112,"bar":"bbb"}', JSON.encode({foo = 112,  bar = 'bbb'}))
       end)
     
     it("should load luahs", function()
@@ -47,11 +48,13 @@ describe("Openresty C libs", function()
         hits = db:scan(text, scratch)
         
         local start = 0
+        local result = {}
         for _, match in pairs(hits) do
-          print( string.sub(text, start, match.to))
+          table.insert(result, string.sub(text, start, match.to))
           start = match.to + 1
         end
         
+        assert.equal(text, table.concat(result, ''))
       end)
     
 end)

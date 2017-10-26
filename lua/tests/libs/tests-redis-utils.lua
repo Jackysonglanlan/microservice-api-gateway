@@ -20,7 +20,7 @@ describe("resty-redis-util", function()
           return
         end
         
-        print("ping result: ", ok)
+        assert.equal( ok, 'PONG')
       end)
 end)
 
