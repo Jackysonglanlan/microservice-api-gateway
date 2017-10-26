@@ -2,9 +2,12 @@
   "name": "nginx-remote-automator",
   "version": "1.0.0",
   "description": "nginx(openresty) automator via npm script",
+  "// scripts 说明": "",
+  "//   check-global-param: See https://moonbingbing.gitbooks.io/openresty-best-practices/content/lua/local.html": "",
   "scripts": {
     "//--------------------------------------- DEV --------------------------------------------": "",
     "dev-start": "LUA_ENV=dev scripts/dev-start.sh start",
+    "check-global-param": "bin/lua-releng ",
     "//--------------------------------------- TEST --------------------------------------------": "",
     "test": "npm run test-only -- --pattern=tests-.+ -- lua/tests",
     "test-only": "LUA_ENV=test lua/bin/busted ",
