@@ -20,7 +20,7 @@ describe("resty-redis-util", function()
           return
         end
         
-        assert.equal( ok, 'PONG')
+        assert.equal( 'PONG', ok)
       end)
 end)
 

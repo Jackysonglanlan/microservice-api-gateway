@@ -17,26 +17,41 @@ end
 
 -- 加载 openresty 的 package.path, 这样整个测试环境就和 openresty 的运行环境一致了
 
-local tmpFilePath = 'tmp/lua-home'
-local tmp = io.open(tmpFilePath)
+local function _locatePathViaWhich(cmd)
+  local tmpFilePath = 'tmp/lua-home'
 
-if not tmp then
-  os.execute('dirname `which lua` > ' .. tmpFilePath) -- lua 调用 shell 方法只能返回状态码，如果要得到输出，需把输入写入文件
-  tmp = io.open(tmpFilePath) -- 再读出
+  -- lua 调用 shell 方法只能返回状态码，如果要得到 stdout 输出，需把输入写入文件
+  os.execute('lua/bin/path-finder.sh ' .. cmd .. ' > ' .. tmpFilePath)
+  local tmp = io.open(tmpFilePath) -- 再读出
+
+  local realPath = trim(tmp:read('*all')) -- execute() 会自动加上换行符，所以要 trim
+  tmp:close()
+  return realPath
 end
 
-local LUA_HOME = trim(tmp:read('*all')) .. '/../' -- execute() 会自动加上换行符，所以要 trim
-tmp:close()
-
-
 local ROOT = os.getenv('PWD') .. '/'
+local OPENRESTY_HOME = _locatePathViaWhich('openresty') .. '/../../'
+local LUA_HOME = _locatePathViaWhich('lua') .. '/../'
 
-package.path = LUA_HOME .. 'share/lua/5.1/?.lua;' .. LUA_HOME .. 'share/lua/5.1/?/init.lua;' ..
-ROOT .. 'lua/src/?.lua;' .. ROOT .. 'lua/libs/?.lua;' .. ';;'
+-- 加载 openresty 环境
 
-package.cpath = LUA_HOME .. 'lib/lua/5.1/?.so;' .. ROOT .. 'lua/libs/?.so;' .. ';;'
+package.path = OPENRESTY_HOME .. 'lualib/?.lua;' ..
+LUA_HOME .. 'share/lua/5.1/?.lua;' ..
+LUA_HOME .. 'share/lua/5.1/?/init.lua;' ..
+ROOT .. 'lua/src/?.lua;' ..
+ROOT .. 'lua/libs/?.lua;' ..
+';;'
+
+package.cpath = OPENRESTY_HOME .. 'lualib/?.so;' ..
+LUA_HOME .. 'lib/lua/5.1/?.so;' ..
+ROOT .. 'lua/libs/?.so;' ..
+';;'
 
 require('init')
 
+-- 上面加载了 openresty 环境，所以可以用 busted 测试 openresty 代码了
 -- Busted command-line runner
 require 'busted.runner'({ standalone = false })
+
+
+

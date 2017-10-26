@@ -1,12 +1,12 @@
 
-local ENV = {'dev', 'prod', 'test'}
+local VALID_ENV = {'dev', 'prod', 'test'}
 local runningEnv = os.getenv("LUA_ENV") or ''
 
 ------- introduce LUA_ENV:
 
 local function _mustHaveLUA_ENV()
   local found = false
-  for _, env in pairs(ENV) do
+  for _, env in pairs(VALID_ENV) do
     if string.match(runningEnv, env .. '.*') then
       found = true
       break
@@ -31,7 +31,7 @@ end
 
 local function _envFunctionFactory(targetEnv, notIn)
   return   function(fun)
-    local foundEnv = _arrSelect(ENV, function(k, supportedEnv)
+    local foundEnv = _arrSelect(VALID_ENV, function(k, supportedEnv)
         return string.match(runningEnv, supportedEnv .. '.*')
     end)
     
@@ -62,8 +62,8 @@ _G.notInTest = _envFunctionFactory('test', true)
 --[[
   - 用于查看代码是否被 jit 优化
   -
-  - 对于没有被 JIT 优化的代码，日志会出现 NYI（Not Yet Implemented）关键字，比如:
-  - [TRACE --- db_base.lua:247 -- NYI: bytecode 51 at db_base.lua:252]
+  - 对于没有被 JIT 优化的代码，日志会出现 NYI（Not Yet Implemented）关键字，例如:
+  - [TRACE --- (4/0) date.lua:636 -- NYI: bytecode 51]
   -
   - see https://moonbingbing.gitbooks.io/openresty-best-practices/content/something/2016_8.html
 ]]--
