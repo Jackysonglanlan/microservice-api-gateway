@@ -81,6 +81,8 @@ jitDebug()
 
 -- core class extension
 _G.String = require('yqj.StringExt')
+_G.Date = require('yqj.date')
+_G.Path = require('yqj.path')
 
 -- mount everyday use modules to global
 _G.JSON = require('libcjson.libcjson')

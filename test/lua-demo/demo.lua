@@ -47,7 +47,9 @@ local function md5AndCJSON()
   
   local uuid = require('yqj.jit-uuid')
   
-  ngx.say(JSON.encode({foo = 112, uuid = uuid.generate_v4(), md5 = md5}))
+  local now = Date()
+  
+  ngx.say(JSON.encode({foo = 112, uuid = uuid.generate_v4(), md5 = md5, now = now:fmt('${http}')}))
 end
 md5AndCJSON()
 
@@ -58,7 +60,7 @@ local function testTamale()
     { {"foo", 1, {} },      "one" }, 
     { 10,                   function() return "two" end}, 
     { {"bar", 10, 100},     "three" }, 
-    { {"baz", V"X" },       V"X" },                                                         -- V"X" is a variable
+    { {"baz", V"X" },       V"X" },                                                                 -- V"X" is a variable
     { {"add", V"X", V"Y"},  function(cs) return cs.X + cs.Y end }, 
   }
   

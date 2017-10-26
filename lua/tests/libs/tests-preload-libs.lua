@@ -28,5 +28,10 @@ describe("Preload libs and functions", function()
         assert.equal('table', type(String))
       end)
     
+    it("should load Path", function()
+        --
+        assert.equal('table', type(Path))
+      end)
+    
     
 end)
