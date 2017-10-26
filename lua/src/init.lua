@@ -12,7 +12,7 @@ local function _mustHaveLUA_ENV()
   end
   
   if not found then
-    os.execute('echo "[YQJ] FATAL: Illegal or Missing LUA_ENV (valid value: dev prod test)... Quit!!"')
+    os.execute('echo "[YQJ] FATAL: Illegal or Missing LUA_ENV (valid value: dev prod test)... Quit!!" > /dev/stderr')
     os.exit(1);
   end
 end
@@ -23,7 +23,18 @@ _mustHaveLUA_ENV()
 ----- start init ----
 ---------------------
 
--- introduce LUA_ENV:
+-- core class extension
+require('luacat.luacat.luacat') -- 注意: luacat 库自带的 moacat 是一个做游戏的 sdk, 没有使用，但是也没有删除
+
+-- mount everyday use modules to global
+_G.JSON = require('libcjson.libcjson')
+_G.utils = require('yqj.utils')(ngx)
+_G.utils.regex = require('regex.regex')
+
+-- lua lodash
+_G._ = require('moses.moses_min')
+
+------- introduce LUA_ENV:
 
 local function _envFunctionFactory(targetEnv, notIn)
   return   function(fun)
@@ -40,17 +51,6 @@ local function _envFunctionFactory(targetEnv, notIn)
     end
   end
 end
-
--- core class extension
-require('luacat.luacat.luacat') -- 注意: luacat 库自带的 moacat 是一个做游戏的 sdk, 没有使用，但是也没有删除
-
--- mount everyday use modules to global
-_G.JSON = require('libcjson.libcjson')
-_G.utils = require('yqj.utils')(ngx)
-_G.utils.regex = require('regex.regex')
-
--- lua lodash
-_G._ = require('moses.moses_min')
 
 -- Lua env handler
 _G.inDev = _envFunctionFactory('dev')

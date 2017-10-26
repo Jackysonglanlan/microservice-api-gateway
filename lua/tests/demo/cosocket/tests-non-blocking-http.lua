@@ -1,9 +1,10 @@
 
+local url = 'www.baidu.com'
+
 describe("cosocket", function()
     -- see https://www.openresty.com.cn/pra_ngx_lua_whats_cosocket.html
-    it("should perform non-blocking socket", function()
+    pending("should perform non-blocking socket", function()
         local sock = ngx.socket.tcp()
-        local url = 'www.baidu.com'
         local ok, err = sock:connect(url, 80)
         if not ok then
           print("failed to connect to baidu: ", err)
@@ -26,4 +27,5 @@ describe("cosocket", function()
         sock:close()
         print('successfully talk to ' .. url .. '! response first line: ', data)
       end)
+    
 end)
