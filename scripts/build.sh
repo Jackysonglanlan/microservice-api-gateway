@@ -111,7 +111,7 @@ _makeDirs(){
 
 main(){
   if [[ -f $ALL_BIN_FILES_COPIED_MARK_FILE ]]; then
-    yellow 'All libs are built, no need to build...'
+    yellow 'All libs are installed, no need to build...'
     return
   fi
   
