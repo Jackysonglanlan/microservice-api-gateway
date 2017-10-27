@@ -4,41 +4,6 @@ local utils = {}
 local inspect = require('inspect.inspect')
 
 local logger = require('yqj.logger')
-
-function utils.deepcompare(t1, t2, ignore_mt)
-  local ty1 = type(t1)
-  local ty2 = type(t2)
-  if ty1 ~= ty2 then return false end
-  -- non-table types can be directly compared
-  if ty1 ~= 'table' and ty2 ~= 'table' then return t1 == t2 end
-  -- as well as tables which have the metamethod __eq
-  local mt = getmetatable(t1)
-  if not ignore_mt and mt and mt.__eq then return t1 == t2 end
-  for k1, v1 in pairs(t1) do
-    local v2 = t2[k1]
-    if v2 == nil or not utils.deepcompare(v1, v2) then return false end
-  end
-  for k2, v2 in pairs(t2) do
-    local v1 = t1[k2]
-    if v1 == nil or not utils.deepcompare(v1, v2) then return false end
-  end
-  return true
-end
-
-function utils.deepcopy(t)
-  if type(t) ~= 'table' then return t end
-  local mt = getmetatable(t)
-  local res = {}
-  for k, v in pairs(t) do
-    if type(v) == 'table' then
-      v = utils.deepcopy(v)
-    end
-    res[k] = v
-  end
-  setmetatable(res, mt)
-  return res
-end
-
 function utils.islist(t)
   local itemcount = 0
   local last_type = nil
@@ -60,52 +25,6 @@ function utils.islist(t)
   end
   
   return true
-end
-
-local function __genOrderedIndex( t )
-  local orderedIndex = {}
-  for key in pairs(t) do
-    table.insert( orderedIndex, key )
-  end
-  table.sort( orderedIndex )
-  return orderedIndex
-end
-
-local function orderedNext(t, state)
-  -- Equivalent of the next function, but returns the keys in the alphabetic
-  -- order. We use a temporary ordered key table that is stored in the
-  -- table being iterated.
-  
-  local key = nil
-  
-  --print("orderedNext: state = "..tostring(state) )
-  if state == nil then
-    -- the first time, generate the index
-    t.__orderedIndex = __genOrderedIndex( t )
-    key = t.__orderedIndex[1]
-    return key, t[key]
-  end
-  -- fetch the next value
-  key = nil
-  for i = 1, table.getn(t.__orderedIndex) do
-    if t.__orderedIndex[i] == state then
-      key = t.__orderedIndex[i + 1]
-    end
-  end
-  
-  if key then
-    return key, t[key]
-  end
-  
-  -- no more value to return, cleanup
-  t.__orderedIndex = nil
-  return
-end
-
-function utils.orderedPairs(t)
-  -- Equivalent of the pairs() function on tables. Allows to iterate
-  -- in order
-  return orderedNext, t, nil
 end
 
 --[[
