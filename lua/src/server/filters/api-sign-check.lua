@@ -3,6 +3,7 @@
 local utils = require('yqj.utils')(ngx)
 local resty_md5 = require "resty.md5"
 local string = require "resty.string"
+local merge = require('pl.tablex').merge
 local cjson = require("cjson")
 
 local SIGN_HEADER_KEY = 'sign'
@@ -22,7 +23,7 @@ cache the Nginx variable value to your own Lua variable, for example:
 
 -- ------- private
 
-function _genePresignStrFromParamsAndHeaders( presignParamTable )
+local function _genePresignStrFromParamsAndHeaders( presignParamTable )
   local a = {}
   for n in pairs(presignParamTable) do
     table.insert(a, n)
@@ -40,12 +41,12 @@ function _genePresignStrFromParamsAndHeaders( presignParamTable )
   return sortedStr
 end
 
-function _escapeStr( presignStr )
+local function _escapeStr( presignStr )
   return ngx.escape_uri(presignStr)
 end
 
 -- sign with md5
-function _signStr( presignStr )
+local function _signStr( presignStr )
   local md5 = resty_md5:new()
   
   local ok = md5:update(presignStr)
@@ -57,7 +58,7 @@ function _signStr( presignStr )
   return md5
 end
 
-function _calcSign()
+local function _calcSign()
   -- get args
   local args = ngx.req.get_uri_args()
   -- utils.debug(args)
@@ -67,7 +68,7 @@ function _calcSign()
   -- utils.log(headers)
   
   -- merge
-  local allParams = Table.merge(args, headers)
+  local allParams = merge(args, headers, true)
   -- utils.log(allParams)
   
   -- gene presignStr
@@ -80,7 +81,7 @@ function _calcSign()
   return md5
 end
 
-function _blockIllegalAccess()
+local function _blockIllegalAccess()
   utils.alog('[Wrong Sign Reqest] headers: ' .. ngx.req.raw_header())
   
   ngx.header["Content-Type"] = "application/json"
@@ -127,7 +128,7 @@ end
 
 --]]
 
-function checkAPISign()
+local function checkAPISign()
   local calculatedSign = _calcSign()
   utils.log('ilegal sign: ' .. calculatedSign)
   -- local signInHeader = ngx.req.get_headers()[SIGN_HEADER_KEY]
