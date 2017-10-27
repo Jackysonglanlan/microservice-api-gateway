@@ -47,7 +47,7 @@ LUA_HOME .. 'lib/lua/5.1/?.so;' ..
 ROOT .. 'lua/libs/?.so;' ..
 ';;'
 
-require('init')
+require('init.init')
 
 -- 上面加载了 openresty 环境，所以可以用 busted 测试 openresty 代码了
 -- Busted command-line runner
