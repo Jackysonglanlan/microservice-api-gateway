@@ -22,7 +22,7 @@ describe("Openresty C libs", function()
     
     it("should load lfs", function()
         walkAllFilesRecursive('lua/libs/.prebuild', function(f)
-            assert.is_true(String.start_with(f, 'lua/libs/.prebuild'))
+            assert.is_true(f:startsWith(f, 'lua/libs/.prebuild'))
             end)
       end)
     

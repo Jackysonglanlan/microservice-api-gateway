@@ -23,11 +23,6 @@ describe("Preload libs and functions", function()
         assert.equal('{"b":2,"a":1,"c":3}', JSON.encode({a = 1, b = 2, c = 3}))
       end)
     
-    it("should load StringExt", function()
-        --
-        assert.equal('table', type(String))
-      end)
-    
     it("should load Path", function()
         --
         assert.equal('table', type(Path))

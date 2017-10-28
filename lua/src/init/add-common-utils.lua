@@ -25,7 +25,7 @@ jitDebug()
 ---------------------
 
 -- core class extension
-_G.String = require('yqj.StringExt')
+require('yqj.strong')
 _G.Date = require('yqj.date')
 _G.Path = require('yqj.path')
 
