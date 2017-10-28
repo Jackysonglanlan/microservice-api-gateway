@@ -11,6 +11,7 @@
     "//--------------------------------------- TEST --------------------------------------------": "",
     "test": "npm run test-only -- --pattern=tests-.+ -- lua/tests",
     "test-only": "LUA_ENV=test lua/bin/busted ",
+    "test-start-mock-backend-server": "node lua/tests/mock-backend-server/server.js",
     "//-------------------------------------- DEPLOY --------------------------------------------": "",
     "deploy-to-200": "pm2 deploy test200",
     "//--------------------------------------- PRODCTION --------------------------------------------": "",

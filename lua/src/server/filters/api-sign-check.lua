@@ -1,5 +1,4 @@
 
-
 local utils = require('yqj.utils')(ngx)
 local resty_md5 = require "resty.md5"
 local string = require "resty.string"
@@ -8,9 +7,7 @@ local cjson = require("cjson")
 
 local SIGN_HEADER_KEY = 'sign'
 -- todo: set the proper response code for ilegal sign
-local ERROR_RESPONSE_DATA = {code = 620, error = 'wrong sign'}
-
-local ERROR_RESPONSE = cjson.encode(ERROR_RESPONSE_DATA)
+local ERROR_RESPONSE = cjson.encode({code = 620, error = 'wrong sign'})
 
 
 --[[ 读取 nginx 变量时 要特别注意
