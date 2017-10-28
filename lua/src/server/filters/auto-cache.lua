@@ -7,10 +7,12 @@
 -- 这个 filter 需要 auto-cache-before-trigger 和 auto-cache-trigger 的配合
 ---------
 
+local lz4 = require("lz4.lz4")
+
 local function _decompressJSONStr(compressedStr)
-  -- utils.log(compressedStr)
-  -- TODO
-  return compressedStr
+  local origStr = lz4.decompress(compressedStr)
+  -- utils.log('decompressed len:' .. string.len(origStr))
+  return origStr
 end
 
 local function _isCacheHit(uri)

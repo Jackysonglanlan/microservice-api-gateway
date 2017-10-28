@@ -12,12 +12,12 @@ if not fullRespData then
   return
 end
 
--- TODO:
--- compress before cache
+local lz4 = require("lz4.lz4")
 
 local function _compressJSONStr(jsonStr)
-  -- utils.log(jsonStr)
-  return jsonStr
+  local compressed = lz4.compress(jsonStr)
+  -- utils.log('compressed len:' .. string.len(compressed))
+  return compressed
 end
 
 local function _isNeedToTriggerAutoCache(ctx)
