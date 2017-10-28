@@ -21,7 +21,7 @@ use_red_green_echo() {
 use_red_green_echo 'Build'
 
 
-ALL_BIN_FILES_COPIED_MARK_FILE='./all-bin-files-copied.log'
+ALL_BIN_FILES_COPIED_MARK_FILE='./all-so-files-copied.log'
 
 # lua lib root path
 LUA_LIB_PATH="lua/libs"
