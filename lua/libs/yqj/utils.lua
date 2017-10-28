@@ -67,12 +67,11 @@ local function _extract_filename_line_for_log_info(traceback)
     text = traceback
   else
     local from = 1
-    text = String.slice(traceback, from, tailcall)
   end
   
-  local realLoc = String.split(text, ": in function ")[2]
-  realLoc = String.split(realLoc, "\n")[2]
-  realLoc = String.lstrip(realLoc)
+  local realLoc = text:split(": in function ")[2]
+  realLoc = realLoc:split("\n")[2]
+  realLoc = realLoc:lstrip()
   
   return realLoc
 end

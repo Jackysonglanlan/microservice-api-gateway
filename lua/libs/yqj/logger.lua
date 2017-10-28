@@ -8,7 +8,7 @@ local C = ffi.C
 local bor = bit.bor
 
 local setmetatable = setmetatable
-local localtime = ngx.localtime()
+local localtime = ngx.localtime
 local ngx = ngx
 local type = type
 
@@ -65,7 +65,7 @@ local function _loggerFactory(level)
     if self.log_level > level then
       return
     end
-    local c = localtime .. ": " .. msg .. "\n";
+    local c = localtime() .. ": " .. msg .. "\n";
     C.write(self.log_fd, c, #c);
   end
 end

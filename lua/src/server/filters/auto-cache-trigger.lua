@@ -16,7 +16,7 @@ local lz4 = require("lz4.lz4")
 
 local function _compressJSONStr(jsonStr)
   local compressed = lz4.compress(jsonStr)
-  -- utils.log('compressed len:' .. string.len(compressed))
+  utils.log('compressed len:' .. string.len(compressed))
   return compressed
 end
 
