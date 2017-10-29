@@ -25,24 +25,34 @@ function _makeRoutes(routeConf) {
 
 // backend def
 
-// const smallFewShortBackend = (req, res, name) => {
-//   res.setHeader('X-YQJ-CACHE', 'small_few_short'); // trigger Openresty auto-cache
-//   res.end(JSON.stringify({ from: name }));
-// };
-
-// const bigMassLongBackend = (req, res, name) => {
-//   res.setHeader('X-YQJ-CACHE', 'big_mass_long'); // trigger Openresty auto-cache
-//   res.end(JSON.stringify({ from: name }));
-// };
-
-const smallChunkDataBackend = (req, res, name) => {
-  res.setHeader('X-YQJ-CACHE', true); // trigger Openresty auto-cache
+const smallMassShortBackend = (req, res, name) => {
+  res.setHeader(
+    'X-YQJ-CACHE', // trigger Openresty auto-cache
+    JSON.stringify({
+      type: 'small_mass_short'
+    })
+  );
   res.end(JSON.stringify({ from: name }));
 };
 
-const bigChunkDataBackend = (req, res, name) => {
-  res.setHeader('X-YQJ-CACHE', true); // trigger Openresty auto-cache
-  res.end(JSON.stringify({ from: name, chunk: Buffer.alloc(10e3).toString() }));
+const mockBackend = (req, res, name) => {
+  res.setHeader(
+    'X-YQJ-CACHE', // trigger Openresty auto-cache
+    JSON.stringify({
+      type: 'small_mass_short'
+    })
+  );
+  res.end(JSON.stringify({ from: name }));
+};
+
+const bigFewLongBackend = (req, res, name) => {
+  res.setHeader(
+    'X-YQJ-CACHE', // trigger Openresty auto-cache
+    JSON.stringify({
+      type: 'big_few_long'
+    })
+  );
+  res.end(JSON.stringify({ from: name, chunk: Buffer.alloc(10e2).toString() }));
 };
 
 const noCacheBackend = (req, res, name) => {
@@ -52,7 +62,7 @@ const noCacheBackend = (req, res, name) => {
 
 // run
 
-const routes = _makeRoutes({ bigChunkDataBackend, smallChunkDataBackend, noCacheBackend });
+const routes = _makeRoutes({ bigFewLongBackend, smallMassShortBackend, mockBackend, noCacheBackend });
 
 http
   .createServer((req, res) => {

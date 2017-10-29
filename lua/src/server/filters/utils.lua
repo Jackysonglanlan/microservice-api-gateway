@@ -1,4 +1,8 @@
 
+local insert = table.insert
+
+local concat = table.concat
+
 local M = {}
 
 --[[
@@ -15,14 +19,14 @@ function M.bodyFilterGetFullRespData()
   ngx.ctx.respDataChunks = ngx.ctx.respDataChunks or {}
   
   local chunk = ngx.arg[1]
-  table.insert(ngx.ctx.respDataChunks, chunk)
+  insert(ngx.ctx.respDataChunks, chunk)
   
   local isGetAllResp = ngx.arg[2]
   if not isGetAllResp then
     return -- return if there are still data to pass
   end
   
-  local fullData = table.concat(ngx.ctx.respDataChunks, '')
+  local fullData = concat(ngx.ctx.respDataChunks, '')
   ngx.ctx.respDataChunks = nil
   return fullData
 end
