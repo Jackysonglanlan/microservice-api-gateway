@@ -26,12 +26,7 @@ local S_IRWXU  = 0x01C0
 local S_IRGRP  = 0x0020
 local S_IROTH  = 0x0004
 
--- log level
-local LVL_DEBUG = 1
-local LVL_INFO  = 2
-local LVL_ALERT  = 3
-local LVL_ERROR = 4
-local LVL_NONE  = 999
+local LOG_LEVEL = {debug = 1, info = 2, warn = 3, error = 4, none = 999}
 
 module(...)
 
@@ -42,16 +37,7 @@ local mt = { __index = _M }
 function new(self, log_type, logfile)
   local log_level, log_fd = nil
   
-  local level = nil
-  if 'debug' == log_type then
-    level = LVL_DEBUG
-  elseif 'info' == log_type then
-    level = LVL_INFO
-  elseif 'error' == log_type then
-    level = LVL_ERROR
-  else
-    level = LVL_NONE
-  end
+  local level = LOG_LEVEL[log_type] or LOG_LEVEL['none']
   
   return setmetatable({
     log_level = level, 
@@ -73,10 +59,10 @@ end
 --
 -- method defs
 --
-debug = _loggerFactory(LVL_DEBUG)
-info = _loggerFactory(LVL_INFO)
-error = _loggerFactory(LVL_ERROR)
-alert = _loggerFactory(LVL_ALERT)
+debug = _loggerFactory(LOG_LEVEL['debug'])
+info = _loggerFactory(LOG_LEVEL['info'])
+warn = _loggerFactory(LOG_LEVEL['warn'])
+error = _loggerFactory(LOG_LEVEL['error'])
 
 local class_mt = {
   -- to prevent use of casual module global variables

@@ -8,7 +8,7 @@ _mkLogDirs(){
   mkdir -p {logs,'test/logs'}
   
   # those utils.log() log files can't be auto-created on mac (no idea why)
-  touch logs/yqj.{alert,debug,error,info}.log
+  touch logs/yqj.{debug,info,warn,error}.log
 }
 
 _cleanLogs(){

@@ -58,7 +58,7 @@ local function _getCachedValue(uri, cacheToUse)
   local cachedJsonStr, err = cacheToUse:get(uri, nil, _cacheRefresher)
   if err then
     utils.elog('err reading cache value with uri:', uri)
-    cachedJsonStr = nil
+    cachedJsonStr = nil -- 出错当是没有缓存
   end
   
   -- local res = ngx.location.capture(uri, { share_all_vars = true })
@@ -96,12 +96,15 @@ local function _applyAutoCache()
   
   local cacheToUse = _determineCache()
   
+  -- 下面注意: _isCacheHit() 用的 peek(), 而 _getCachedValue() 用的 get()
+  
   if not _isCacheHit(uri, cacheToUse) then
     utils.log('[auto-cache] missing for uri: ' .. uri .. ', pass req to backend server')
     return -- pass request to backend server
   end
   
   local cachedJsonStr = _getCachedValue(uri, cacheToUse)
+  -- 在 peek() 和 get() 之间有时间差，peek() 查到并不保证 get() 一定有，所以为啥这里还要检查一次
   if not cachedJsonStr then
     -- TODO: 测试缓存失效
     utils.log('[auto-cache] missing for uri: ' .. uri .. ', pass req to backend server')

@@ -79,7 +79,7 @@ local function _calcSign()
 end
 
 local function _blockIllegalAccess()
-  utils.alog('[Wrong Sign Reqest] headers: ' .. ngx.req.raw_header())
+  utils.wlog('[Wrong Sign Reqest] with headers: ' .. ngx.req.raw_header())
   
   ngx.header["Content-Type"] = "application/json"
   ngx.say(ERROR_RESPONSE)
@@ -127,7 +127,8 @@ end
 
 local function checkAPISign()
   local calculatedSign = _calcSign()
-  utils.log('ilegal sign: ' .. calculatedSign)
+  -- utils.log('ilegal sign: ' .. calculatedSign)
+  
   -- local signInHeader = ngx.req.get_headers()[SIGN_HEADER_KEY]
   -- if signInHeader == calculatedSign then
   --   -- sign check ok, pass to backend servers

@@ -4,6 +4,7 @@ local utils = {}
 local inspect = require('inspect.inspect')
 
 local logger = require('yqj.logger')
+
 function utils.islist(t)
   local itemcount = 0
   local last_type = nil
@@ -95,10 +96,10 @@ end
 return function ( ngx )
   utils.ngx = ngx
   
-  utils.log = _log('info') -- info log
-  utils.alog = _log('alert') -- alert log
-  utils.elog = _log('error') -- error log
   utils.dlog = _log('debug') -- error log
+  utils.log = _log('info') -- info log
+  utils.wlog = _log('warn') -- alert log
+  utils.elog = _log('error') -- error log
   
   return utils
 end
