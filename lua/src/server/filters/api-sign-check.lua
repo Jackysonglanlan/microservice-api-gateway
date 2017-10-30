@@ -83,7 +83,7 @@ local function _blockIllegalAccess()
   
   ngx.header["Content-Type"] = "application/json"
   ngx.say(ERROR_RESPONSE)
-  ngx.eof()
+  ngx.exit(ngx.HTTP_OK)
 end
 
 
