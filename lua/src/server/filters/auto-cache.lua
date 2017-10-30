@@ -24,7 +24,7 @@ end
 local function _isCacheHit(uri, cacheToUse)
   -- 没有 cache 可用
   if not cacheToUse then
-    utils.log('[auto-cache] No cache found, can not use auto-cache')
+    -- utils.log('[auto-cache] No cache found, can not use auto-cache')
     return false
   end
   
@@ -36,7 +36,7 @@ local function _isCacheHit(uri, cacheToUse)
   end
   
   if ttl then
-    utils.log('[auto-cache] Found cache ' + cacheToUse.name)
+    -- utils.log('[auto-cache] Found cache ' + cacheToUse.name)
     return true
   end
   

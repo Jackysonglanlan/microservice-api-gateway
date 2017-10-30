@@ -32,7 +32,7 @@
       "repo": "http://jacky:abcd123@internal.yiqijiao.cn:8412/gitblit/r/jacky/openresty-dispatcher.git",
       "path": "/var/www/openresty-dispatcher",
       "ssh_options": "StrictHostKeyChecking=no",
-      "post-deploy": "",
+      "post-deploy": "scripts/pm2/post-deploy.sh",
       "env": {
         "LUA_ENV": "dev"
       }
@@ -45,7 +45,7 @@
       "repo": "git@git.oschina.net:yiqijiao/yqj_payment.git",
       "path": "/var/www/yqj-payment",
       "ssh_options": "StrictHostKeyChecking=no",
-      "post-deploy": "scripts/pm2-hooks/post-deploy.sh test /var/www/yqj-payment payment",
+      "post-deploy": "scripts/pm2/post-deploy.sh",
       "env": {
         "LUA_ENV": "test"
       }
@@ -58,7 +58,7 @@
       "repo": "git@git.oschina.net:yiqijiao/yqj_payment.git",
       "path": "/var/www/yqj-payment",
       "ssh_options": "StrictHostKeyChecking=no",
-      "post-deploy": "scripts/pm2-hooks/post-deploy.sh production /var/www/yqj-payment payment",
+      "post-deploy": "scripts/pm2/post-deploy.sh",
       "env": {
         "LUA_ENV": "production"
       }

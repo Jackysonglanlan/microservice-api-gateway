@@ -21,7 +21,7 @@ use_red_green_echo() {
 use_red_green_echo 'Build'
 
 
-ALL_BIN_FILES_COPIED_MARK_FILE='./all-so-files-copied.log'
+ALL_SO_FILES_COPIED_MARK_FILE='./all-so-files-copied.log'
 
 # lua lib root path
 LUA_LIB_PATH="lua/libs"
@@ -44,7 +44,7 @@ _markAllLibsAreBuilt(){
   green "All C libs are built..."
   green "Make mark file..."
   green "Done"
-  touch $ALL_BIN_FILES_COPIED_MARK_FILE
+  touch $ALL_SO_FILES_COPIED_MARK_FILE
 }
 
 ###### build all the C libs
@@ -110,7 +110,7 @@ _makeDirs(){
 ######
 
 main(){
-  if [[ -f $ALL_BIN_FILES_COPIED_MARK_FILE ]]; then
+  if [[ -f $ALL_SO_FILES_COPIED_MARK_FILE ]]; then
     yellow 'All libs are installed, no need to build...'
     return
   fi

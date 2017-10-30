@@ -16,7 +16,7 @@ if not ngx.header[YQJ_AUTO_CACHE_TRIGGER_HEADER] then
   return -- 所以下面不需要处理了
 end
 
-utils.log('[auto-cache] Detected: backend server request auto-cache: ' + ngx.header[YQJ_AUTO_CACHE_TRIGGER_HEADER])
+-- utils.log('[auto-cache] Detected: backend server request auto-cache: ' + ngx.header[YQJ_AUTO_CACHE_TRIGGER_HEADER])
 
 local function _saveCacheConfDataToCTX(ctx)
   ctx.requestCacheConf = JSON.decode(ngx.header[YQJ_AUTO_CACHE_TRIGGER_HEADER])
