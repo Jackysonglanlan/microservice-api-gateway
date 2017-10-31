@@ -72,7 +72,7 @@ local function _calcSign()
   
   -- sign
   local md5Sign = _signStr(presignStr)
-  utils.log('valid sign: ' .. md5Sign)
+  -- utils.log('valid sign: ' .. md5Sign)
   return md5Sign
 end
 
@@ -86,7 +86,9 @@ local function _blockIllegalAccess()
 end
 
 
----------- main
+---------- export
+
+local M = {}
 
 --[[
 
@@ -124,7 +126,7 @@ end
 
 --]]
 
-local function checkAPISign()
+function M.checkAPISign()
   local calculatedSign = _calcSign()
   -- utils.log('ilegal sign: ' .. calculatedSign)
   
@@ -143,13 +145,8 @@ local function checkAPISign()
   _blockIllegalAccess()
 end
 
-checkAPISign()
 
-
-
-
-
-
+return M
 
 
 
