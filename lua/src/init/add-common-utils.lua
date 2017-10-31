@@ -25,14 +25,16 @@ jitDebug()
 ---------------------
 
 -- core class extension
-require('yqj.strong')
-_G.Date = require('yqj.date')
-_G.Path = require('yqj.path')
+local strong = require('yqj.strong')
 
 -- mount everyday use modules to global
 _G.JSON = require('libcjson.libcjson')
-_G.utils = require('yqj.utils')(ngx)
-_G.utils.regex = require('regex.regex')
+
+local utils = require('yqj.utils')(ngx)
+utils.regex = require('regex.regex')
+utils.Date = require('yqj.date')
+utils.Path = require('yqj.path')
+_G.utils = utils
 
 -- lua lodash
 _G._ = require('moses.moses')

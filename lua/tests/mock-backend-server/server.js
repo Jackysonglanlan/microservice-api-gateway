@@ -2,11 +2,18 @@
 
 const http = require('http');
 
+const ROUTE_PREFIX = '/cache-test/';
+
 function _mountRoute(route, backend) {
   let hitCount = 0;
-  return (url, req, res) => {
-    if ('/cache-test/' + route !== url) {
-      return;
+  return (uri, req, res) => {
+    const matchBackendOwnRule = backend.matchURI && backend.matchURI(uri);
+
+    if (!matchBackendOwnRule) {
+      // try common match rule
+      if (ROUTE_PREFIX + route !== uri) {
+        return;
+      }
     }
 
     console.log(`hit ${backend.name}: ${++hitCount}`);
@@ -17,9 +24,9 @@ function _mountRoute(route, backend) {
   };
 }
 
-function _makeRoutes(routeConf) {
-  return Object.keys(routeConf).map(mountURL => {
-    return _mountRoute(mountURL, routeConf[mountURL]);
+function _makeRoutes(routeList) {
+  return routeList.map(route => {
+    return _mountRoute(route.name, route);
   });
 }
 
@@ -60,9 +67,23 @@ const noCacheBackend = (req, res, name) => {
   res.end(JSON.stringify({ from: name }));
 };
 
+const matchAllTheRestBackend = (req, res, name) => {
+  // no cache
+  res.end(JSON.stringify({ from: name, 'receive-uri': req.url }));
+};
+matchAllTheRestBackend.matchURI = uri => {
+  return !uri.startsWith(ROUTE_PREFIX);
+};
+
 // run
 
-const routes = _makeRoutes({ bigFewLongBackend, smallMassShortBackend, mockBackend, noCacheBackend });
+const routes = _makeRoutes([
+  bigFewLongBackend,
+  smallMassShortBackend,
+  mockBackend,
+  noCacheBackend,
+  matchAllTheRestBackend
+]);
 
 http
   .createServer((req, res) => {

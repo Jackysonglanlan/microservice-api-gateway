@@ -1,4 +1,4 @@
-local date = Date
+local date = utils.Date
 
 describe("Testing the 'date' module", function()
     

@@ -106,7 +106,6 @@ local function _applyAutoCache()
   local cachedJsonStr = _getCachedValue(uri, cacheToUse)
   -- 在 peek() 和 get() 之间有时间差，peek() 查到并不保证 get() 一定有，所以为啥这里还要检查一次
   if not cachedJsonStr then
-    -- TODO: 测试缓存失效
     utils.log('[auto-cache] missing for uri: ' .. uri .. ', pass req to backend server')
     return -- pass request to backend server
   end

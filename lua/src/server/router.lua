@@ -1,6 +1,7 @@
 
 local Router = {}
 
+local gsub = string.gsub
 -- see https://github.com/git-hulk/lua-resty-router
 local RealRouter = require('router.router')
 local realRouter = RealRouter:new()
@@ -22,9 +23,7 @@ end
 ]]--
 function Router.dispatch(apiPrefix, filePath, uri)
   -- utils.log(filePath, uri)
-  
-  local fileRequirePath = 'server.routes.' .. string.gsub(filePath, '-', '.')
-  local paramURI = uri
+  local fileRequirePath = 'server.routes.' .. gsub(filePath, '-', '.')
   
   local route = cache[fileRequirePath]
   if not route then

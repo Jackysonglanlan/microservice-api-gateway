@@ -2,11 +2,18 @@
 local utils = require('yqj.utils')(ngx)
 local resty_md5 = require "resty.md5"
 local string = require "resty.string"
-local merge = require('pl.tablex').merge
 local cjson = require("cjson")
+local merge = require('pl.tablex').merge
+local insert = table.insert
+local sort = table.sort
+local concat = table.concat
+local md5 = resty_md5:new()
+local to_hex = string.to_hex
 
 local SIGN_HEADER_KEY = 'sign'
--- todo: set the proper response code for ilegal sign
+local ERROR_RESPONSE_HEADER = {['Content-Type'] = 'application/json'}
+
+-- TODO: set the proper response code for ilegal sign
 local ERROR_RESPONSE = cjson.encode({code = 620, error = 'wrong sign'})
 
 
@@ -23,18 +30,18 @@ cache the Nginx variable value to your own Lua variable, for example:
 local function _genePresignStrFromParamsAndHeaders( presignParamTable )
   local a = {}
   for n in pairs(presignParamTable) do
-    table.insert(a, n)
+    insert(a, n)
   end
   
-  table.sort(a)
+  sort(a)
   
   local sorted = {}
   for k, sortedKey in pairs(a) do
     if sortedKey ~= SIGN_HEADER_KEY then
-      table.insert(sorted, sortedKey .. '=' .. presignParamTable[sortedKey])
+      insert(sorted, sortedKey .. '=' .. presignParamTable[sortedKey])
     end
   end
-  local sortedStr = table.concat(sorted, '&')
+  local sortedStr = concat(sorted, '&')
   return sortedStr
 end
 
@@ -44,15 +51,13 @@ end
 
 -- sign with md5
 local function _signStr( presignStr )
-  local md5 = resty_md5:new()
-  
   local ok = md5:update(presignStr)
   if not ok then
     return
   end
   
-  local md5 = string.to_hex(md5:final())
-  return md5
+  local md5Sign = to_hex(md5:final())
+  return md5Sign
 end
 
 local function _calcSign()
@@ -74,14 +79,15 @@ local function _calcSign()
   -- utils.log('presignStr', presignStr)
   
   -- sign
-  local md5 = _signStr(presignStr)
-  return md5
+  local md5Sign = _signStr(presignStr)
+  return md5Sign
 end
 
 local function _blockIllegalAccess()
-  utils.wlog('[Wrong Sign Reqest] with headers: ' .. ngx.req.raw_header())
+  utils.wlog('[Wrong Sign Reqest] with : ')
+  -- utils.log('headers: ' .. ngx.req.raw_header())
   
-  ngx.header["Content-Type"] = "application/json"
+  ngx.header = ERROR_RESPONSE_HEADER
   ngx.say(ERROR_RESPONSE)
   ngx.exit(ngx.HTTP_OK)
 end
