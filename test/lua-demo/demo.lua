@@ -45,7 +45,7 @@ local function md5AndCJSON()
   end
   local md5 = string.to_hex(md5:final())
   
-  local uuid = require('yqj.jit-uuid')
+  local uuid = require('yqj.uuid')
   
   local now = Date()
   
@@ -60,7 +60,7 @@ local function testTamale()
     { {"foo", 1, {} },      "one" }, 
     { 10,                   function() return "two" end}, 
     { {"bar", 10, 100},     "three" }, 
-    { {"baz", V"X" },       V"X" },                                                                 -- V"X" is a variable
+    { {"baz", V"X" },       V"X" },  -- V"X" is a variable
     { {"add", V"X", V"Y"},  function(cs) return cs.X + cs.Y end }, 
   }
   

@@ -1,14 +1,11 @@
 
 local utils = require('yqj.utils')(ngx)
-local resty_md5 = require "resty.md5"
 local string = require "resty.string"
 local cjson = require("cjson")
 local merge = require('pl.tablex').merge
 local insert = table.insert
 local sort = table.sort
 local concat = table.concat
-local md5 = resty_md5:new()
-local to_hex = string.to_hex
 
 local SIGN_HEADER_KEY = 'sign'
 local ERROR_RESPONSE_HEADER = {['Content-Type'] = 'application/json'}
@@ -51,12 +48,7 @@ end
 
 -- sign with md5
 local function _signStr( presignStr )
-  local ok = md5:update(presignStr)
-  if not ok then
-    return
-  end
-  
-  local md5Sign = to_hex(md5:final())
+  local md5Sign = ngx.md5(presignStr)
   return md5Sign
 end
 
@@ -80,11 +72,12 @@ local function _calcSign()
   
   -- sign
   local md5Sign = _signStr(presignStr)
+  utils.log('valid sign: ' .. md5Sign)
   return md5Sign
 end
 
 local function _blockIllegalAccess()
-  utils.wlog('[Wrong Sign Reqest] with : ')
+  utils.wlog('[Wrong Sign Reqest] request: ' .. ngx.var.uri)
   -- utils.log('headers: ' .. ngx.req.raw_header())
   
   ngx.header = ERROR_RESPONSE_HEADER

@@ -67,23 +67,17 @@ const noCacheBackend = (req, res, name) => {
   res.end(JSON.stringify({ from: name }));
 };
 
-const matchAllTheRestBackend = (req, res, name) => {
+const matchRestBackend = (req, res, name) => {
   // no cache
   res.end(JSON.stringify({ from: name, 'receive-uri': req.url }));
 };
-matchAllTheRestBackend.matchURI = uri => {
+matchRestBackend.matchURI = uri => {
   return !uri.startsWith(ROUTE_PREFIX);
 };
 
 // run
 
-const routes = _makeRoutes([
-  bigFewLongBackend,
-  smallMassShortBackend,
-  mockBackend,
-  noCacheBackend,
-  matchAllTheRestBackend
-]);
+const routes = _makeRoutes([bigFewLongBackend, smallMassShortBackend, mockBackend, noCacheBackend, matchRestBackend]);
 
 http
   .createServer((req, res) => {

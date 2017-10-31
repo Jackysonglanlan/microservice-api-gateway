@@ -10,6 +10,5 @@ describe("Openresty test context", function()
         ngx.sleep(0.1)
         assert.is_true(1 == 1)
       end)
-    
 end)
 
