@@ -3,7 +3,7 @@
 local checkLUAEnv = require('init.check-LUA-ENV')
 local addCommonUtils = require('init.add-common-utils')
 local preloadLibs = require('init.preload-libs')
-local preloadAccessFilters = require('init.preload-access-filters')
+local preloadFilters = require('init.preload-filters')
 
 notInTest(function()
     _G.__yqj_global_cache = require('init.auto-cache')

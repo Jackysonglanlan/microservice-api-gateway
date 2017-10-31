@@ -12,7 +12,7 @@ local M = {}
   -
   - @return string Full TEXT response data, or nil if the data is still coming
 ]]--
-function M.bodyFilterGetFullRespData()
+function M.bodyFilterGetFullRespData(ngx)
   -- nginx is running on non-blocking mode, so this method will be called many times
   
   -- tmp save chunks in ctx

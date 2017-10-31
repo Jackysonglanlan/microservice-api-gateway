@@ -1,6 +1,6 @@
 
 ---------
--- used in access_by_lua_file_xxx directive
+-- used in access_by_lua_block directive
 --
 -- auto-cache 主要实现
 --
@@ -14,7 +14,7 @@ local function _decompressJSONStr(compressedStr)
   return origStr
 end
 
-local function _determineCache()
+local function _determineCache(ngx)
   -- 因为 auto-cache-trigger 在上一次请求时把类型值放在了 Last-Modified 中，所以从 If-Modified-Since 取
   local cacheType = ngx.req.get_headers()['If-Modified-Since']
   -- utils.log(cacheType)
@@ -41,9 +41,6 @@ local function _isCacheHit(uri, cacheToUse)
   end
   
   return false
-  
-  -- TEST-ONLY
-  -- return true
 end
 
 local function _cacheRefresher()
@@ -68,33 +65,38 @@ local function _getCachedValue(uri, cacheToUse)
   return (cachedJsonStr)
 end
 
-local function _sendCachedDataHeaders(cachedRespWithHeader)
+local function _sendCachedHeaders(ngx, origHeaders)
+  _.each(origHeaders, function(k, v)
+      ngx.header[k] = v
+  end)
+end
+
+local function _sendCachedResponse(ngx, origResp)
+  ngx.say(origResp)
+end
+
+local function _sendCachedDataToClient(ngx, compressedCacheData)
+  local cachedRespWithHeader = _decompressJSONStr(compressedCacheData)
+  -- utils.log(compressedCacheData)
+  
   -- cachedRespWithHeader format: see auto-cache-maker
   local tmp = cachedRespWithHeader:split('__a_c_h__')
   
   local origHeaders = JSON.decode(tmp[2])
-  _.each(origHeaders, function(k, v)
-      ngx.header[k] = v
-  end)
-  
   local origResp = tmp[1]
-  ngx.say(origResp)
-end
-
-local function _sendCachedDataToClient(compressedCacheData)
-  local cachedRespWithHeader = _decompressJSONStr(compressedCacheData)
-  -- utils.log(compressedCacheData)
   
-  _sendCachedDataHeaders(cachedRespWithHeader)
+  _sendCachedHeaders(ngx, origHeaders)
+  _sendCachedResponse(ngx, origResp)
   ngx.exit(ngx.HTTP_OK) -- 终止请求，不转发到 backend，见 nginx.conf
 end
 
--- main process
+-- export
 
-local function _applyAutoCache()
+local M = {}
+
+function M.applyAutoCache(ngx)
+  local cacheToUse = _determineCache(ngx)
   local uri = ngx.var.uri
-  
-  local cacheToUse = _determineCache()
   
   -- 下面注意: _isCacheHit() 用的 peek(), 而 _getCachedValue() 用的 get()
   
@@ -112,9 +114,9 @@ local function _applyAutoCache()
   
   utils.log('[auto-cache] (' + cacheToUse.name + ') hit for uri: ' + uri)
   
-  _sendCachedDataToClient(cachedJsonStr)
+  _sendCachedDataToClient(ngx, cachedJsonStr)
 end
 
-_applyAutoCache()
 
+return M
 
