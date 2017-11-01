@@ -7,9 +7,11 @@
 -- 这个 filter 需要 auto-cache-response-header-handler 和 auto-cache-maker 的配合
 ---------
 local lz4 = require("lz4.lz4")
+local decompress = lz4.decompress
+local json_decode = JSON.decode
 
 local function _decompressJSONStr(compressedStr)
-  local origStr = lz4.decompress(compressedStr)
+  local origStr = decompress(compressedStr)
   -- utils.log('decompressed len:' .. string.len(origStr))
   return origStr
 end
@@ -76,14 +78,13 @@ local function _sendCachedResponse(ngx, origResp)
 end
 
 local function _sendCachedDataToClient(ngx, compressedCacheData)
-  local cachedRespWithHeader = _decompressJSONStr(compressedCacheData)
-  -- utils.log(compressedCacheData)
+  local cachedData = _decompressJSONStr(compressedCacheData)
   
-  -- cachedRespWithHeader format: see auto-cache-maker
-  local tmp = cachedRespWithHeader:split('__a_c_h__')
+  -- cachedData format: see auto-cache-maker
+  local tmp = cachedData:split('__a_c_h__')
   
-  local origHeaders = JSON.decode(tmp[2])
-  local origResp = tmp[1]
+  local origHeaders = json_decode(tmp[1])
+  local origResp = tmp[2]
   
   _sendCachedHeaders(ngx, origHeaders)
   _sendCachedResponse(ngx, origResp)
@@ -106,8 +107,9 @@ function M.applyAutoCache(ngx)
   end
   
   local cachedJsonStr = _getCachedValue(uri, cacheToUse)
-  -- 在 peek() 和 get() 之间有时间差，peek() 查到并不保证 get() 一定有，所以为啥这里还要检查一次
-  if not cachedJsonStr then
+  
+  -- peek() 和 get() 有时间差，peek() 查到并不保证 get() 一定有(peek时有 -> 过期 -> get -> nil)
+  if not cachedJsonStr then -- 所以再检查一次
     utils.log('[auto-cache] missing for uri: ' .. uri .. ', pass req to backend server')
     return -- pass request to backend server
   end
