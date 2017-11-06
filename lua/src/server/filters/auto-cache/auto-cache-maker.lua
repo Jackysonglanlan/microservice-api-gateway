@@ -34,7 +34,7 @@ local function _cacheRefresher(respHeaders, respData)
   -- 把 响应数据 和 header 存在一起, 形成最终的缓存数据, auto-cache 那里会把这个数据拆开
   
   -- 由于 respData 可能很大，所以用 concat 完成字符串拼接
-  local cachedData = {json_encode(respHeaders) , '__a_c_h__' , respData }
+  local cachedData = {json_encode(respHeaders) , '__6ef30a91b546ada6c5cjs4dbe402deccd80c5dd0f0__' , respData }
   cachedData = concat(cachedData)
   -- utils.log(cachedData)
   
@@ -51,7 +51,7 @@ end
 local function _addResponseDataToMLCache(requestCacheConf, ngx, respData)
   local requestedCache = _determineCacheType(requestCacheConf)
   
-  utils.log('[auto-cache-maker] Ready to cache response header and data, using cache: ' + requestedCache.name)
+  -- utils.log('[auto-cache-maker] Ready to cache response header and data, using cache: ' + requestedCache.name)
   
   local uri = ngx.var.uri
   local respHeaders = ngx.resp.get_headers(50, true)
@@ -103,9 +103,5 @@ function M.makeCache(ngx)
 end
 
 return M
-
-
-
-
 
 

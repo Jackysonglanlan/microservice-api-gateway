@@ -26,7 +26,7 @@ end
 local function _isCacheHit(uri, cacheToUse)
   -- 没有 cache 可用
   if not cacheToUse then
-    utils.log('[auto-cache] No cache found, can not use auto-cache')
+    utils.wlog('[auto-cache] No cache found, can not use auto-cache')
     return false
   end
   
@@ -60,10 +60,6 @@ local function _getCachedValue(uri, cacheToUse)
     cachedJsonStr = nil -- 出错当是没有缓存
   end
   
-  -- local res = ngx.location.capture(uri, { share_all_vars = true })
-  -- local freshJsonStr = res.body
-  -- utils.log(freshJsonStr)
-  
   return (cachedJsonStr)
 end
 
@@ -81,7 +77,7 @@ local function _sendCachedDataToClient(ngx, compressedCacheData)
   local cachedData = _decompressJSONStr(compressedCacheData)
   
   -- cachedData format: see auto-cache-maker
-  local tmp = cachedData:split('__a_c_h__')
+  local tmp = cachedData:split('__6ef30a91b546ada6c5cjs4dbe402deccd80c5dd0f0__')
   
   local origHeaders = json_decode(tmp[1])
   local origResp = tmp[2]
@@ -102,7 +98,7 @@ function M.applyAutoCache(ngx)
   -- 下面注意: _isCacheHit() 用的 peek(), 而 _getCachedValue() 用的 get()
   
   if not _isCacheHit(uri, cacheToUse) then
-    utils.log('[auto-cache] missing for uri: ' .. uri .. ', pass req to backend server')
+    -- utils.log('[auto-cache] missing for uri: ' .. uri .. ', pass req to backend server')
     return -- pass request to backend server
   end
   
@@ -110,25 +106,16 @@ function M.applyAutoCache(ngx)
   
   -- peek() 和 get() 有时间差，peek() 查到并不保证 get() 一定有(peek时有 -> 过期 -> get -> nil)
   if not cachedJsonStr then -- 所以再检查一次
-    utils.log('[auto-cache] missing for uri: ' .. uri .. ', pass req to backend server')
+    -- utils.log('[auto-cache] missing between peek() and get() for uri: ' .. uri .. ', pass req to backend server')
     return -- pass request to backend server
   end
   
-  utils.log('[auto-cache] (' + cacheToUse.name + ') hit for uri: ' + uri)
+  -- utils.log('[auto-cache] (' + cacheToUse.name + ') hit for uri: ' + uri)
   
   _sendCachedDataToClient(ngx, cachedJsonStr)
 end
 
 
 return M
-
-
-
-
-
-
-
-
-
 
 
