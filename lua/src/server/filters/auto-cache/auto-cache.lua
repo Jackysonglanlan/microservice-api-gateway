@@ -26,7 +26,7 @@ end
 local function _isCacheHit(uri, cacheToUse)
   -- 没有 cache 可用
   if not cacheToUse then
-    -- utils.log('[auto-cache] No cache found, can not use auto-cache')
+    utils.log('[auto-cache] No cache found, can not use auto-cache')
     return false
   end
   
@@ -56,7 +56,7 @@ local function _getCachedValue(uri, cacheToUse)
   
   local cachedJsonStr, err = cacheToUse:get(uri, nil, _cacheRefresher)
   if err then
-    utils.elog('err reading cache value with uri:', uri)
+    utils.elog('err reading cache value with uri:', uri, err)
     cachedJsonStr = nil -- 出错当是没有缓存
   end
   
@@ -68,7 +68,7 @@ local function _getCachedValue(uri, cacheToUse)
 end
 
 local function _sendCachedHeaders(ngx, origHeaders)
-  _.forEach(origHeaders, function(k, v)
+  _.forEach(origHeaders, function(v, k)
     ngx.header[k] = v
   end)
 end
@@ -121,5 +121,14 @@ end
 
 
 return M
+
+
+
+
+
+
+
+
+
 
 

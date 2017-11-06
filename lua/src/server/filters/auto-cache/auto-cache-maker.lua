@@ -6,8 +6,6 @@
 local concat = table.concat
 local filterUtils = require('server.filters.utils')
 
-utils.log(filterUtils)
-
 local lz4 = require("lz4.lz4")
 local compress = lz4.compress
 local json_encode = JSON.encode
@@ -53,7 +51,7 @@ end
 local function _addResponseDataToMLCache(requestCacheConf, ngx, respData)
   local requestedCache = _determineCacheType(requestCacheConf)
   
-  -- utils.log('[auto-cache-maker] Ready to cache response header and data, using cache: ' + requestedCache.name)
+  utils.log('[auto-cache-maker] Ready to cache response header and data, using cache: ' + requestedCache.name)
   
   local uri = ngx.var.uri
   local respHeaders = ngx.resp.get_headers(50, true)
@@ -95,7 +93,7 @@ function M.makeCache(ngx)
     return
   end
   
-  utils.log('[auto-cache-maker] Got full response data...')
+  -- utils.log('[auto-cache-maker] Got full response data...')
   -- utils.log(fullRespData)
   
   -- 这里，因为已经拿到了数据，所以可以提前写入缓存，等下一次请求上来，auto-cache.lua 就可以直接取了
@@ -105,6 +103,9 @@ function M.makeCache(ngx)
 end
 
 return M
+
+
+
 
 
 

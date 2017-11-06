@@ -27,102 +27,80 @@ local copyright = [[
   local lz4 = require("lz4.lz4")
   
   describe("lz4", function ()
+    
+    describe("version:", function ()
+      it("type", function ()
+        assert.is_true(type(lz4.version()) == "number")
+      end)
+      it("compatibility", function()
+        assert.is_true(lz4.version() >= 10300)
+      end)
+    end)
+    
+    describe("compress:", function ()
+      it("default", function ()
+        assert.is_not_nil(lz4.compress(copyright))
+        assert.is_not_nil(lz4.compress(copyright), 1)
+      end)
+      it("high compression", function ()
+        assert.is_not_nil(lz4.compress(copyright, 9))
+      end)
+      it("handle nil input", function ()
+        local ret, errmsg = lz4.compress()
+        assert.is_nil(ret)
+        assert.is_true(type(errmsg) == "string")
+      end)
+      it("handle empty string input", function ()
+        local ret, errmsg = lz4.compress("")
+        assert.is_nil(ret)
+        assert.is_true(type(errmsg) == "string")
+      end)
       
-      describe("version:", function ()
-          it("type", function ()
-              assert.is_true(type(lz4.version()) == "number")
-              end)
-          it("compatibility", function()
-              assert.is_true(lz4.version() >= 10300)
-              end)
-        end)
-      
-      describe("compress:", function ()
-          it("default", function ()
-              assert.is_not_nil(lz4.compress(copyright))
-              assert.is_not_nil(lz4.compress(copyright), 1)
-              end)
-          it("high compression", function ()
-              assert.is_not_nil(lz4.compress(copyright, 9))
-              end)
-          it("handle nil input", function ()
-              local ret, errmsg = lz4.compress()
-              assert.is_nil(ret)
-              assert.is_true(type(errmsg) == "string")
-              end)
-          it("handle empty string input", function ()
-              local ret, errmsg = lz4.compress("")
-              assert.is_nil(ret)
-              assert.is_true(type(errmsg) == "string")
-              end)
-          
-          it("should show its power", function()
-              local hugeData = {}
-              for i = 1, 1e4  do
-                table.insert(hugeData, copyright)
-              end
-              hugeData = table.concat(hugeData, '')
-              local compressed = lz4.compress(hugeData)
-              
-              -- print(string.len( compressed))
-              -- print(string.len( hugeData))
-              
-              -- 100x compression!!
-              assert.is_true(string.len( hugeData) / string.len( compressed) > 100)
-              end)
-        end)
-      
-      describe("decompress:", function ()
-          it("default", function ()
-              assert.is_true(lz4.decompress(lz4.compress(copyright)) == copyright)
-              assert.is_true(lz4.decompress(lz4.compress(copyright, 1)) == copyright)
-              end)
-          it("high compression", function ()
-              assert.is_true(lz4.decompress(lz4.compress(copyright, 9)) == copyright)
-              end)
-          it("handle nil input", function ()
-              local ret, errmsg = lz4.decompress()
-              assert.is_nil(ret)
-              assert.is_true(type(errmsg) == "string")
-              end)
-          it("handle empty string input", function ()
-              local ret, errmsg = lz4.decompress("")
-              assert.is_nil(ret)
-              assert.is_true(type(errmsg) == "string")
-              end)
-          it("handle malformed input", function ()
-              local ret, errmsg
-              ret, errmsg = lz4.decompress("short")
-              assert.is_nil(ret)
-              assert.is_true(type(errmsg) == "string")
-              ret, errmsg = lz4.decompress("longlonglonglong")
-              assert.is_nil(ret)
-              assert.is_true(type(errmsg) == "string")
-              end)
-        end)
+      it("should show its power", function()
+        local hugeData = {}
+        for i = 1, 1e4  do
+          table.insert(hugeData, copyright)
+        end
+        hugeData = table.concat(hugeData, '')
+        local compressed = lz4.compress(hugeData)
+        
+        -- print(string.len( compressed))
+        -- print(string.len( hugeData))
+        
+        -- 100x compression!!
+        assert.is_true(string.len( hugeData) / string.len( compressed) > 100)
+      end)
+    end)
+    
+    describe("decompress:", function ()
+      it("default", function ()
+        assert.is_true(lz4.decompress(lz4.compress(copyright)) == copyright)
+        assert.is_true(lz4.decompress(lz4.compress(copyright, 1)) == copyright)
+      end)
+      it("high compression", function ()
+        assert.is_true(lz4.decompress(lz4.compress(copyright, 9)) == copyright)
+      end)
+      it("handle nil input", function ()
+        local ret, errmsg = lz4.decompress()
+        assert.is_nil(ret)
+        assert.is_true(type(errmsg) == "string")
+      end)
+      it("handle empty string input", function ()
+        local ret, errmsg = lz4.decompress("")
+        assert.is_nil(ret)
+        assert.is_true(type(errmsg) == "string")
+      end)
+      it("handle malformed input", function ()
+        local ret, errmsg
+        ret, errmsg = lz4.decompress("short")
+        assert.is_nil(ret)
+        assert.is_true(type(errmsg) == "string")
+        ret, errmsg = lz4.decompress("longlonglonglong")
+        assert.is_nil(ret)
+        assert.is_true(type(errmsg) == "string")
+      end)
+    end)
   end)
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   
   
   

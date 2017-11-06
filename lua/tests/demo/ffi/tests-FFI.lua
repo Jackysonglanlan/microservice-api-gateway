@@ -11,40 +11,39 @@ ffi.cdef[[
 ffi.cdef[[
   typedef struct cfoo{
     int timestamp;
-    } cfoo;
+  } cfoo;
 ]]
 
 describe("FFI", function()
+  
+  setup(function()
+    -- 编译动态库
+    os.execute('cd lua/tests/demo/ffi && make')
+  end)
+  
+  it("should load C lib", function()
+    local c = ffi.load("lua/tests/demo/ffi/libhelloworld.so")
     
-    setup(function()
-        -- 编译动态库
-        os.execute('cd lua/tests/demo/ffi && make')
-      end)
+    -- userdata 代表数据是 C 的结构
+    assert.equal('userdata', type(c))
+    -- 调用 c 函数，返回的 char* 需要转换为 lua string
+    assert.equal('haha', ffi.string(c.haha()))
+  end)
+  
+  
+  it("should use C struct", function()
+    --
+    local size = ffi.sizeof('cfoo') -- 计算这个结构体占用的内存大小
+    assert.equal(size, 4) -- (由于只有一个 int，所以是 4 byte)
     
-    it("should load C lib", function()
-        local c = ffi.load("lua/tests/demo/ffi/libhelloworld.so")
-        
-        -- userdata 代表数据是 C 的结构
-        assert.equal('userdata', type(c))
-        -- 调用 c 函数，返回的 char* 需要转换为 lua string
-        assert.equal('haha', ffi.string(c.haha()))
-      end)
+    local ptr = ffi.typeof('cfoo *')
+    assert.equal(tostring(ptr), 'ctype<struct cfoo *>')
     
-    
-    it("should use C struct", function()
-        --
-        local size = ffi.sizeof('cfoo') -- 计算这个结构体占用的内存大小
-        assert.equal(size, 4) -- (由于只有一个 int，所以是 4 byte)
-        
-        local ptr = ffi.typeof('cfoo *')
-        assert.equal(tostring(ptr), 'ctype<struct cfoo *>')
-        
-        local data = ffi.new('cfoo') -- 使用结构体
-        local ts = os.time(os.date("!*t"))
-        data.timestamp = ts
-        assert.equal(data.timestamp, ts)
-      end)
+    local data = ffi.new('cfoo') -- 使用结构体
+    local ts = os.time(os.date("!*t"))
+    data.timestamp = ts
+    assert.equal(data.timestamp, ts)
+  end)
 end)
-
 
 
