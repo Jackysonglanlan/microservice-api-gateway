@@ -68,8 +68,8 @@ local function _getCachedValue(uri, cacheToUse)
 end
 
 local function _sendCachedHeaders(ngx, origHeaders)
-  _.each(origHeaders, function(k, v)
-      ngx.header[k] = v
+  _.forEach(origHeaders, function(k, v)
+    ngx.header[k] = v
   end)
 end
 
@@ -121,4 +121,5 @@ end
 
 
 return M
+
 

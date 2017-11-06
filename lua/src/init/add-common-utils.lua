@@ -14,8 +14,8 @@
 ]]--
 local function jitDebug()
   _G.inDev(function()
-      local v = require "jit.v"
-      v.on("logs/jit.bailout.log")
+    local v = require "jit.v"
+    v.on("logs/jit.bailout.log")
   end)
 end
 jitDebug()
@@ -37,5 +37,6 @@ utils.Path = require('yqj.path')
 _G.utils = utils
 
 -- lua lodash
-_G._ = require('moses.moses')
+_G._ = require('lodash.lodash')
+
 

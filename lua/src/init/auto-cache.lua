@@ -16,8 +16,8 @@ local mlcache = require("resty.mlcache")
 ]]--
 local function _buildCache(name, opts)
   opts = opts or {
-    lru_size = 1000,    -- size of the L1 (Lua-land LRU) cache
-    ttl      = 60 * 60,   -- ttl for hits in seconds
+    lru_size = 1000,           -- size of the L1 (Lua-land LRU) cache
+    ttl      = 60 * 60,        -- ttl for hits in seconds
   }
   
   -- defined in Openresty conf file by directive: lua_shared_dict
@@ -37,13 +37,18 @@ end
 local cache = {}
 
 cache.small_mass_short = _buildCache('small_mass_short', {
-  lru_size = 1e5,                    -- size of the L1 (Lua-land LRU) cache
-  ttl      = 10,                      -- ttl for hits in seconds
+  lru_size = 1e5,    -- size of the L1 (Lua-land LRU) cache
+  ttl      = 10,     -- ttl for hits in seconds
 })
 
 cache.big_few_long = _buildCache('big_few_long', {
-  lru_size = 1e3,                    -- size of the L1 (Lua-land LRU) cache
-  ttl      = 60 * 30,                      -- ttl for hits in seconds
+  lru_size = 1e3,            -- size of the L1 (Lua-land LRU) cache
+  ttl      = 60 * 30,        -- ttl for hits in seconds
 })
 
 return cache
+
+
+
+
+

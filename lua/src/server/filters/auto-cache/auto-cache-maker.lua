@@ -4,7 +4,9 @@
 ---------
 
 local concat = table.concat
-local filterUtils = require('lua.src.server.filters.utils')
+local filterUtils = require('server.filters.utils')
+
+utils.log(filterUtils)
 
 local lz4 = require("lz4.lz4")
 local compress = lz4.compress
@@ -103,3 +105,6 @@ function M.makeCache(ngx)
 end
 
 return M
+
+
+
