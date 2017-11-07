@@ -26,7 +26,7 @@ local function _cacheURIToMLCache(requestCacheConf, ngx)
   
   -- utils.log('[auto-cache-maker] Ready to cache response header and data, using cache: ' + requestedCache.name)
   
-  local uri = ngx.var.uri
+  local uri = ngx.var.request_uri
   
   -- 缓存结构: 请求 uri -> true
   -- 这里注意，是通过 get 来设置缓存值的，why？
@@ -65,5 +65,4 @@ function M.makeCache(ngx)
 end
 
 return M
-
 

@@ -83,7 +83,7 @@ local M = {}
 
 function M.applyAutoCache(ngx)
   local cacheToUse = _determineCache(ngx)
-  local uri = ngx.var.uri
+  local uri = ngx.var.request_uri
   
   -- 下面注意: _isCacheHit() 用的 peek(), 而 _getCachedValue() 用的 get()
   
@@ -107,4 +107,6 @@ end
 
 
 return M
+
+
 

@@ -11,7 +11,7 @@ function _mountRoute(route, backend) {
 
     if (!matchBackendOwnRule) {
       // try common match rule
-      if (ROUTE_PREFIX + route !== uri) {
+      if (!uri.startsWith(ROUTE_PREFIX + route)) {
         return;
       }
     }
