@@ -3,20 +3,6 @@
 -- used in body_filter_by_lua_block directive
 ---------
 
-local concat = table.concat
-local filterUtils = require('server.filters.utils')
-
-local lz4 = require("lz4.lz4")
-local compress = lz4.compress
-local json_encode = JSON.encode
-
-local function _compressJSONStr(jsonStr)
-  -- lz4 压缩，保证效率不受影响
-  local compressed = compress(jsonStr)
-  -- utils.log('compressed len:' + string.len(compressed))
-  return compressed
-end
-
 local function _isNeedToTriggerAutoCache(requestCacheConf)
   return type(requestCacheConf) == 'table' -- see auto-cache-response-header-handler.lua
 end
@@ -24,42 +10,28 @@ end
 -- this only runs *once* until the key expires, so do expansive operations like connecting to a
 -- remote backend here.
 -- i.e: call a backend server or redis in this callback
-local function _cacheRefresher(respHeaders, respData)
+local function _cacheRefresher()
   -- utils.log('[auto-cache-maker] Pack response data and orig headers')
   
-  -- 所有的 响应 都是在 nginx 层被压缩的，所以这里不能保存 Content-Encoding，不然要出错
-  respHeaders['Content-Encoding'] = nil
-  
-  -- 缓存 响应数据 和 header，这样可以使客户端完全透明(客户端完全区分不出来到底是 缓存数据 还是 来自 backend 的数据)
-  -- 把 响应数据 和 header 存在一起, 形成最终的缓存数据, auto-cache 那里会把这个数据拆开
-  
-  -- 由于 respData 可能很大，所以用 concat 完成字符串拼接
-  local cachedData = {json_encode(respHeaders) , '__6ef30a91b546ada6c5cjs4dbe402deccd80c5dd0f0__' , respData }
-  cachedData = concat(cachedData)
-  -- utils.log(cachedData)
-  
-  -- utils.log('[auto-cache-maker] Compress then cache...')
-  
-  -- 压缩后再缓存，这个数据会在 auto-cache.lua 中被读出，解压, 拆开 响应数据 和 header，再返回给客户端
-  return _compressJSONStr(cachedData)
+  -- 只是标记一下即可, 凡是有这个标记的，都会被响应 304
+  return true
 end
 
 local function _determineCacheType(requestCacheConf)
-  return __yqj_global_cache[requestCacheConf.type] -- see lua/src/init/auto-cache.lua
+  return __yqj_global_cache.cache[requestCacheConf.type] -- see lua/src/init/auto-cache.lua
 end
 
-local function _addResponseDataToMLCache(requestCacheConf, ngx, respData)
+local function _cacheURIToMLCache(requestCacheConf, ngx)
   local requestedCache = _determineCacheType(requestCacheConf)
   
   -- utils.log('[auto-cache-maker] Ready to cache response header and data, using cache: ' + requestedCache.name)
   
   local uri = ngx.var.uri
-  local respHeaders = ngx.resp.get_headers(50, true)
   
-  -- 缓存结构: 请求 uri -> ${JSON respHeaders}__a_c_h__${response_data}
+  -- 缓存结构: 请求 uri -> true
   -- 这里注意，是通过 get 来设置缓存值的，why？
   -- 见 https://github.com/thibaultcha/lua-resty-mlcache 的 set() 方法说明
-  requestedCache:get(uri, nil, _cacheRefresher, respHeaders, respData)
+  requestedCache:get(uri, nil, _cacheRefresher)
 end
 
 local function _cleanupCTX(ngx)
@@ -73,6 +45,7 @@ local M = {}
 function M.makeCache(ngx)
   local ctx = ngx.ctx
   
+  -- 这个值是通过 auto-cache-response-header-handler 设置，然后流到这里的
   local backendRequestCacheConf = ctx.requestCacheConf
   
   -- utils.log(ctx)
@@ -85,19 +58,8 @@ function M.makeCache(ngx)
     return
   end
   
-  -- 开始接收 backend 来的响应数据
-  
-  -- non-blocking: 没有收完数据时，这个 filter 会被一直调用, 期间 fullRespData 会一直为 nil
-  local fullRespData = filterUtils.bodyFilterGetFullRespData(ngx)
-  if not fullRespData then
-    return
-  end
-  
-  -- utils.log('[auto-cache-maker] Got full response data...')
-  -- utils.log(fullRespData)
-  
-  -- 这里，因为已经拿到了数据，所以可以提前写入缓存，等下一次请求上来，auto-cache.lua 就可以直接取了
-  _addResponseDataToMLCache(backendRequestCacheConf, ngx, fullRespData)
+  -- 写入 ML 缓存，等下一次请求上来，auto-cache.lua 那边就可以直接取了
+  _cacheURIToMLCache(backendRequestCacheConf, ngx)
   
   _cleanupCTX(ngx)
 end

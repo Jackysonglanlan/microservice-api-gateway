@@ -6,19 +6,24 @@
 --
 ---------
 
+local AUTO_CACHE_KEY = require('init.auto-cache').type
+
 -- 申请 auto-cache 的响应头格式: X-YQJ-CACHE -> JSONStr，json 格式如下:
---   type: small_mass_short(适用于碎片数据) 或 big_few_long(适用于大块数据)
+--   type: cache-key (见 auto-cache.lua)
 local YQJ_AUTO_CACHE_TRIGGER_HEADER = 'X-YQJ-CACHE'
 
--- utils.log('[auto-cache] Detected: backend server request auto-cache: ' + ngx.header[YQJ_AUTO_CACHE_TRIGGER_HEADER])
-
 local function _saveCacheConfDataToCTX(ngx)
-  ngx.ctx.requestCacheConf = JSON.decode(ngx.header[YQJ_AUTO_CACHE_TRIGGER_HEADER])
+  conf = JSON.decode(ngx.header[YQJ_AUTO_CACHE_TRIGGER_HEADER])
+  -- change type to real key(time stamp)
+  conf.type = AUTO_CACHE_KEY[conf.type]
+  
+  -- utils.log(conf)
+  ngx.ctx.requestCacheConf = conf
   ngx.header[YQJ_AUTO_CACHE_TRIGGER_HEADER] = nil -- clean this header, client shall never know
 end
 
 local function _saveCacheTypeToLastModifiedHeader(ngx, requestCacheConf)
-  -- WARN: 有风险！根据 http 协议，Last-Modified 应该是一个时间戳，这里传了个字符串，某些客户端可能不认
+  -- 这里，把 代表缓存类型的时间戳 写入 Last-Modified，这样就可以追踪客户端使用的哪个缓存了
   ngx.header['Last-Modified'] = requestCacheConf.type
 end
 
@@ -34,6 +39,8 @@ function M.detectBackendCacheRequest(ngx)
     return -- 两种情况都不需要处理
   end
   
+  -- utils.log('[auto-cache] Detected: backend server request auto-cache: ' + ngx.header[YQJ_AUTO_CACHE_TRIGGER_HEADER])
+  
   -- 因为这个 filter 是唯一可以拿到 响应头 的 filter(处于 header_filter_by_lua_xxx 阶段)
   -- 所以需要把数据转存在 ngx.ctx 里面，后面的 auto-cache-maker 才能拿到
   _saveCacheConfDataToCTX(ngx)
@@ -44,3 +51,4 @@ end
 
 
 return M
+

@@ -32,11 +32,11 @@ function _makeRoutes(routeList) {
 
 // backend def
 
-const smallMassShortBackend = (req, res, name) => {
+const ttl30sBackend = (req, res, name) => {
   res.setHeader(
     'X-YQJ-CACHE', // trigger Openresty auto-cache
     JSON.stringify({
-      type: 'small_mass_short'
+      type: 'ttl_30s'
     })
   );
   res.end(JSON.stringify({ from: name }));
@@ -46,17 +46,17 @@ const mockBackend = (req, res, name) => {
   res.setHeader(
     'X-YQJ-CACHE', // trigger Openresty auto-cache
     JSON.stringify({
-      type: 'small_mass_short'
+      type: 'ttl_30s'
     })
   );
   res.end(JSON.stringify({ from: name }));
 };
 
-const bigFewLongBackend = (req, res, name) => {
+const ttl5mBackend = (req, res, name) => {
   res.setHeader(
     'X-YQJ-CACHE', // trigger Openresty auto-cache
     JSON.stringify({
-      type: 'big_few_long'
+      type: 'ttl_5m'
     })
   );
   res.end(JSON.stringify({ from: name, chunk: Buffer.alloc(10e2).toString() }));
@@ -77,7 +77,7 @@ matchRestBackend.matchURI = uri => {
 
 // run
 
-const routes = _makeRoutes([bigFewLongBackend, smallMassShortBackend, mockBackend, noCacheBackend, matchRestBackend]);
+const routes = _makeRoutes([ttl5mBackend, ttl30sBackend, mockBackend, noCacheBackend, matchRestBackend]);
 
 http
   .createServer((req, res) => {
