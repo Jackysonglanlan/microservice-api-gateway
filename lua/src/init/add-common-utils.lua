@@ -25,7 +25,7 @@ jitDebug()
 ---------------------
 
 -- core class extension
-local strong = require('yqj.strong')
+local strong = require('yqj.strong') -- string extension
 
 -- mount everyday use modules to global
 _G.JSON = require('libcjson.libcjson')
@@ -38,5 +38,4 @@ _G.utils = utils
 
 -- lua lodash
 _G._ = require('lodash.lodash')
-
 

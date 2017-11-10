@@ -32,11 +32,11 @@ function _makeRoutes(routeList) {
 
 // backend def
 
-const ttl30sBackend = (req, res, name) => {
+const mock2Backend = (req, res, name) => {
   res.setHeader(
     'X-YQJ-CACHE', // trigger Openresty auto-cache
     JSON.stringify({
-      type: 'ttl_30s'
+      type: 'default'
     })
   );
   res.end(JSON.stringify({ from: name }));
@@ -46,20 +46,20 @@ const mockBackend = (req, res, name) => {
   res.setHeader(
     'X-YQJ-CACHE', // trigger Openresty auto-cache
     JSON.stringify({
-      type: 'ttl_30s'
+      type: 'default'
     })
   );
   res.end(JSON.stringify({ from: name }));
 };
 
-const ttl5mBackend = (req, res, name) => {
+const bigChunkBackend = (req, res, name) => {
   res.setHeader(
     'X-YQJ-CACHE', // trigger Openresty auto-cache
     JSON.stringify({
-      type: 'ttl_5m'
+      type: 'default'
     })
   );
-  res.end(JSON.stringify({ from: name, chunk: Buffer.alloc(10e2).toString() }));
+  res.end(JSON.stringify({ from: name, chunk: Buffer.alloc(1e4).toString() }));
 };
 
 const noCacheBackend = (req, res, name) => {
@@ -77,7 +77,7 @@ matchRestBackend.matchURI = uri => {
 
 // run
 
-const routes = _makeRoutes([ttl5mBackend, ttl30sBackend, mockBackend, noCacheBackend, matchRestBackend]);
+const routes = _makeRoutes([bigChunkBackend, mock2Backend, mockBackend, noCacheBackend, matchRestBackend]);
 
 http
   .createServer((req, res) => {

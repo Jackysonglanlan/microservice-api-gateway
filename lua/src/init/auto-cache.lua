@@ -16,8 +16,8 @@ local mlcache = require("resty.mlcache")
 ]]--
 local function _buildCache(name, opts)
   opts = opts or {
-    lru_size = 1000,                      -- size of the L1 (Lua-land LRU) cache
-    ttl      = 60 * 60,                   -- ttl for hits in seconds
+    lru_size = 1000,                                                 -- size of the L1 (Lua-land LRU) cache
+    ttl      = 60 * 60,                                              -- ttl for hits in seconds
   }
   
   -- defined in Openresty conf file by directive: lua_shared_dict
@@ -32,10 +32,10 @@ local function _buildCache(name, opts)
   return cache
 end
 
-local function _buildTTLCache(cacheStore, ttlType, ttl)
+local function _buildTTLCache(cacheStore, cacheType, ttl, lruSize)
   cacheStore.cache = cacheStore.cache or {}
-  cacheStore.cache[cacheStore.type[ttlType]] = _buildCache(ttlType, {
-    lru_size = 1e5, 
+  cacheStore.cache[cacheStore.type[cacheType]] = _buildCache(cacheType, {
+    lru_size = lruSize, 
     ttl      = ttl, 
   })
 end
@@ -54,15 +54,12 @@ local cache = {}
 
 -- 这里，由于缓存是借助 Last-Modified 由客户端指定的，所以为了方便查找，缓存的 type 就是时间戳
 -- 把时间戳当 cache type 来用，这样就可以使用不同的缓存
+-- WARN: 为了不干扰正常的 Last-Modified 机制, 这里统一使用 1970.01.01 这一天内的值(正常的值不会是这一天)
 cache.type = {}
-cache.type.ttl_30s = 'Thu, 01 Jan 1970 00:00:01 GMT'
-cache.type.ttl_5m = 'Thu, 01 Jan 1970 00:00:02 GMT'
-cache.type.ttl_1h = 'Thu, 01 Jan 1970 00:00:03 GMT'
+cache.type.default = 'Thu, 01 Jan 1970 00:00:00 GMT'
 
 -- build cache
-_buildTTLCache(cache, 'ttl_30s', 30)
-_buildTTLCache(cache, 'ttl_5m', 60 * 5)
-_buildTTLCache(cache, 'ttl_1h', 60 * 60)
+_buildTTLCache(cache, 'default', 30, 1e6)
 
 return cache
 
