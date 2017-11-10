@@ -1,5 +1,4 @@
-
-------------------------
+-------------------
 -- multi-level cache
 -- see https://github.com/thibaultcha/lua-resty-mlcache
 ------------------------
@@ -16,8 +15,8 @@ local mlcache = require("resty.mlcache")
 ]]--
 local function _buildCache(name, opts)
   opts = opts or {
-    lru_size = 1000,                                                 -- size of the L1 (Lua-land LRU) cache
-    ttl      = 60 * 60,                                              -- ttl for hits in seconds
+    lru_size = 1000,      -- size of the L1 (Lua-land LRU) cache
+    ttl      = 60 * 60,   -- ttl for hits in seconds
   }
   
   -- defined in Openresty conf file by directive: lua_shared_dict
@@ -59,7 +58,6 @@ cache.type = {}
 cache.type.default = 'Thu, 01 Jan 1970 00:00:00 GMT'
 
 -- build cache
-_buildTTLCache(cache, 'default', 30, 1e6)
+_buildTTLCache(cache, 'default', 3, 1e6)
 
 return cache
-

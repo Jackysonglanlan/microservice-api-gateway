@@ -1,10 +1,9 @@
-
----------
+--------
 -- used in access_by_lua_block directive
 --
 -- auto-cache 主要实现
 --
--- 这个 filter 需要 auto-cache-response-header-handler 和 auto-cache-maker 的配合
+-- 这个 filter 需要 auto-cache-trigger 和 auto-cache-maker 的配合
 ---------
 
 local lz4 = require("lz4.lz4")
@@ -132,7 +131,7 @@ function M.applyAutoCache(ngx)
   end
   
   -- 缓存命中
-  -- utils.log('[auto-cache] cache: ' + cacheToUse.name + ' hit for uri: ' + uri)
+  utils.log('[auto-cache] Hit cache: ' + cacheToUse.name + ' for uri: ' + uri)
   
   -- 如果客户端支持 Last-Modified 机制的缓存
   local isClientSupportLastModify = (cacheType ~= nil)
@@ -143,9 +142,8 @@ function M.applyAutoCache(ngx)
   end
   
   -- 如果不支持, 则发送缓存数据(header body 都发送)
-  utils.log('[auto-cache] client has NO Last-Modified support, send cached data to uri: ' + uri)
+  -- utils.log('[auto-cache] client has NO Last-Modified support, send cached data to uri: ' + uri)
   return _sendCachedDataToClient(ngx, cachedData)
 end
 
 return M
-

@@ -1,5 +1,4 @@
-
----------
+--
 -- used in header_filter_by_lua_block directive
 --
 -- 这个 filter 会保存触发缓存的信息到 ngx.ctx.requestCacheConf，对应 backend response header X-YQJ-CACHE
@@ -9,12 +8,12 @@
 local AUTO_CACHE_KEY = require('init.auto-cache').type
 
 -- 申请 auto-cache 的响应头格式: X-YQJ-CACHE -> JSONStr，json 格式如下:
---   type: cache-key (见 auto-cache.lua)
+--   type: 见 init.auto-cache
 local YQJ_AUTO_CACHE_TRIGGER_HEADER = 'X-YQJ-CACHE'
 
 local function _saveCacheConfDataToCTX(ngx)
   conf = JSON.decode(ngx.header[YQJ_AUTO_CACHE_TRIGGER_HEADER])
-  -- change type to real key(time stamp)
+  -- 把 type 转换为 "时间戳表示", 见 init.auto-cache
   conf.type = AUTO_CACHE_KEY[conf.type]
   
   -- utils.log(conf)
@@ -36,7 +35,7 @@ function M.detectBackendCacheRequest(ngx)
   --   1. 经过 backend 服务器, 但是 backend 不需要缓存(所以没有带这个头)
   --   2. 没有经过 backend 服务器，也就是说，auto-cache 生效了(才没有把请求转到 backend，所以没有这个头)
   if not ngx.header[YQJ_AUTO_CACHE_TRIGGER_HEADER] then
-    return -- 两种情况都不需要处理
+    return -- 两种情况都不需要启用缓存
   end
   
   -- utils.log('[auto-cache] Detected: backend server request auto-cache: ' + ngx.header[YQJ_AUTO_CACHE_TRIGGER_HEADER])
@@ -51,6 +50,3 @@ end
 
 
 return M
-
-
-

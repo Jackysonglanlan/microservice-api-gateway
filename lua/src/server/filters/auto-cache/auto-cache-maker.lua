@@ -32,9 +32,10 @@ end
 -- i.e: call a backend server or redis in this callback
 local function _defaultCacheRefresher(ngx, respData)
   local respHeaders = ngx.resp.get_headers(50, true)
+  -- utils.log(respHeaders)
+  
   -- 所有的 响应 都是在 nginx 层被压缩的，所以这里不能缓存 Content-Encoding，不然要出错
   respHeaders['Content-Encoding'] = nil
-  utils.log(respHeaders)
   
   -- 缓存 响应数据 和 header，这样可以使客户端完全透明(客户端完全区分不出来到底是 缓存数据 还是 来自 backend 的数据)
   -- 把 响应数据 和 header 存在一起, 形成最终的缓存数据, auto-cache 那里会把这个数据拆开
