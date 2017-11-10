@@ -32,7 +32,7 @@ start(){
     echo "[WARN] Openresty is started, pid: `cat test/openresty.pid`"
     return
   fi
-  node ./node_modules/.bin/nodemon --exec "openresty -p `pwd`/test -c test-openresty.conf"
+  ./node_modules/.bin/nodemon --exec "openresty -p `pwd`/test -c test-openresty.conf"
 }
 
 nodemon_restart(){

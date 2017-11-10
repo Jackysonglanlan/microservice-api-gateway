@@ -135,6 +135,7 @@ function M.applyAutoCache(ngx)
   
   -- 如果客户端支持 Last-Modified 机制的缓存
   local isClientSupportLastModify = (cacheType ~= nil)
+  -- cacheType 是附在 req header 上的，如果到这里 cacheType 有值，说明客户端支持 Last-Modified
   if isClientSupportLastModify then
     -- utils.log('[auto-cache] response 304 to uri: ' + uri)
     -- 直接响应 304 (用 304 可以最大限度节省带宽，因为只需要发送 response header)

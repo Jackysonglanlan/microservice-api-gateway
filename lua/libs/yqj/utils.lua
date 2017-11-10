@@ -77,8 +77,8 @@ local function _extract_filename_line_for_log_info(traceback)
   return realLoc
 end
 
-local function _log(level)
-  local log = logger:new(level, 'logs/yqj.' .. level .. '.log' )
+local function _log(ngx, level)
+  local log = logger:new(ngx, level, 'logs/yqj.' .. level .. '.log' )
   
   return function ( ... )
     local buff = {}
@@ -96,10 +96,10 @@ end
 return function ( ngx )
   utils.ngx = ngx
   
-  utils.dlog = _log('debug') -- error log
-  utils.log = _log('info') -- info log
-  utils.wlog = _log('warn') -- alert log
-  utils.elog = _log('error') -- error log
+  utils.dlog = _log(ngx, 'debug') -- error log
+  utils.log = _log(ngx, 'info') -- info log
+  utils.wlog = _log(ngx, 'warn') -- alert log
+  utils.elog = _log(ngx, 'error') -- error log
   
   return utils
 end
