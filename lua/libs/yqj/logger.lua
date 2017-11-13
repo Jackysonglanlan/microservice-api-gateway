@@ -5,10 +5,13 @@ ffi.cdef[[
   int open(const char * path, int access);
   int write(int fd, const char * buf, int nbyte);
   int close(int fd);
+  
+  void printf(const char * format, ...);
 ]]
 local C = ffi.C
 local write = C.write
 local open = C.open
+local printf = C.printf
 
 local bit = require("bit")
 local bor = bit.bor
@@ -21,13 +24,12 @@ local O_APPEND = 0x0400
 
 local LOG_LEVEL = {debug = 1, info = 2, warn = 3, error = 4, none = 999}
 
-local os = require('os')
 local runningEnv = os.getenv("LUA_ENV") or ''
 
 -- output to console if we are in dev Env.
 if string.match(runningEnv, 'dev.*') then
   write = function(_, msg, _)
-    os.execute('echo "' .. msg ..'"')
+    printf(msg)
   end
 end
 

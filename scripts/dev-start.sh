@@ -37,7 +37,9 @@ start(){
 
 nodemon_restart(){
   if [[ -f "test/openresty.pid" ]]; then
+    # cat test/openresty.pid
     kill `cat test/openresty.pid`
+    sleep 1 # wait to finish killing
   fi
   
   sleep 1 # wait to finish killing

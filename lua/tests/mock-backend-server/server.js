@@ -49,7 +49,7 @@ const mockBackend = (req, res, name) => {
       type: 'default'
     })
   );
-  res.end(JSON.stringify({ from: name }));
+  res.end(JSON.stringify({ from: name, time: new Date().toLocaleString() }));
 };
 
 const bigChunkBackend = (req, res, name) => {
