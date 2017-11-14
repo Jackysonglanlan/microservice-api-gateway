@@ -1,90 +1,71 @@
 'use strict';
 
-const http = require('http');
+const express = require('express');
+const app = express();
 
-const ROUTE_PREFIX = '/cache-test/';
-
-function _mountRoute(route, backend) {
-  let hitCount = 0;
-  return (uri, req, res) => {
-    const matchBackendOwnRule = backend.matchURI && backend.matchURI(uri);
-
-    if (!matchBackendOwnRule) {
-      // try common match rule
-      if (!uri.startsWith(ROUTE_PREFIX + route)) {
-        return;
-      }
-    }
-
-    console.log(`hit ${backend.name}: ${++hitCount}`);
-
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'application/json');
-    backend(req, res, backend.name);
-  };
-}
-
-function _makeRoutes(routeList) {
-  return routeList.map(route => {
-    return _mountRoute(route.name, route);
-  });
-}
+const ROUTE_PREFIX = '/cache-test';
 
 // backend def
 
-const mock2Backend = (req, res, name) => {
+const mock2Backend = (req, res, next) => {
   res.setHeader(
     'X-YQJ-CACHE', // trigger Openresty auto-cache
     JSON.stringify({
       type: 'default'
     })
   );
-  res.end(JSON.stringify({ from: name }));
+  res.end(JSON.stringify({ from: res.locals.name }));
 };
 
-const mockBackend = (req, res, name) => {
+const mockBackend = (req, res, next) => {
   res.setHeader(
     'X-YQJ-CACHE', // trigger Openresty auto-cache
     JSON.stringify({
       type: 'default'
     })
   );
-  res.end(JSON.stringify({ from: name, time: new Date().toLocaleString() }));
+
+  const data = JSON.stringify({ from: res.locals.name, time: new Date().toLocaleString() });
+  res.setHeader('Content-Length', data.length);
+  res.end(data);
 };
 
-const bigChunkBackend = (req, res, name) => {
+const bigChunkBackend = (req, res, next) => {
   res.setHeader(
     'X-YQJ-CACHE', // trigger Openresty auto-cache
     JSON.stringify({
       type: 'default'
     })
   );
-  res.end(JSON.stringify({ from: name, chunk: Buffer.alloc(1e4).toString() }));
+  res.end(JSON.stringify({ from: res.locals.name, chunk: Buffer.alloc(1e4).toString() }));
 };
 
-const noCacheBackend = (req, res, name) => {
+const noCacheBackend = (req, res, next) => {
   // no cache
-  res.end(JSON.stringify({ from: name }));
-};
-
-const matchRestBackend = (req, res, name) => {
-  // no cache
-  res.end(JSON.stringify({ from: name, 'receive-uri': req.url }));
-};
-matchRestBackend.matchURI = uri => {
-  return !uri.startsWith(ROUTE_PREFIX);
+  res.end(JSON.stringify({ from: res.locals.name }));
 };
 
 // run
 
-const routes = _makeRoutes([bigChunkBackend, mock2Backend, mockBackend, noCacheBackend, matchRestBackend]);
+const routes = [bigChunkBackend, mock2Backend, mockBackend, noCacheBackend];
 
-http
-  .createServer((req, res) => {
-    routes.forEach(route => {
-      route(req.url, req, res);
-    });
-  })
-  .listen(7778);
+function _makeRoute(backend) {
+  let hitCount = 0;
+  return (req, res, next) => {
+    console.log(`hit ${backend.name}: ${++hitCount}`);
+    res.locals.name = backend.name;
+    backend(req, res, next);
+  };
+}
 
-//
+app.use((req, res, next) => {
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'application/json');
+  next();
+});
+
+routes.forEach(route => {
+  app.use(`${ROUTE_PREFIX}/${route.name}`, _makeRoute(route));
+});
+
+app.listen(7778, () => console.log('Started on port 7778!'));

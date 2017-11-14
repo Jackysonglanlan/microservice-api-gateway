@@ -2,6 +2,14 @@
   "name": "nginx-remote-automator",
   "version": "1.0.0",
   "description": "nginx(openresty) automator via npm script",
+  "keywords": [
+    "Deploy",
+    "Nginx",
+    "Openresty",
+    "Devops"
+  ],
+  "author": "jackysong <jackysonglanlan@gmail.com>",
+  "license": "MIT",
   "// scripts 说明": "",
   "//   check-global-param: See https://moonbingbing.gitbooks.io/openresty-best-practices/content/lua/local.html": "",
   "scripts": {
@@ -21,18 +29,11 @@
     "prestart": "scripts/build.sh",
     "predev-start": "scripts/build.sh"
   },
-  "keywords": [
-    "Deploy",
-    "Nginx",
-    "Openresty",
-    "Devops"
-  ],
-  "author": "jackysong <jackysonglanlan@gmail.com>",
-  "license": "MIT",
+  "dependencies": {
+    "express": "4.16.2",
+    "pm2": "2.7.1"
+  },
   "devDependencies": {
     "nodemon": "1.12.1"
-  },
-  "dependencies": {
-    "pm2": "2.7.1"
   }
 }

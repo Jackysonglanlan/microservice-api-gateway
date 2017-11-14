@@ -1,14 +1,26 @@
-# nginx-remote-automator
-nginx automator via npm script
+# Microservice API Getway
 
-## Openresty Only
-Many business logic are implemented by lua.
+Based on Openresty. Many business logic are implemented by lua.
 
 ## Features
 
-#### auto-cache
+### auto-cache
 TODO
 
-#### api-sign-check
+#### Test:
+
+With auto-cache
+
+```shell
+ab -n 10000 -c 1000 -k http://localhost:7777/cache-test/mockBackend
+```
+
+Without auto-cache
+
+```shell
+ab -n 10000 -c 1000 -k http://localhost:7778/cache-test/mockBackend
+```
+
+### api-sign-check
 TODO
 

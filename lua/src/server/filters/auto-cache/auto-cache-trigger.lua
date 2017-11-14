@@ -39,7 +39,8 @@ local M = {}
 function M.triggerAutoCacheIfPossible(ngx)
   -- 只缓存成功的 GET 请求数据
   if not _isReqGETAndResp200(ngx) then
-    utils.wlog('[auto-cache-trigger] Request NOT GET or response code NOT 200, no cache....')
+    local statusCode = ngx.status
+    utils.wlog('[auto-cache-trigger] Request NOT GET or response code NOT 200, no cache... Resp code:' ..  statusCode)
     return
   end
   

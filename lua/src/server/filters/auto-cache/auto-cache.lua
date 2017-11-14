@@ -111,7 +111,7 @@ end
 
 local M = {}
 
-function M.applyAutoCache(ngx)
+function M.enableAutoCache(ngx)
   local cacheType = _getCacheTypeFromReqHeader(ngx)
   local cacheToUse = _determineCache(cacheType)
   local uri = ngx.var.request_uri
@@ -131,7 +131,7 @@ function M.applyAutoCache(ngx)
   end
   
   -- 缓存命中
-  utils.log('[auto-cache] Hit cache: ' + cacheToUse.name + ' for uri: ' + uri)
+  -- utils.log('[auto-cache] Hit cache: ' + cacheToUse.name + ' for uri: ' + uri)
   
   -- 如果客户端支持 Last-Modified 机制的缓存
   local isClientSupportLastModify = (cacheType ~= nil)
