@@ -64,11 +64,12 @@ local function _cacheURIToMLCache(requestCacheConf, ngx, respData)
   -- utils.log('[auto-cache-maker] Ready to cache response header and data, using cache: ' + requestedCache.name)
   
   local uri = ngx.var.request_uri
+  local cacheKey = ngx.md5(uri)
   
-  -- 缓存结构: 请求 uri -> ${JSON respHeaders}__a_c_h__${response_data}
+  -- 缓存结构: 请求 uri 的 md5 -> ${JSON respHeaders}__6ef30a91b546ada6c5cjs4dbe402deccd80c5dd0f0__${response_data}
   -- 这里注意，是通过 get 来设置缓存值的，why？
   -- 见 https://github.com/thibaultcha/lua-resty-mlcache 的 set() 方法说明
-  requestedCache:get(uri, nil, _defaultCacheRefresher, ngx, respData)
+  requestedCache:get(cacheKey, nil, _defaultCacheRefresher, ngx, respData)
 end
 
 local function _cleanupCTX(ngx)

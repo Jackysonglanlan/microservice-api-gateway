@@ -25,8 +25,8 @@ const mockBackend = (req, res, next) => {
     })
   );
 
-  const data = JSON.stringify({ from: res.locals.name, time: new Date().toLocaleString() });
-  res.setHeader('Content-Length', data.length);
+  const data = JSON.stringify({ from: res.locals.name, time: new Date().toLocaleString(), encoding: '中文' });
+  res.setHeader('Content-Length', Buffer.byteLength(data, 'utf8'));
   res.end(data);
 };
 
@@ -59,7 +59,6 @@ function _makeRoute(backend) {
 }
 
 app.use((req, res, next) => {
-  res.statusCode = 200;
   res.setHeader('Content-Type', 'application/json');
   next();
 });

@@ -34,16 +34,16 @@ local function _determineCache(cacheType)
   return cacheToUse
 end
 
-local function _maybeInCache(uri, cacheToUse)
-  local ttl, err = cacheToUse:peek(uri)
+local function _maybeInCache(key, cacheToUse)
+  local ttl, err = cacheToUse:peek(key)
   
   if err then
-    utils.elog('[auto-cache] Error peek cache value with uri:', uri)
+    utils.elog('[auto-cache] Error peek cache value with key:', key)
     return false
   end
   
   if ttl then
-    -- utils.log('[auto-cache] Found cache ' + cacheToUse.name)
+    -- utils.log('[auto-cache] Found data in cache ' + cacheToUse.name)
     return true
   end
   
@@ -55,14 +55,14 @@ local function _cacheRefresher()
   return nil
 end
 
-local function _getCachedValue(uri, cacheToUse)
+local function _getCachedValue(key, cacheToUse)
   -- this call will respectively hit L1 and L2 before running the
   -- callback (L3). The returned value will then be stored in L2 and
   -- L1 for the next request.
   
-  local cachedData, err = cacheToUse:get(uri, nil, _cacheRefresher)
+  local cachedData, err = cacheToUse:get(key, nil, _cacheRefresher)
   if err then
-    utils.elog('err reading cache value with uri:', uri, err)
+    utils.elog('err reading cache value with key:', key, err)
     cachedData = nil -- 出错当是没有缓存
   end
   
@@ -115,14 +115,15 @@ function M.enableAutoCache(ngx)
   local cacheType = _getCacheTypeFromReqHeader(ngx)
   local cacheToUse = _determineCache(cacheType)
   local uri = ngx.var.request_uri
+  local cacheKey = ngx.md5(uri)
   
   -- 下面注意: _maybeInCache() 用的 peek(), 而 _getCachedValue() 用的 get()
-  if not _maybeInCache(uri, cacheToUse) then
+  if not _maybeInCache(cacheKey, cacheToUse) then
     -- utils.log('[auto-cache] missing for uri: ' .. uri .. ', pass req to backend server')
     return -- pass request to backend server
   end
   
-  local cachedData = _getCachedValue(uri, cacheToUse)
+  local cachedData = _getCachedValue(cacheKey, cacheToUse)
   
   -- peek() 和 get() 有时间差，peek() 查到并不保证 get() 一定有(peek时有 -> 过期 -> get -> nil)
   if not cachedData then -- 所以再检查一次
@@ -133,12 +134,12 @@ function M.enableAutoCache(ngx)
   -- 缓存命中
   -- utils.log('[auto-cache] Hit cache: ' + cacheToUse.name + ' for uri: ' + uri)
   
-  -- 如果客户端支持 Last-Modified 机制的缓存
   local isClientSupportLastModify = (cacheType ~= nil)
-  -- cacheType 是附在 req header 上的，如果到这里 cacheType 有值，说明客户端支持 Last-Modified
   if isClientSupportLastModify then
+    -- cacheType 是附在 req header 上的，如果到这里, 代表 cacheType 有值，说明客户端支持 Last-Modified
     -- utils.log('[auto-cache] response 304 to uri: ' + uri)
     -- 直接响应 304 (用 304 可以最大限度节省带宽，因为只需要发送 response header)
+    cachedData = nil
     return _resp304ToClient(ngx, cacheType)
   end
   
