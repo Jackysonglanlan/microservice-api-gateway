@@ -4,20 +4,8 @@
 set -euo pipefail
 trap "echo 'error: Script failed: see failed command above'" ERR
 
-use_red_green_echo() {
-  prefix="$1"
-  red() {
-    echo "$(tput bold)$(tput setaf 1)[$prefix] $*$(tput sgr0)";
-  }
-  
-  green() {
-    echo "$(tput bold)$(tput setaf 2)[$prefix] $*$(tput sgr0)";
-  }
-  
-  yellow() {
-    echo "$(tput bold)$(tput setaf 3)[$prefix] $*$(tput sgr0)";
-  }
-}
+. $(dirname "$0")/../lib/utils.sh
+
 use_red_green_echo 'PRESTART-PROCESS'
 
 PRESTART_PROCESS_DONE='./PRESTART-PROCESS-DONE.log'
@@ -112,10 +100,16 @@ _makeDirs(){
 ######
 
 main(){
+  green 'Start checking npm packages dependency...'
+  
+  npm_install_if_needed package.json
+  
   if [[ -f $PRESTART_PROCESS_DONE ]]; then
-    yellow 'Prestart process has been preformed, no need to run again...'
+    yellow 'Prestart process has been run, no need to run again...'
     return
   fi
+  
+  green 'Start running prestart process...'
   
   _on_mac _cp_all_so_files_to_lua_root_path mac
   _on_linux _cp_all_so_files_to_lua_root_path linux

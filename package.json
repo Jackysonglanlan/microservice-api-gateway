@@ -26,10 +26,10 @@
     "//--------------------------------------- PRODCTION --------------------------------------------": "",
     "start": "pm2 start ecosystem.json --env production",
     "//--------------------------------------- HOOKS --------------------------------------------": "",
-    "pretest-only": "scripts/npm-hooks/prestart.sh",
-    "prestart": "scripts/npm-hooks/prestart.sh",
-    "predev-start-pm2": "scripts/npm-hooks/prestart.sh",
-    "predev-start-nodemon": "scripts/npm-hooks/prestart.sh"
+    "pretest-only": "LUA_ENV=test scripts/npm-hooks/prestart.sh",
+    "prestart": "LUA_ENV=production cripts/npm-hooks/prestart.sh",
+    "predev-start-pm2": "LUA_ENV=dev scripts/npm-hooks/prestart.sh",
+    "predev-start-nodemon": "LUA_ENV=dev scripts/npm-hooks/prestart.sh"
   },
   "dependencies": {
     "express": "4.16.2",
