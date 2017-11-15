@@ -27,6 +27,8 @@ _prepare(){
   _cleanLogs
 }
 
+# public
+
 start(){
   if [[ -f "test/openresty.pid" ]]; then
     echo "[WARN] Openresty is started, pid: `cat test/openresty.pid`"
@@ -49,6 +51,8 @@ nodemon_restart(){
   fi
 }
 
+# run
+
 _prepare
 
-$@
+LUA_ENV=dev $@

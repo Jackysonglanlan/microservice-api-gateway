@@ -18,8 +18,7 @@ use_red_green_echo() {
     echo "$(tput bold)$(tput setaf 3)[$prefix] $*$(tput sgr0)";
   }
 }
-use_red_green_echo 'Build'
-
+use_red_green_echo 'PRESTART-PROCESS'
 
 PRESTART_PROCESS_DONE='./PRESTART-PROCESS-DONE.log'
 
@@ -107,7 +106,7 @@ _cp_all_so_files_to_lua_root_path(){
 
 _makeDirs(){
   green 'Making necessary dirs...'
-  mkdir -p {tmp,'logs/nginx','logs/pm2'}
+  mkdir -p {tmp,'logs/nginx','logs/pm2','logs/pids'}
 }
 
 ######

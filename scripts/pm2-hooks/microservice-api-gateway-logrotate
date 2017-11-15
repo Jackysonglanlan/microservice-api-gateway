@@ -22,7 +22,7 @@
 
 /var/www/microservice-api-gateway/current/logs/*.log /var/www/microservice-api-gateway/current/logs/nginx/*.log /var/www/microservice-api-gateway/current/logs/pm2/*.log{
   # 设置操作权限，否则不会启动滚动，因为我们的部署流程统一为 deploy 账户，所以可以写死
-  su deploy deploy
+  su maintain maintain
 
   # 每天轮询
   daily

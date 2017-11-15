@@ -1,7 +1,7 @@
 {
-  "name": "nginx-remote-automator",
+  "name": "microservice-api-gateway",
   "version": "1.0.0",
-  "description": "nginx(openresty) automator via npm script",
+  "description": "Microservice API gateway, based on Openresty",
   "keywords": [
     "Deploy",
     "Nginx",
@@ -14,7 +14,8 @@
   "//   check-global-param: See https://moonbingbing.gitbooks.io/openresty-best-practices/content/lua/local.html": "",
   "scripts": {
     "//--------------------------------------- DEV --------------------------------------------": "",
-    "dev-start": "LUA_ENV=dev scripts/dev-start.sh start",
+    "dev-start-nodemon": "scripts/start/dev-start.sh start",
+    "dev-start-pm2": "pm2 start ecosystem.json --env dev",
     "check-global-param": "bin/lua-releng ",
     "//--------------------------------------- TEST --------------------------------------------": "",
     "test": "npm run test-only -- --pattern=tests-.+ -- lua/tests",
@@ -25,9 +26,10 @@
     "//--------------------------------------- PRODCTION --------------------------------------------": "",
     "start": "pm2 start ecosystem.json --env production",
     "//--------------------------------------- HOOKS --------------------------------------------": "",
-    "pretest-only": "scripts/build.sh",
-    "prestart": "scripts/build.sh",
-    "predev-start": "scripts/build.sh"
+    "pretest-only": "scripts/npm-hooks/prestart.sh",
+    "prestart": "scripts/npm-hooks/prestart.sh",
+    "predev-start-pm2": "scripts/npm-hooks/prestart.sh",
+    "predev-start-nodemon": "scripts/npm-hooks/prestart.sh"
   },
   "dependencies": {
     "express": "4.16.2",

@@ -1,27 +1,30 @@
 {
   "apps": [{
-    "name": "openresty-dispatcher",
+    "name": "microservice-api-gateway",
     "watch": false,
     "merge_logs": true,
-    "script": "scripts/prod-start.sh",
+    "script": "scripts/start/production-start.sh",
     "exec_interpreter": "bash",
     "exec_mode": "fork",
     "autorestart": true,
     "max_memory_restart": "500M", // Lua VM 的最大使用内存 1G, 这个限制是单个 Lua VM，也就是单个 Nginx worker
     "error_file": "logs/pm2/pm2.error.log",
     "out_file": "logs/pm2/pm2.stdout.log",
-    "pid_file": "logs/pm2/pm2.pid",
+    "pid_file": "logs/pids/pm2.pid",
     "env": {
+      "LUA_ENV": "production"
+    },
+    "env_dev": {
       "LUA_ENV": "dev"
     },
     "env_test200": {
       "LUA_ENV": "dev"
     },
-    "env_test": {
-      "LUA_ENV": "dev"
+    "env_test239": {
+      "LUA_ENV": "production"
     },
     "env_production": {
-      "LUA_ENV": "dev"
+      "LUA_ENV": "production"
     }
   }],
   "deploy": {
@@ -38,7 +41,7 @@
       }
     },
 
-    "test": {
+    "test239": {
       "user": "deploy",
       "host": ["112.124.116.174"],
       "ref": "origin/dev",
@@ -47,7 +50,7 @@
       "ssh_options": "StrictHostKeyChecking=no",
       "post-deploy": "scripts/pm2-hooks/post-deploy.sh",
       "env": {
-        "LUA_ENV": "test"
+        "LUA_ENV": "production"
       }
     },
 
