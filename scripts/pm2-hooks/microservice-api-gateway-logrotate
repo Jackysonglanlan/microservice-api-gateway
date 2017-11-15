@@ -22,8 +22,7 @@
 
 /var/www/microservice-api-gateway/current/logs/*.log /var/www/microservice-api-gateway/current/logs/nginx/*.log /var/www/microservice-api-gateway/current/logs/pm2/*.log{
   # 设置操作权限，否则不会启动滚动，因为我们的部署流程统一为 deploy 账户，所以可以写死
-  #su deploy deploy
-  maintain maintain
+  su deploy deploy
 
   # 每天轮询
   daily
@@ -62,8 +61,8 @@
 
   #  脚本内容，给 NGINX 发信号要求重新生成日志，如果 nginx 没起来就不操作
   postrotate
-  if [ -f /var/www/microservice-api-gateway/current/test/test-openresty.pid ]; then
-    kill -USR1 `cat /var/www/microservice-api-gateway/current/test/test-openresty.pid`
+  if [ -f /var/www/microservice-api-gateway/current/logs/pids/openresty.pid ]; then
+    kill -USR1 `cat /var/www/microservice-api-gateway/current/logs/pids/openresty.pid`
   fi
   endscript
 }

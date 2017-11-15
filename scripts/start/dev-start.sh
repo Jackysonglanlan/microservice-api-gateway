@@ -29,24 +29,26 @@ _prepare(){
 
 # public
 
+OPENRESTY_PID_FILE_PATH='logs/pids/openresty.pid'
+
 start(){
-  if [[ -f "test/openresty.pid" ]]; then
-    echo "[WARN] Openresty is started, pid: `cat test/openresty.pid`"
+  if [[ -f $OPENRESTY_PID_FILE_PATH ]]; then
+    echo "[WARN] Openresty is started, pid: `cat $OPENRESTY_PID_FILE_PATH`"
     return
   fi
   ./node_modules/.bin/nodemon --exec "openresty -p `pwd`/test -c test-openresty.conf"
 }
 
 nodemon_restart(){
-  if [[ -f "test/openresty.pid" ]]; then
-    # cat test/openresty.pid
-    kill `cat test/openresty.pid`
+  if [[ -f $OPENRESTY_PID_FILE_PATH ]]; then
+    # cat $OPENRESTY_PID_FILE_PATH
+    kill "`cat $OPENRESTY_PID_FILE_PATH`"
     sleep 1 # wait to finish killing
   fi
   
   sleep 1 # wait to finish killing
   
-  if [[ ! -f "test/openresty.pid" ]]; then
+  if [[ ! -f $OPENRESTY_PID_FILE_PATH ]]; then
     openresty -p `pwd`/test -c test-openresty.conf
   fi
 }
