@@ -1,4 +1,4 @@
-# Microservice API Getway
+# Microservice API Gateway
 
 Based on Openresty. Many business logic are implemented by lua.
 

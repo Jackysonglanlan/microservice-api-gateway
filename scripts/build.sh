@@ -21,7 +21,7 @@ use_red_green_echo() {
 use_red_green_echo 'Build'
 
 
-ALL_SO_FILES_COPIED_MARK_FILE='./all-so-files-copied.log'
+PRESTART_PROCESS_DONE='./PRESTART-PROCESS-DONE.log'
 
 # lua lib root path
 LUA_LIB_PATH="lua/libs"
@@ -40,11 +40,9 @@ _on_linux(){
   fi
 }
 
-_markAllLibsAreBuilt(){
-  green "All C libs are built..."
-  green "Make mark file..."
-  green "Done"
-  touch $ALL_SO_FILES_COPIED_MARK_FILE
+_markPrestartProcessDone(){
+  green 'Mark prestart process done'
+  touch $PRESTART_PROCESS_DONE
 }
 
 ###### build all the C libs
@@ -71,7 +69,9 @@ _markAllLibsAreBuilt(){
 ## Compile those libs are tricky and boring, so we pre-build them to avoid the pain process in production Env.
 
 # $1: mac or linux
-_cp_all_bin_files_to_lua_root_path(){
+_cp_all_so_files_to_lua_root_path(){
+  green 'Start copying .so libs...'
+  
   # 动态库 都必须放在 lua 库根目录，否则 ffi_load 找不到, 见 nginx.conf 的 lua_package_cpath
   
   ##### WARN
@@ -101,28 +101,30 @@ _cp_all_bin_files_to_lua_root_path(){
   for xzFile in $LUA_LIB_PATH/.prebuild/$1/*.tar.xz; do
     tar -Jxf $xzFile -C $LUA_LIB_PATH
   done
+  
+  green "All so libs are copied to lua lib path..."
 }
 
 _makeDirs(){
-  mkdir -p {tmp,logs}
+  green 'Making necessary dirs...'
+  mkdir -p {tmp,'logs/nginx','logs/pm2'}
 }
 
 ######
 
 main(){
-  if [[ -f $ALL_SO_FILES_COPIED_MARK_FILE ]]; then
-    yellow 'All libs are installed, no need to build...'
+  if [[ -f $PRESTART_PROCESS_DONE ]]; then
+    yellow 'Prestart process has been preformed, no need to run again...'
     return
   fi
   
-  green 'Start building C libs...'
-  
-  _on_mac _cp_all_bin_files_to_lua_root_path mac
-  _on_linux _cp_all_bin_files_to_lua_root_path linux
-  
-  _markAllLibsAreBuilt
+  _on_mac _cp_all_so_files_to_lua_root_path mac
+  _on_linux _cp_all_so_files_to_lua_root_path linux
   
   _makeDirs
+  # TODO: more prestart steps add here
+  
+  _markPrestartProcessDone
 }
 
 main

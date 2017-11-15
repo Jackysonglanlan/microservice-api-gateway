@@ -5,7 +5,7 @@ set -euo pipefail
 trap "echo 'error: Script failed: see failed command above'" ERR
 
 _mkLogDirs(){
-  mkdir -p {logs,'test/logs'}
+  mkdir -p {logs,'test/logs','test/logs/nginx'}
   
   # those utils.log() log files can't be auto-created on mac (no idea why)
   touch logs/yqj.{debug,info,warn,error}.log
