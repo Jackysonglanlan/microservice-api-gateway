@@ -5,20 +5,16 @@ set -euo pipefail
 trap "echo 'error: Script failed: see failed command above'" ERR
 
 _mkLogDirs(){
-  mkdir -p {logs,'test/logs','test/logs/nginx'}
+  mkdir -p 'test/logs'
   
   # those utils.log() log files can't be auto-created on mac (no idea why)
   touch logs/yqj.{debug,info,warn,error}.log
 }
 
 _cleanLogs(){
-  local logDirs=(logs 'test/logs')
-  for logDir in ${logDirs[@]}; do
-    for logFile in $logDir/*.log; do
-      if [[ -f $logFile ]]; then
-        echo '' > $logFile
-      fi
-    done
+  for logFile in $(find 'logs' -name '*.log') ; do
+    # echo $logFile
+    echo '' > $logFile
   done
 }
 
@@ -27,9 +23,9 @@ _prepare(){
   _cleanLogs
 }
 
-# public
-
 OPENRESTY_PID_FILE_PATH='logs/pids/openresty.pid'
+
+# public
 
 start(){
   if [[ -f $OPENRESTY_PID_FILE_PATH ]]; then
@@ -57,4 +53,5 @@ nodemon_restart(){
 
 _prepare
 
+# dynamic invoke public method
 LUA_ENV=dev $@

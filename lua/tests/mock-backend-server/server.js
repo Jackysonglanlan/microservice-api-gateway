@@ -3,8 +3,6 @@
 const express = require('express');
 const app = express();
 
-const ROUTE_PREFIX = '/cache-test';
-
 // backend def
 
 const mock2Backend = (req, res, next) => {
@@ -25,7 +23,14 @@ const mockBackend = (req, res, next) => {
     })
   );
 
-  const data = JSON.stringify({ from: res.locals.name, time: new Date().toLocaleString(), encoding: '中文' });
+  const data = JSON.stringify({
+    code: 200,
+    data: {
+      from: res.locals.name,
+      time: new Date().toLocaleString(),
+      encoding: '中文'
+    }
+  });
   res.setHeader('Content-Length', Buffer.byteLength(data, 'utf8'));
   res.end(data);
 };
@@ -52,7 +57,7 @@ const routes = [bigChunkBackend, mock2Backend, mockBackend, noCacheBackend];
 function _makeRoute(backend) {
   let hitCount = 0;
   return (req, res, next) => {
-    console.log(`hit ${backend.name}: ${++hitCount}`);
+    console.log(`hit ${backend.name}: ${++hitCount} with url:${req.originalUrl}`);
     res.locals.name = backend.name;
     backend(req, res, next);
   };
@@ -63,6 +68,7 @@ app.use((req, res, next) => {
   next();
 });
 
+const ROUTE_PREFIX = '/cache-test';
 routes.forEach(route => {
   app.use(`${ROUTE_PREFIX}/${route.name}`, _makeRoute(route));
 });

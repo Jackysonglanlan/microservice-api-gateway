@@ -9,6 +9,7 @@
 local lz4 = require("lz4.lz4")
 local decompress = lz4.decompress
 local json_decode = JSON.decode
+local match = string.match
 
 local function _decompressJSONStr(compressedStr)
   local origStr = decompress(compressedStr)
@@ -134,9 +135,9 @@ function M.enableAutoCache(ngx)
   -- 缓存命中
   -- utils.log('[auto-cache] Hit cache: ' + cacheToUse.name + ' for uri: ' + uri)
   
-  local isClientSupportLastModify = (cacheType ~= nil)
-  if isClientSupportLastModify then
-    -- cacheType 是附在 req header 上的，如果到这里, 代表 cacheType 有值，说明客户端支持 Last-Modified
+  -- 这里 cacheType 可能为 nil，代表客户端不支持 Last-Modified 机制
+  local isClientWantUseCache = cacheType and match(cacheType, 'Wed, 01 Jan 3000')
+  if isClientWantUseCache then
     -- utils.log('[auto-cache] response 304 to uri: ' + uri)
     -- 直接响应 304 (用 304 可以最大限度节省带宽，因为只需要发送 response header)
     cachedData = nil
